@@ -30,6 +30,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-standard": "^4.0.1",
+    "git-commit-msg-linter": "^2.6.0",
     "prettier": "^2.1.1",
     "typescript": "~3.9.5"
   },
