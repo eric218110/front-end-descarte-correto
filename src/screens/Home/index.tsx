@@ -6,26 +6,37 @@ import {
   ImageLogo,
   TextLogo,
   Main,
-  ImageMain,
   TextMain,
   Bottom,
-  ButtonBottom
+  ButtonBottom,
+  TitleContent,
+  TextButtonBottom,
+  ContentRight,
+  IconLeftButtom
 } from './styles'
+import HumanIcon from '../../assets/human.svg'
 
 export const Home: React.FC = () => (
   <Wrapper>
     <Container>
       <Logo>
-        <ImageLogo />
+        <ImageLogo source={require('../../assets/logo.png')} />
         <TextLogo>Any Name</TextLogo>
       </Logo>
       <Main>
-        <ImageMain />
-        <TextMain>Welcome my App</TextMain>
-        <TextMain>Let´s help our planet</TextMain>
+        <HumanIcon width={153} height={260} />
+        <TitleContent>
+          <TextMain color="grey">Welcome my App</TextMain>
+          <TextMain color="green">Let´s help our planet</TextMain>
+        </TitleContent>
       </Main>
       <Bottom>
-        <ButtonBottom>Find Collect points</ButtonBottom>
+        <ButtonBottom>
+          <TextButtonBottom>Find Collect points</TextButtonBottom>
+          <ContentRight>
+            <IconLeftButtom />
+          </ContentRight>
+        </ButtonBottom>
       </Bottom>
     </Container>
   </Wrapper>
