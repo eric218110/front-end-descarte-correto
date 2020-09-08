@@ -1,6 +1,6 @@
 import { StatusBar } from 'react-native'
 import React from 'react'
-import { Home } from './src/screens/Home'
+import { Routes } from './src/routes'
 
 const App: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ const App: React.FC = () => {
         barStyle="dark-content"
         translucent
       />
-      <Home />
+      <Routes />
     </React.Fragment>
   )
 }
