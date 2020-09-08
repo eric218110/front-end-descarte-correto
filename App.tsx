@@ -1,11 +1,15 @@
-import { StatusBar } from 'expo-status-bar'
+import { StatusBar } from 'react-native'
 import React from 'react'
 import { Home } from './src/screens/Home'
 
 const App: React.FC = () => {
   return (
     <React.Fragment>
-      <StatusBar style="auto" />
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle="dark-content"
+        translucent
+      />
       <Home />
     </React.Fragment>
   )
