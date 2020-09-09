@@ -85,38 +85,38 @@ export const Map: React.FC = () => {
         <Bottom>
           <ContentBottom>
             <Items>
-              <Item color="#dd3d42" first>
-                <IconItem />
+              <Item active color="#dd3d42" first>
+                <IconItem source={require('../../assets/image-item.png')} />
                 <TextItem numberOfLines={1} color="#dd3d42">
                   Any item
                 </TextItem>
               </Item>
-              <Item color="#e4e3e3">
-                <IconItem />
-                <TextItem numberOfLines={1} color="#e4e3e3">
+              <Item active color="#072602">
+                <IconItem source={require('../../assets/image-item-2.png')} />
+                <TextItem numberOfLines={1} color="#072602">
                   Any item
                 </TextItem>
               </Item>
-              <Item color="#c9a9a8">
-                <IconItem />
-                <TextItem numberOfLines={1} color="#c9a9a8">
+              <Item active color="#232B70">
+                <IconItem source={require('../../assets/image-item-3.png')} />
+                <TextItem numberOfLines={1} color="#232B70">
                   Any item
                 </TextItem>
               </Item>
-              <Item color="#c3d4a4">
-                <IconItem />
+              <Item active color="#c3d4a4">
+                <IconItem source={require('../../assets/image-item-4.png')} />
                 <TextItem numberOfLines={1} color="#c3d4a4">
                   Any item
                 </TextItem>
               </Item>
-              <Item color="#b4b4b4">
-                <IconItem />
-                <TextItem numberOfLines={1} color="#b4b4b4">
+              <Item color="#C4E01A">
+                <IconItem source={require('../../assets/image-item.png')} />
+                <TextItem numberOfLines={1} color="#C4E01A">
                   Any item
                 </TextItem>
               </Item>
               <Item color="#e4c3d1">
-                <IconItem />
+                <IconItem source={require('../../assets/image-item.png')} />
                 <TextItem numberOfLines={1} color="#e4c3d1">
                   Any item
                 </TextItem>
