@@ -4,10 +4,12 @@ import { Platform } from 'react-native'
 import Constants from 'expo-constants'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { RawButton } from 'react-native-gesture-handler'
+import { lighten, darken } from 'polished'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type IPropsItem = {
   first?: boolean
+  active?: boolean
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -112,17 +114,26 @@ export const Items = styled.ScrollView.attrs(() => ({
 }))``
 
 export const Item = styled.View<IPropsItem & IPropsColorItem>`
-  background: green;
+  background: ${props => lighten(0.2, props.color)};
   border-radius: 17px;
   width: 70px;
   margin-left: ${props => (props.first ? 0 : css`14px`)};
+  justify-content: space-around;
+  align-items: center;
+  border: solid 3px ${props => lighten(0.2, props.color)};
+  ${props =>
+    props.active &&
+    css`
+      border-color: ${darken(0.2, props.color)};
+    `}
 `
 
-export const IconItem = styled.View``
+export const IconItem = styled.Image``
 
 export const TextItem = styled.Text<IPropsColorItem>`
-  color: ${props => props.color};
+  color: ${props => darken(0.2, props.color)};
   font-weight: bold;
   font-family: roboto_500;
   font-size: 14px;
+  padding-bottom: 5px;
 `
