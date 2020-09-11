@@ -1,20 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled, { css } from 'styled-components/native'
 import { colors } from '../../styles/colors'
 import { Platform } from 'react-native'
 import Constants from 'expo-constants'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { RawButton } from 'react-native-gesture-handler'
-import { lighten, darken } from 'polished'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type IPropsItem = {
   first?: boolean
   active?: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type IPropsColorItem = {
   color: string
+}
+
+type IPropsColorActive = {
+  activeColor: string
 }
 
 const statusBarHeight =
@@ -113,25 +115,27 @@ export const Items = styled.ScrollView.attrs(() => ({
   showsHorizontalScrollIndicator: false
 }))``
 
-export const Item = styled.View<IPropsItem & IPropsColorItem>`
-  background: ${props => lighten(0.2, props.color)};
+export const Item = styled.View<
+  IPropsItem & IPropsColorItem & IPropsColorActive
+>`
+  background: ${props => props.color};
   border-radius: 17px;
   width: 70px;
   margin-left: ${props => (props.first ? 0 : css`14px`)};
   justify-content: space-around;
   align-items: center;
-  border: solid 3px ${props => lighten(0.2, props.color)};
+  border: solid 3px ${props => props.color};
   ${props =>
     props.active &&
     css`
-      border-color: ${darken(0.2, props.color)};
+      border-color: ${props.activeColor};
     `}
 `
 
 export const IconItem = styled.Image``
 
 export const TextItem = styled.Text<IPropsColorItem>`
-  color: ${props => darken(0.2, props.color)};
+  color: ${props => props.color};
   font-weight: bold;
   font-family: roboto_500;
   font-size: 14px;

@@ -85,39 +85,27 @@ export const Map: React.FC = () => {
         <Bottom>
           <ContentBottom>
             <Items>
-              <Item active color="#dd3d42" first>
+              <Item activeColor="#702323" color="#CEB4B4" first>
                 <IconItem source={require('../../assets/image-item.png')} />
-                <TextItem numberOfLines={1} color="#dd3d42">
+                <TextItem numberOfLines={1} color="#702323">
                   Any item
                 </TextItem>
               </Item>
-              <Item active color="#072602">
+              <Item activeColor="#072602" color="#9DB791">
                 <IconItem source={require('../../assets/image-item-2.png')} />
                 <TextItem numberOfLines={1} color="#072602">
                   Any item
                 </TextItem>
               </Item>
-              <Item active color="#232B70">
+              <Item activeColor="#2E3192" color="#BBBDD3">
                 <IconItem source={require('../../assets/image-item-3.png')} />
-                <TextItem numberOfLines={1} color="#232B70">
+                <TextItem numberOfLines={1} color="#2E3192">
                   Any item
                 </TextItem>
               </Item>
-              <Item active color="#c3d4a4">
+              <Item activeColor="#6D7D0C" color="#DBEC71">
                 <IconItem source={require('../../assets/image-item-4.png')} />
-                <TextItem numberOfLines={1} color="#c3d4a4">
-                  Any item
-                </TextItem>
-              </Item>
-              <Item color="#C4E01A">
-                <IconItem source={require('../../assets/image-item.png')} />
-                <TextItem numberOfLines={1} color="#C4E01A">
-                  Any item
-                </TextItem>
-              </Item>
-              <Item color="#e4c3d1">
-                <IconItem source={require('../../assets/image-item.png')} />
-                <TextItem numberOfLines={1} color="#e4c3d1">
+                <TextItem numberOfLines={1} color="#6D7D0C">
                   Any item
                 </TextItem>
               </Item>
