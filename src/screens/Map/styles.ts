@@ -5,6 +5,7 @@ import { Platform } from 'react-native'
 import Constants from 'expo-constants'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { RawButton } from 'react-native-gesture-handler'
+import * as Map from 'react-native-maps'
 
 type IPropsItem = {
   first?: boolean
@@ -121,8 +122,8 @@ export const Item = styled.View<
   background: ${props => props.color};
   border-radius: 17px;
   width: 70px;
-  margin-left: ${props => (props.first ? 0 : css`14px`)};
-  justify-content: space-around;
+  margin-left: 10px;
+  justify-content: center;
   align-items: center;
   border: solid 3px ${props => props.color};
   ${props =>
@@ -132,12 +133,33 @@ export const Item = styled.View<
     `}
 `
 
-export const IconItem = styled.Image``
+export const IconItem = styled.Image`
+  height: 65%;
+  width: 90%;
+  align-self: center;
+`
 
 export const TextItem = styled.Text<IPropsColorItem>`
   color: ${props => props.color};
   font-weight: bold;
   font-family: roboto_500;
   font-size: 14px;
-  padding-bottom: 5px;
+  height: 25%;
+`
+
+export const MarkerWrapper = styled(Map.Marker)``
+
+export const Marker = styled.View`
+  height: 45px;
+  width: 45px;
+  background: rgba(0, 188, 212, 0.08);
+`
+
+export const MarkerLocation = styled.View`
+  border-radius: 25px;
+  height: 45px;
+  width: 45px;
+  background: rgba(0, 188, 212, 0.2);
+  align-items: center;
+  justify-content: center;
 `
