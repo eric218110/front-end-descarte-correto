@@ -71,11 +71,11 @@ export const Bottom = styled.View`
   padding-bottom: 20px;
 `
 
-export const ButtonBottom = styled(RectButton)`
+export const ButtonBottom = styled(RectButton)<{ disable: boolean }>`
   width: 300px;
   height: 52px;
   border-radius: 10px;
-  background: ${colors.primary};
+  background: ${props => (props.disable ? colors.primary : '#8B958A')};
   justify-content: center;
   align-items: center;
   flex-direction: row;
@@ -88,10 +88,10 @@ export const TextButtonBottom = styled.Text`
   text-transform: uppercase;
   padding-right: 10px;
 `
-export const ContentRight = styled.View`
+export const ContentRight = styled.View<{ disable: boolean }>`
   height: 52px;
   width: 52px;
-  background: ${colors.primaryDark};
+  background: ${props => (props.disable ? colors.primaryDark : '#8B958A')};
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   position: absolute;
