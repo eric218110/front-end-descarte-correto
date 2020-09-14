@@ -21,7 +21,7 @@ type IProps = {
 
 const opacity = new Animated.Value(0)
 
-export const AlertError = ({
+export const AlertAnimated = ({
   backgroundColor,
   iconName,
   colorActions,
