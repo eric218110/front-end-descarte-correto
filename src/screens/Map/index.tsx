@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react'
 
 import {
@@ -17,16 +18,27 @@ import {
   Items,
   Item,
   IconItem,
-  TextItem
+  TextItem,
+  MarkerWrapper,
+  MarkerLocation
 } from './styles'
 import MapView from 'react-native-maps'
 import * as Location from 'expo-location'
 import { Alert, StatusBar } from 'react-native'
 import { colors } from '../../styles/colors'
-
+import api from '../../service/api'
+import LocationIcon from '../../assets/location.svg'
 type IState = {
   latitude: number
   longitude: number
+}
+
+type IStateItems = {
+  id: string
+  title: string
+  image: string
+  color: string
+  activeColor: string
 }
 
 export const Map: React.FC = () => {
@@ -34,6 +46,9 @@ export const Map: React.FC = () => {
     latitude: 0,
     longitude: 0
   })
+
+  const [items, setItems] = useState<IStateItems[]>([] as IStateItems[])
+
   useEffect(() => {
     async function loadPosition() {
       const { status } = await Location.requestPermissionsAsync()
@@ -43,7 +58,7 @@ export const Map: React.FC = () => {
         return
       }
 
-      const location = await Location.getCurrentPositionAsync()
+      const location = await Location.getCurrentPositionAsync({})
 
       const { latitude, longitude } = location.coords
 
@@ -52,6 +67,15 @@ export const Map: React.FC = () => {
 
     loadPosition()
   }, [])
+
+  useEffect(() => {
+    async function getItems() {
+      await api.get<IStateItems[]>('item').then(({ data }) => {
+        setItems(data)
+      })
+    }
+    getItems()
+  }, [items])
 
   return (
     <Wrapper>
@@ -71,44 +95,48 @@ export const Map: React.FC = () => {
         </Header>
         <MapContent>
           {initialLocation.latitude !== 0 && (
-            <MapView
-              style={{ width: '100%', height: '100%' }}
-              initialRegion={{
-                latitude: initialLocation.latitude,
-                longitude: initialLocation.longitude,
-                latitudeDelta: 0.014,
-                longitudeDelta: 0.014
-              }}
-            ></MapView>
+            <>
+              <MapView
+                style={{ width: '100%', height: '100%' }}
+                initialRegion={{
+                  latitude: initialLocation.latitude,
+                  longitude: initialLocation.longitude,
+                  latitudeDelta: 0.014,
+                  longitudeDelta: 0.014
+                }}
+              >
+                <MarkerWrapper
+                  coordinate={{
+                    latitude: initialLocation.latitude,
+                    longitude: initialLocation.longitude
+                  }}
+                >
+                  <MarkerLocation>
+                    <LocationIcon/>
+                  </MarkerLocation>
+                </MarkerWrapper>
+              </MapView>
+
+            </>
           )}
         </MapContent>
         <Bottom>
           <ContentBottom>
             <Items>
-              <Item activeColor="#702323" color="#CEB4B4" first>
-                <IconItem source={require('../../assets/image-item.png')} />
-                <TextItem numberOfLines={1} color="#702323">
-                  Any item
-                </TextItem>
-              </Item>
-              <Item activeColor="#072602" color="#9DB791">
-                <IconItem source={require('../../assets/image-item-2.png')} />
-                <TextItem numberOfLines={1} color="#072602">
-                  Any item
-                </TextItem>
-              </Item>
-              <Item activeColor="#2E3192" color="#BBBDD3">
-                <IconItem source={require('../../assets/image-item-3.png')} />
-                <TextItem numberOfLines={1} color="#2E3192">
-                  Any item
-                </TextItem>
-              </Item>
-              <Item activeColor="#6D7D0C" color="#DBEC71">
-                <IconItem source={require('../../assets/image-item-4.png')} />
-                <TextItem numberOfLines={1} color="#6D7D0C">
-                  Any item
-                </TextItem>
-              </Item>
+              {items.map(({ id, activeColor, color, image, title }) => {
+                return (
+                  <Item
+                    key={id}
+                    activeColor={activeColor}
+                    color={color}
+                  >
+                    <IconItem source={{ uri: image }} />
+                    <TextItem numberOfLines={1} color={activeColor}>
+                      {title}
+                    </TextItem>
+                  </Item>
+                )
+              })}
             </Items>
           </ContentBottom>
         </Bottom>
