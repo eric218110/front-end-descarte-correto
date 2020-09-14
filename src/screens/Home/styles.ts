@@ -16,18 +16,16 @@ const statusBarHeight =
 
 export const Wrapper = styled.SafeAreaView`
   background: ${colors.background};
-  flex: 1;
   padding-top: ${statusBarHeight}px;
-`
-
-export const Container = styled.View`
-  flex: 1;
-  justify-content: center;
   height: ${height}px;
   width: ${width}px;
+  align-items: center;
+  justify-content: center;
 `
-export const ImageLogo = styled.Image``
 
+export const Container = styled.ScrollView`
+  flex: 1;
+`
 export const Logo = styled.View`
   width: ${width}px;
   height: 134px;
@@ -43,7 +41,7 @@ export const TextLogo = styled.Text`
 `
 
 export const Main = styled.View`
-  margin-top: 43px;
+  margin-top: 20px;
   align-items: center;
   margin-bottom: 43px;
 `
@@ -70,6 +68,7 @@ export const TextMain = styled.Text<IProps>`
 
 export const Bottom = styled.View`
   align-items: center;
+  padding-bottom: 20px;
 `
 
 export const ButtonBottom = styled(RectButton)`

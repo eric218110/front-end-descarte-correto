@@ -3,7 +3,6 @@ import {
   Container,
   Wrapper,
   Logo,
-  ImageLogo,
   TextLogo,
   Main,
   TextMain,
@@ -15,6 +14,7 @@ import {
   IconLeftButtom
 } from './styles'
 import HumanIcon from '../../assets/human.svg'
+import LogoIcon from '../../assets/logo.svg'
 import { useNavigation } from '@react-navigation/native'
 
 export const Home: React.FC = () => {
@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
     <Wrapper>
       <Container>
         <Logo>
-          <ImageLogo source={require('../../assets/logo.png')} />
+          <LogoIcon />
           <TextLogo>Any Name</TextLogo>
         </Logo>
         <Main>
