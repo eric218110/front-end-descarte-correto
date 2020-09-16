@@ -18,7 +18,6 @@ import HumanIcon from '../../assets/human.svg'
 import LogoIcon from '../../assets/logo.svg'
 import { useNavigation } from '@react-navigation/native'
 import NetInfo from '@react-native-community/netinfo'
-import { TouchableOpacity, Text } from 'react-native'
 import { AlertAnimated } from '../../components/Alert'
 
 export const Home: React.FC = () => {
