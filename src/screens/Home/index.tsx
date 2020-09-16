@@ -57,7 +57,7 @@ export const Home: React.FC = () => {
           <TextLogo>Any Name</TextLogo>
         </Logo>
         <Main>
-          <HumanIcon width={153} height={260} />
+          <HumanIcon style={{ flex: 1 }} />
           <TitleContent>
             <TextMain color="grey">Welcome my App</TextMain>
             <TextMain color="green">Let´s help our planet</TextMain>
@@ -73,9 +73,6 @@ export const Home: React.FC = () => {
               <IconLeftButtom />
             </ContentRight>
           </ButtonBottom>
-          <TouchableOpacity onPress={() => setIsConnected(!isConnected)}>
-            <Text>Off</Text>
-          </TouchableOpacity>
         </Bottom>
       </Container>
     </Wrapper>
