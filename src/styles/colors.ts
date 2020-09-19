@@ -7,5 +7,14 @@ export const colors = {
   text: {
     light: '#FFFFFF',
     dark: '#A7A7A7'
+  },
+  actions: {
+    success: {
+      dark: '#1E7106'
+    },
+    error: {
+      dark: '#FF0000',
+      light: '#F2CCCC'
+    }
   }
 }
