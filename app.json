@@ -21,7 +21,12 @@
     },
     "android": {
       "package": "com.ericsilva.apptcc",
-      "versionCode": 1
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBHAXOz2WSqIt4HziGNdnWXjlz2bf03-k4"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
