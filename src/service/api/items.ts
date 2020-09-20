@@ -1,10 +1,10 @@
 import api from './index'
 
-type IStateItems = {
+export type IStateItems = {
   id: string
   title: string
-  image: string
   color: string
+  active: boolean
   activeColor: string
 }
 
