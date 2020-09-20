@@ -10,7 +10,7 @@ type IStateItems = {
 
 export const getItemsApi = async (): Promise<IStateItems[]> => {
   try {
-    const { data } = await api.get<IStateItems[]>('itwem')
+    const { data } = await api.get<IStateItems[]>('item')
     if (!data) {
       return []
     }
