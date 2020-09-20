@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Wrapper,
   Container,
   MapViewContainer,
-  IconsListContainer
+  ModalizeContainer,
+  ContainerAction,
+  ContentAction,
+  ActionIconFilter,
+  ActionIconFixLocation,
+  ActionIconAddPoint
 } from './styles'
 import * as Location from 'expo-location'
 import { ActivityIndicator, Alert, StatusBar, View } from 'react-native'
 import { colors } from '../../styles/colors'
 import { Header } from '../../components/Header'
-import { Action } from '../../components/Actions'
-import { Item } from '../../components/Item'
-import { getItemsApi } from '../../service/api/items'
+import { Modalize } from 'react-native-modalize'
 type IState = {
   latitude: number
   longitude: number
@@ -22,13 +25,6 @@ export const Map: React.FC = () => {
     latitude: 0,
     longitude: 0
   })
-
-  useEffect(() => {
-    async function setItems() {
-      console.log(await getItemsApi())
-    }
-    setItems()
-  }, [])
 
   useEffect(() => {
     async function loadPosition() {
@@ -46,6 +42,12 @@ export const Map: React.FC = () => {
 
     loadPosition()
   }, [])
+
+  const modalRefFilterItems = useRef<Modalize>(null)
+
+  const handleOnOpenModalFilterItems = () => {
+    modalRefFilterItems.current?.open()
+  }
 
   return (
     <Wrapper>
@@ -70,13 +72,18 @@ export const Map: React.FC = () => {
           </View>
         )}
       </Container>
-      <Action />
-      <IconsListContainer>
-        <Item colorBackground="#072602" name="battery" />
-        <Item colorBackground="#19225E" name="canned" />
-        <Item colorBackground="#BC225C" name="canned" />
-        <Item colorBackground="#FD9154" name="canned" />
-      </IconsListContainer>
+      <ContainerAction>
+        <ContentAction onPress={handleOnOpenModalFilterItems}>
+          <ActionIconFilter />
+        </ContentAction>
+        <ContentAction>
+          <ActionIconFixLocation />
+        </ContentAction>
+        <ContentAction>
+          <ActionIconAddPoint />
+        </ContentAction>
+      </ContainerAction>
+      <ModalizeContainer ref={modalRefFilterItems} />
     </Wrapper>
   )
 }
