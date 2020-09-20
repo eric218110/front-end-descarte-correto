@@ -4,8 +4,14 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Home as HomeScreen } from '../screens/Home'
 import { Map as MapScreen } from '../screens/Map'
 import { AddPoint as AddPointScreen } from '../screens/Point/Add'
+import { ItemsProvider } from '../service/context/items-context'
 
 const Stack = createStackNavigator()
+const MapScreenRender = (): JSX.Element => (
+  <ItemsProvider>
+    <MapScreen />
+  </ItemsProvider>
+)
 
 export const AppRoutes: React.FC = () => (
   <NavigationContainer>
@@ -18,7 +24,7 @@ export const AppRoutes: React.FC = () => (
       <Stack.Screen
         options={{ headerShown: false }}
         name="Maps"
-        component={MapScreen}
+        component={MapScreenRender}
       />
       <Stack.Screen
         options={{ headerShown: false }}
