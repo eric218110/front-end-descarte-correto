@@ -1,44 +1,20 @@
-/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react'
-
 import {
   Wrapper,
   Container,
-  Header,
-  Avatar,
-  IconAvatar,
-  ImageUser,
-  ActiveIcon,
-  TextAvatar,
-  ExitAppActionIconContent,
-  ExitAppActionIcon,
-  MapContent,
-  Bottom,
-  ContentBottom,
-  Items,
-  Item,
-  IconItem,
-  TextItem,
-  MarkerWrapper,
-  MarkerLocation
+  MapViewContainer,
+  IconsListContainer
 } from './styles'
-import MapView from 'react-native-maps'
 import * as Location from 'expo-location'
-import { Alert, StatusBar } from 'react-native'
+import { ActivityIndicator, Alert, StatusBar, View } from 'react-native'
 import { colors } from '../../styles/colors'
-import api from '../../service/api'
-import LocationIcon from '../../assets/location.svg'
+import { Header } from '../../components/Header'
+import { Action } from '../../components/Actions'
+import { Item } from '../../components/Item'
+import { getItemsApi } from '../../service/api/items'
 type IState = {
   latitude: number
   longitude: number
-}
-
-type IStateItems = {
-  id: string
-  title: string
-  image: string
-  color: string
-  activeColor: string
 }
 
 export const Map: React.FC = () => {
@@ -47,7 +23,12 @@ export const Map: React.FC = () => {
     longitude: 0
   })
 
-  const [items, setItems] = useState<IStateItems[]>([] as IStateItems[])
+  useEffect(() => {
+    async function setItems() {
+      console.log(await getItemsApi())
+    }
+    setItems()
+  }, [])
 
   useEffect(() => {
     async function loadPosition() {
@@ -59,88 +40,43 @@ export const Map: React.FC = () => {
       }
 
       const location = await Location.getCurrentPositionAsync({})
-
       const { latitude, longitude } = location.coords
-
       setInitialLocation({ latitude, longitude })
     }
 
     loadPosition()
   }, [])
 
-  useEffect(() => {
-    async function getItems() {
-      await api.get<IStateItems[]>('item').then(({ data }) => {
-        setItems(data)
-      })
-    }
-    getItems()
-  }, [items])
-
   return (
     <Wrapper>
       <StatusBar backgroundColor={colors.background} />
+      <Header />
       <Container>
-        <Header>
-          <Avatar>
-            <IconAvatar>
-              <ImageUser source={require('../../assets/user.jpeg')} />
-              <ActiveIcon />
-            </IconAvatar>
-            <TextAvatar>Any user name</TextAvatar>
-          </Avatar>
-          <ExitAppActionIconContent>
-            <ExitAppActionIcon />
-          </ExitAppActionIconContent>
-        </Header>
-        <MapContent>
-          {initialLocation.latitude !== 0 && (
-            <>
-              <MapView
-                style={{ width: '100%', height: '100%' }}
-                initialRegion={{
-                  latitude: initialLocation.latitude,
-                  longitude: initialLocation.longitude,
-                  latitudeDelta: 0.014,
-                  longitudeDelta: 0.014
-                }}
-              >
-                <MarkerWrapper
-                  coordinate={{
-                    latitude: initialLocation.latitude,
-                    longitude: initialLocation.longitude
-                  }}
-                >
-                  <MarkerLocation>
-                    <LocationIcon/>
-                  </MarkerLocation>
-                </MarkerWrapper>
-              </MapView>
-
-            </>
-          )}
-        </MapContent>
-        <Bottom>
-          <ContentBottom>
-            <Items>
-              {items.map(({ id, activeColor, color, image, title }) => {
-                return (
-                  <Item
-                    key={id}
-                    activeColor={activeColor}
-                    color={color}
-                  >
-                    <IconItem source={{ uri: image }} />
-                    <TextItem numberOfLines={1} color={activeColor}>
-                      {title}
-                    </TextItem>
-                  </Item>
-                )
-              })}
-            </Items>
-          </ContentBottom>
-        </Bottom>
+        {initialLocation.latitude !== 0 ? (
+          <>
+            <MapViewContainer
+              showsUserLocation
+              initialRegion={{
+                latitude: initialLocation.latitude,
+                longitude: initialLocation.longitude,
+                latitudeDelta: 0.014,
+                longitudeDelta: 0.014
+              }}
+            ></MapViewContainer>
+          </>
+        ) : (
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <ActivityIndicator size={45} animating />
+          </View>
+        )}
       </Container>
+      <Action />
+      <IconsListContainer>
+        <Item colorBackground="#072602" name="battery" />
+        <Item colorBackground="#19225E" name="canned" />
+        <Item colorBackground="#BC225C" name="canned" />
+        <Item colorBackground="#FD9154" name="canned" />
+      </IconsListContainer>
     </Wrapper>
   )
 }
