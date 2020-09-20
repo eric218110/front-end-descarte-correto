@@ -8,13 +8,18 @@ import {
   ContentAction,
   ActionIconFilter,
   ActionIconFixLocation,
-  ActionIconAddPoint
+  ActionIconAddPoint,
+  ItemsListContainer
 } from './styles'
 import * as Location from 'expo-location'
-import { ActivityIndicator, Alert, StatusBar, View } from 'react-native'
+import { Alert, StatusBar } from 'react-native'
 import { colors } from '../../styles/colors'
 import { Header } from '../../components/Header'
+import { Filter } from '../../components/Item/Filter'
+import { Loading } from '../../components/Loading'
 import { Modalize } from 'react-native-modalize'
+import { useItemsContext } from '../../service/context/items-context'
+import { Item } from '../../components/Item'
 type IState = {
   latitude: number
   longitude: number
@@ -25,6 +30,9 @@ export const Map: React.FC = () => {
     latitude: 0,
     longitude: 0
   })
+
+  const { getItemsSelected } = useItemsContext()
+  const itemsSelected = getItemsSelected()
 
   useEffect(() => {
     async function loadPosition() {
@@ -67,9 +75,7 @@ export const Map: React.FC = () => {
             ></MapViewContainer>
           </>
         ) : (
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <ActivityIndicator size={45} animating />
-          </View>
+          <Loading />
         )}
       </Container>
       <ContainerAction>
@@ -83,7 +89,16 @@ export const Map: React.FC = () => {
           <ActionIconAddPoint />
         </ContentAction>
       </ContainerAction>
-      <ModalizeContainer ref={modalRefFilterItems} />
+      <ModalizeContainer ref={modalRefFilterItems}>
+        <Filter />
+      </ModalizeContainer>
+      <ItemsListContainer>
+        {itemsSelected.map(({ id, title, active, activeColor }) =>
+          active ? (
+            <Item name={title} key={id} colorBackground={activeColor} />
+          ) : null
+        )}
+      </ItemsListContainer>
     </Wrapper>
   )
 }

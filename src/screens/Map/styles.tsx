@@ -32,7 +32,7 @@ export const MapViewContainer = styled(MapView)`
 
 export const MarkerWrapper = styled(Marker)``
 
-export const IconsListContainer = styled.ScrollView.attrs(() => ({
+export const ItemsListContainer = styled.ScrollView.attrs(() => ({
   horizontal: true,
   showsHorizontalScrollIndicator: false
 }))`
