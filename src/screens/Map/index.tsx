@@ -17,9 +17,13 @@ import { colors } from '../../styles/colors'
 import { Header } from '../../components/Header'
 import { Filter } from '../../components/Item/Filter'
 import { Loading } from '../../components/Loading'
+import { Point } from '../../components/Point'
 import { Modalize } from 'react-native-modalize'
 import { useItemsContext } from '../../service/context/items-context'
 import { Item } from '../../components/Item'
+import { getPointsApi, PointsProps } from '../../service/api/points'
+import { Marker } from 'react-native-maps'
+
 type IState = {
   latitude: number
   longitude: number
@@ -30,6 +34,8 @@ export const Map: React.FC = () => {
     latitude: 0,
     longitude: 0
   })
+
+  const [points, setPoints] = useState<PointsProps[]>([])
 
   const { getItemsSelected } = useItemsContext()
   const itemsSelected = getItemsSelected()
@@ -51,6 +57,14 @@ export const Map: React.FC = () => {
     loadPosition()
   }, [])
 
+  useEffect(() => {
+    async function getPoints() {
+      const points = await getPointsApi()
+      setPoints(points)
+    }
+    getPoints()
+  }, [])
+
   const modalRefFilterItems = useRef<Modalize>(null)
 
   const handleOnOpenModalFilterItems = () => {
@@ -66,13 +80,40 @@ export const Map: React.FC = () => {
           <>
             <MapViewContainer
               showsUserLocation
+              showsMyLocationButton={false}
+              showsTraffic={false}
+              showsCompass={false}
+              showsBuildings={false}
+              showsIndoors={false}
+              showsScale={false}
+              showsIndoorLevelPicker={false}
+              showsPointsOfInterest={false}
               initialRegion={{
                 latitude: initialLocation.latitude,
                 longitude: initialLocation.longitude,
                 latitudeDelta: 0.014,
                 longitudeDelta: 0.014
               }}
-            ></MapViewContainer>
+            >
+              {points.length > 0 &&
+                points.map(({ id, name, latitude, longitude, items }) => (
+                  <Marker
+                    key={id}
+                    title={name}
+                    description={`Description: ${name}`}
+                    coordinate={{
+                      latitude: Number(latitude),
+                      longitude: Number(longitude)
+                    }}
+                  >
+                    <Point
+                      backgroundColor={
+                        items.length > 1 ? colors.primary : items[0].activeColor
+                      }
+                    />
+                  </Marker>
+                ))}
+            </MapViewContainer>
           </>
         ) : (
           <Loading />
