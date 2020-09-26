@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Wrapper,
   Container,
@@ -23,6 +23,8 @@ import { useItemsContext } from '../../service/context/items-context'
 import { Item } from '../../components/Item'
 import { getPointsApi, PointsProps } from '../../service/api/points'
 import { Marker } from 'react-native-maps'
+import { useNavigation } from '@react-navigation/native'
+import { useAccountContext } from '../../service/context/account-context'
 
 type IState = {
   latitude: number
@@ -35,10 +37,13 @@ export const Map: React.FC = () => {
     longitude: 0
   })
 
+  const navigation = useNavigation()
   const [points, setPoints] = useState<PointsProps[]>([])
 
   const { getItemsSelected } = useItemsContext()
   const itemsSelected = getItemsSelected()
+
+  const { signed } = useAccountContext()
 
   useEffect(() => {
     async function loadPosition() {
@@ -70,6 +75,10 @@ export const Map: React.FC = () => {
   const handleOnOpenModalFilterItems = () => {
     modalRefFilterItems.current?.open()
   }
+
+  const handleNavigateAddPoint = useCallback(() => {
+    signed ? navigation.navigate('AddPoint') : navigation.navigate('Account')
+  }, [])
 
   return (
     <Wrapper>
@@ -126,7 +135,7 @@ export const Map: React.FC = () => {
         <ContentAction>
           <ActionIconFixLocation />
         </ContentAction>
-        <ContentAction>
+        <ContentAction onPress={handleNavigateAddPoint}>
           <ActionIconAddPoint />
         </ContentAction>
       </ContainerAction>
