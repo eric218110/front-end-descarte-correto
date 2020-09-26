@@ -1,8 +1,9 @@
 import React from 'react'
-import { Container, Text } from './styles'
+import { useAccountContext } from '../../../service/context/account-context'
+import { Account } from '../../Account'
+import { AddPoint as AddPointScreen } from './AddPoint'
 
-export const AddPoint = (): JSX.Element => (
-  <Container>
-    <Text>Add Point</Text>
-  </Container>
-)
+export const AddPoint = (): JSX.Element => {
+  const { signed } = useAccountContext()
+  return signed ? <AddPointScreen /> : <Account />
+}
