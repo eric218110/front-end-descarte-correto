@@ -6,6 +6,7 @@ import { Map as MapScreen } from '../screens/Map'
 import { AddPoint as AddPointScreen } from '../screens/Point/Add'
 import { Account as AccountScreen } from '../screens/Account'
 import { ItemsProvider } from '../service/context/items-context'
+import { colors } from '../styles/colors'
 
 const Stack = createStackNavigator()
 const MapScreenRender = (): JSX.Element => (
@@ -27,8 +28,24 @@ export const AppRoutes: React.FC = () => (
         name="Maps"
         component={MapScreenRender}
       />
-      <Stack.Screen name="AddPoint" component={AddPointScreen} />
-      <Stack.Screen name="Account" component={AccountScreen} />
+      <Stack.Screen
+        options={() => ({
+          title: '',
+          headerTintColor: colors.primary,
+          headerTransparent: true
+        })}
+        name="AddPoint"
+        component={AddPointScreen}
+      />
+      <Stack.Screen
+        options={() => ({
+          title: '',
+          headerTintColor: colors.primary,
+          headerTransparent: true
+        })}
+        name="Account"
+        component={AccountScreen}
+      />
     </Stack.Navigator>
   </NavigationContainer>
 )
