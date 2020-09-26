@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Home as HomeScreen } from '../screens/Home'
 import { Map as MapScreen } from '../screens/Map'
 import { AddPoint as AddPointScreen } from '../screens/Point/Add'
+import { Account as AccountScreen } from '../screens/Account'
 import { ItemsProvider } from '../service/context/items-context'
 
 const Stack = createStackNavigator()
@@ -26,11 +27,8 @@ export const AppRoutes: React.FC = () => (
         name="Maps"
         component={MapScreenRender}
       />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="AddPoint"
-        component={AddPointScreen}
-      />
+      <Stack.Screen name="AddPoint" component={AddPointScreen} />
+      <Stack.Screen name="Account" component={AccountScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 )
