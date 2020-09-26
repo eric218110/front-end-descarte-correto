@@ -1,4 +1,15 @@
 import React from 'react'
-import { Container } from './style'
+import { Wrapper, Container, ImageContainer, PointContainer } from './style'
 
-export const Point = (): JSX.Element => <Container />
+type IPropsPoint = {
+  backgroundColor: string
+}
+
+export const Point = ({ backgroundColor }: IPropsPoint): JSX.Element => (
+  <Wrapper>
+    <Container>
+      <ImageContainer />
+      <PointContainer backgroundColor={backgroundColor} />
+    </Container>
+  </Wrapper>
+)
