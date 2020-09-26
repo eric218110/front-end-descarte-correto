@@ -1,5 +1,5 @@
 export const colors = {
-  primary: '#072602',
+  primary: '#285E19',
   primaryLight: '#DCE7DB',
   primaryDark: '#0c180a',
   background: '#F8F9FB',
@@ -10,11 +10,14 @@ export const colors = {
   },
   actions: {
     success: {
-      dark: '#1E7106'
+      dark: '#072602'
     },
     error: {
       dark: '#FF0000',
       light: '#F2CCCC'
+    },
+    disable: {
+      dark: '#8B958A'
     }
   }
 }
