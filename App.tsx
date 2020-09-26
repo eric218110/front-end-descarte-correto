@@ -7,11 +7,13 @@ import {
   useFonts,
   Roboto_500Medium,
   Roboto_400Regular,
+  Roboto_300Light,
   Roboto_700Bold
 } from '@expo-google-fonts/roboto'
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
+    roboto_200: Roboto_300Light,
     roboto_400: Roboto_500Medium,
     roboto_500: Roboto_400Regular,
     roboto_700: Roboto_700Bold
