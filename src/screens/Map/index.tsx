@@ -24,7 +24,6 @@ import { Item } from '../../components/Item'
 import { getPointsApi, PointsProps } from '../../service/api/points'
 import { Marker } from 'react-native-maps'
 import { useNavigation } from '@react-navigation/native'
-import { useAccountContext } from '../../service/context/account-context'
 
 type IState = {
   latitude: number
@@ -42,8 +41,6 @@ export const Map: React.FC = () => {
 
   const { getItemsSelected } = useItemsContext()
   const itemsSelected = getItemsSelected()
-
-  const { signed } = useAccountContext()
 
   useEffect(() => {
     async function loadPosition() {
@@ -77,7 +74,7 @@ export const Map: React.FC = () => {
   }
 
   const handleNavigateAddPoint = useCallback(() => {
-    signed ? navigation.navigate('AddPoint') : navigation.navigate('Account')
+    navigation.navigate('AddPoint')
   }, [])
 
   return (
