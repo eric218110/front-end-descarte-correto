@@ -6,7 +6,6 @@ export const Container = styled(RectButton)<{ disable?: boolean }>`
   display: flex;
   align-items: center;
   width: 50%;
-  margin: 3px;
   display: flex;
   flex-direction: row;
   align-items: center;
