@@ -1,11 +1,15 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import React, { createContext, useCallback, useContext } from 'react'
 import { signInApi, UserProps } from '../api/signIn'
-import { Account } from '../domain/account'
+
+type ResponseSignIn = {
+  success: boolean
+  error: string
+}
 
 type AccountContextData = {
   signed: boolean
-  signIn: (user: UserProps) => Promise<void>
+  signIn: (user: UserProps) => Promise<ResponseSignIn>
 }
 const AccountContext = createContext<AccountContextData>(
   {} as AccountContextData
@@ -16,37 +20,48 @@ export const AccountProvider = ({
 }: {
   children: JSX.Element
 }): JSX.Element => {
-  const [accountContext, setAccountContext] = React.useState<Account>({
-    id: '',
-    name: '',
-    email: '',
-    token: '',
-    role: ''
+  const [accountContext, setAccountContext] = React.useState<{
+    accessToken: string
+  }>({
+    accessToken: ''
   })
 
   React.useEffect(() => {
     async function loadStorage() {
-      const UserStorage = await AsyncStorage.getItem('@TccApp:account')
-
-      if (UserStorage) {
-        setAccountContext(JSON.parse(UserStorage))
+      const accessToken = await AsyncStorage.getItem('@TccApp:account:token')
+      if (accessToken) {
+        setAccountContext({
+          accessToken: accessToken
+        })
       }
+      console.log(accessToken)
     }
 
     loadStorage()
   }, [])
 
-  const signIn = useCallback(async (user: UserProps): Promise<void> => {
+  const signIn = useCallback(async (user: UserProps): Promise<
+    ResponseSignIn
+  > => {
     const account = await signInApi(user)
+    if (!account.accessToken) {
+      return {
+        error: 'Email ou senha invalidos',
+        success: false
+      }
+    }
+    await AsyncStorage.setItem('@TccApp:account:token', account.accessToken)
     setAccountContext(account)
-
-    await AsyncStorage.setItem('@TccApp:account', JSON.stringify(account))
+    return {
+      error: '',
+      success: true
+    }
   }, [])
 
   return (
     <AccountContext.Provider
       value={{
-        signed: accountContext.id !== '',
+        signed: !!accountContext.accessToken,
         signIn: signIn
       }}
     >
