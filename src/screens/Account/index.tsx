@@ -14,12 +14,23 @@ import {
 } from './styles'
 import Woman from '../../assets/woman.svg'
 import { Button } from '../../components/Button'
+import { useNavigation } from '@react-navigation/native'
 
 export const Account = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false)
 
+  const navigator = useNavigation()
+
   const handleClickButtonLogin = useCallback(() => {
     setLoading(true)
+    navigator.navigate('Login')
+    setLoading(false)
+  }, [])
+
+  const handleClickButtonSignUp = useCallback(() => {
+    setLoading(true)
+    navigator.navigate('SignUp')
+    setLoading(false)
   }, [])
 
   return (
@@ -42,7 +53,7 @@ export const Account = (): JSX.Element => {
         />
         <CreateAccount>
           <SubtitleBottom>novo por aqui?</SubtitleBottom>
-          <ButtonTouchableOpacity>
+          <ButtonTouchableOpacity onPress={handleClickButtonSignUp}>
             <TextTouchableOpacity>criar conta</TextTouchableOpacity>
           </ButtonTouchableOpacity>
         </CreateAccount>
