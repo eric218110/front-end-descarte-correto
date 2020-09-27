@@ -28,7 +28,7 @@ export const AlertAnimated = ({
   title,
   description
 }: IProps): JSX.Element => {
-  const [offSet] = useState(new Animated.ValueXY({ x: 0, y: 180 }))
+  const [offSet] = useState(new Animated.ValueXY({ x: 0, y: 220 }))
 
   React.useEffect(() => {
     Animated.parallel([
@@ -38,7 +38,7 @@ export const AlertAnimated = ({
         useNativeDriver: true
       }),
       Animated.spring(offSet.y, {
-        toValue: 0,
+        toValue: 100,
         speed: 4,
         bounciness: 13,
         useNativeDriver: true
