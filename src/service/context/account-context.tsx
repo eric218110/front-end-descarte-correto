@@ -24,22 +24,23 @@ export const AccountProvider = ({
     role: ''
   })
 
+  React.useEffect(() => {
+    async function loadStorage() {
+      const UserStorage = await AsyncStorage.getItem('@TccApp:account')
+
+      if (UserStorage) {
+        setAccountContext(JSON.parse(UserStorage))
+      }
+    }
+
+    loadStorage()
+  }, [])
+
   const signIn = useCallback(async (user: UserProps): Promise<void> => {
-    const { email, name, token, role, id } = await signInApi(user)
+    const account = await signInApi(user)
+    setAccountContext(account)
 
-    setAccountContext({
-      id,
-      name,
-      email,
-      token,
-      role
-    })
-
-    await AsyncStorage.setItem(
-      '@MyCredit:user',
-      JSON.stringify({ email, name })
-    )
-    await AsyncStorage.setItem('@MyCredit:token', token)
+    await AsyncStorage.setItem('@TccApp:account', JSON.stringify(account))
   }, [])
 
   return (
