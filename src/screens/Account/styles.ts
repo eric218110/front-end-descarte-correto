@@ -1,4 +1,4 @@
-import styled from 'styled-components/native'
+import styled, { css } from 'styled-components/native'
 import { colors } from '../../styles/colors'
 
 export const Wrapper = styled.SafeAreaView``
@@ -44,14 +44,38 @@ export const Body = styled.View`
   justify-content: center;
 `
 
-export const Bottom = styled.View`
+export const Bottom = styled.View<{ keyboardOpen?: boolean }>`
   align-items: center;
   margin-bottom: 75px;
+  justify-content: center;
+  ${props =>
+    props.keyboardOpen &&
+    css`
+      flex-direction: row;
+      justify-content: center;
+      width: 320px;
+      align-items: center;
+      margin-top: 20px;
+      margin-bottom: 0px;
+      height: 40px;
+      margin: auto;
+    `}
 `
 
-export const CreateAccount = styled.View``
+export const CreateAccount = styled.View<{ keyboardOpen?: boolean }>`
+  ${props =>
+    props.keyboardOpen &&
+    css`
+      margin-left: 60px;
+      align-items: center;
+      justify-content: space-between;
+    `}
+`
 
-export const ButtonTouchableOpacity = styled.TouchableOpacity``
+export const ButtonTouchableOpacity = styled.TouchableOpacity`
+  margin-bottom: 20px;
+  align-items: center;
+`
 
 export const TextTouchableOpacity = styled.Text`
   font-family: roboto_700;
