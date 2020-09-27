@@ -12,6 +12,8 @@ export const Container = styled(RectButton)<{ disable?: boolean }>`
   justify-content: center;
   border-radius: 5px;
   height: 37px;
+  justify-content: center;
+  align-items: center;
   background-color: ${props =>
     props.disable ? colors.actions.disable.dark : colors.primary};
 `
@@ -25,4 +27,6 @@ export const Loading = styled.ActivityIndicator.attrs({
 export const Text = styled.Text<{ disable?: boolean }>`
   text-transform: uppercase;
   color: ${props => (props.disable ? '#d6d6d6' : colors.text.light)};
+  text-align: center;
+  width: 100%;
 `
