@@ -13,7 +13,6 @@ import {
 } from '../styles'
 import { InputGroup, ContainerLogin, Container } from './styles'
 import { Button } from '../../../components/Button'
-import { Input } from '../../../components/Input'
 import { Animated, Keyboard } from 'react-native'
 import { colors } from '../../../styles/colors'
 import { useNavigation } from '@react-navigation/native'
@@ -123,12 +122,7 @@ export const SignUpAccount = (): JSX.Element => {
             >
               Criar conta
             </Animated.Text>
-            <InputGroup>
-              <Input text="name" />
-              <Input text="email" style={{ marginTop: 22 }} />
-              <Input text="password" style={{ marginTop: 22 }} />
-              <Input text="confirme password" style={{ marginTop: 22 }} />
-            </InputGroup>
+            <InputGroup></InputGroup>
           </ContainerLogin>
         </Animated.View>
       </Body>
