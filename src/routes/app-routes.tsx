@@ -5,6 +5,8 @@ import { Home as HomeScreen } from '../screens/Home'
 import { Map as MapScreen } from '../screens/Map'
 import { AddPoint as AddPointScreen } from '../screens/Point/Add'
 import { Account as AccountScreen } from '../screens/Account'
+import { LoginAccount as LoginAccountScreen } from '../screens/Account/Login'
+import { SignUpAccount as SignUpAccountScreen } from '../screens/Account/SignUp'
 import { ItemsProvider } from '../service/context/items-context'
 import { colors } from '../styles/colors'
 
@@ -45,6 +47,24 @@ export const AppRoutes: React.FC = () => (
         })}
         name="Account"
         component={AccountScreen}
+      />
+      <Stack.Screen
+        options={() => ({
+          title: '',
+          headerTintColor: colors.primary,
+          headerTransparent: true
+        })}
+        name="Login"
+        component={LoginAccountScreen}
+      />
+      <Stack.Screen
+        options={() => ({
+          title: '',
+          headerTintColor: colors.primary,
+          headerTransparent: true
+        })}
+        name="SignUp"
+        component={SignUpAccountScreen}
       />
     </Stack.Navigator>
   </NavigationContainer>
