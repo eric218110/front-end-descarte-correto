@@ -3,7 +3,12 @@ import { colors } from '../../styles/colors'
 
 export const Wrapper = styled.SafeAreaView``
 
-export const Container = styled.SafeAreaView`
+export const Container = styled.ScrollView.attrs(() => ({
+  keyboardShouldPersistTaps: 'handled',
+  contentContainerStyle: {
+    flex: 1
+  }
+}))`
   background: ${colors.background};
   flex: 1;
   padding-top: 102px;
@@ -24,6 +29,7 @@ export const Subtitle = styled.Text`
   color: ${colors.actions.success.dark};
   font-size: 18px;
   margin-top: 20px;
+  margin-bottom: 20px;
 `
 
 export const SubtitleBottom = styled.Text`

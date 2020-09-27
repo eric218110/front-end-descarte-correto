@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
+/* eslint-disable @typescript-eslint/ban-types */
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Container,
   Header,
@@ -12,22 +13,33 @@ import {
   ButtonTouchableOpacity,
   TextTouchableOpacity
 } from '../styles'
-import { InputGroup, ContainerLogin } from './styles'
+import { InputGroup, ContainerLogin, IconEmail, IconPassword } from './styles'
 import { Button } from '../../../components/Button'
-import { Input } from '../../../components/Input'
-import { Animated, Keyboard } from 'react-native'
+import {
+  Alert,
+  Animated,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput
+} from 'react-native'
 import { colors } from '../../../styles/colors'
-import { useNavigation } from '@react-navigation/native'
+import { Input } from '../../../components/Input'
+import { Form } from '@unform/mobile'
+import { FormHandles } from '@unform/core'
+import * as Yup from 'yup'
+import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
 import { useAccountContext } from '../../../service/context/account-context'
+import { useNavigation } from '@react-navigation/native'
 
 export const LoginAccount = (): JSX.Element => {
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading] = useState<boolean>(false)
   const [offSet] = useState(new Animated.ValueXY({ x: 0, y: 150 }))
   const [opacity] = useState(new Animated.Value(0.5))
   const [opacityText] = useState(new Animated.Value(1))
   const [openKeyboard, setOpenKeyboard] = useState<boolean>()
-  const [email, setEmailInput] = useState<string>('')
-  const [password, setPasswordInput] = useState<string>('')
+  const inputPasswordRef = useRef<TextInput>(null)
+  const formRef = useRef<FormHandles>(null)
   const { signIn } = useAccountContext()
   const navigator = useNavigation()
 
@@ -81,32 +93,57 @@ export const LoginAccount = (): JSX.Element => {
     }
   }, [])
 
-  const handleClickButtonLogin = useCallback(async () => {
-    setLoading(true)
-    const response = await signIn({ email, password })
-    console.log(response)
+  type SignInFormDataType = {
+    email: string
+    password: string
+  }
 
-    setLoading(false)
-  }, [])
+  const handleSubmitLogin = useCallback(async (data: SignInFormDataType) => {
+    try {
+      formRef.current?.setErrors({})
+      const schemasYup = Yup.object().shape({
+        email: Yup.string()
+          .required('Campo email é obrigatório')
+          .email('Digite um email valido'),
+        password: Yup.string().required('Senha é um campo obrigatório')
+      })
 
-  const handleClickButtonSignUp = useCallback(() => {
-    setLoading(true)
-    navigator.navigate('SignUp')
-    setLoading(false)
+      await schemasYup.validate(data, {
+        abortEarly: false
+      })
+
+      const { success, error } = await signIn({
+        email: data.email,
+        password: data.password
+      })
+
+      if (success) {
+        navigator.navigate('AddPoint')
+      } else {
+        Alert.alert('Erro no login', error)
+      }
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const errors = getValidationErrorsYup(error)
+        formRef.current?.setErrors(errors)
+        return ''
+      }
+
+      Alert.alert('Erro no login', 'Ocorreu um erro na requisição')
+    }
   }, [])
 
   return (
-    <Container>
-      <Header>
-        <ContentTitle>
-          <Title>Descarte </Title>
-          <Title grenColor>correto</Title>
-        </ContentTitle>
-        <Subtitle>Vamos cuidar do nosso planeta</Subtitle>
-      </Header>
-      <Body>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled
+    >
+      <Container>
         <Animated.View
           style={{
+            flex: 1,
+            alignItems: 'center',
             opacity: opacity,
             transform: [
               {
@@ -115,59 +152,74 @@ export const LoginAccount = (): JSX.Element => {
             ]
           }}
         >
-          <ContainerLogin>
-            <Animated.Text
-              style={[
-                {
-                  fontSize: 36,
-                  color: colors.primary,
-                  fontFamily: 'roboto_700',
-                  marginBottom: openKeyboard ? 0 : 23
-                },
-                {
-                  opacity: opacityText
-                }
-              ]}
-            >
-              Login
-            </Animated.Text>
-            <InputGroup>
-              <Input
-                keyboardType="email-address"
-                autoCorrect={false}
-                text="email"
-                returnKeyType="next"
-                onChangeText={value => {
-                  setEmailInput(value)
-                }}
-              />
-              <Input
-                secureTextEntry
-                text="password"
-                returnKeyType="send"
-                onSubmitEditing={handleClickButtonLogin}
-                style={{ marginTop: 42 }}
-                onChangeText={value => {
-                  setPasswordInput(value)
-                }}
-              />
-            </InputGroup>
-          </ContainerLogin>
+          <Header>
+            <ContentTitle>
+              <Title>Descarte </Title>
+              <Title grenColor>correto</Title>
+            </ContentTitle>
+            <Subtitle>Vamos cuidar do nosso planeta</Subtitle>
+          </Header>
+
+          <Body>
+            <Form ref={formRef} onSubmit={handleSubmitLogin}>
+              <ContainerLogin>
+                <Animated.Text
+                  style={[
+                    {
+                      fontSize: 36,
+                      color: colors.primary,
+                      fontFamily: 'roboto_700',
+                      marginBottom: openKeyboard ? 0 : 23
+                    },
+                    {
+                      opacity: opacityText
+                    }
+                  ]}
+                >
+                  Login
+                </Animated.Text>
+                <InputGroup>
+                  <Input
+                    Icon={IconEmail}
+                    name="email"
+                    placeholder="email"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    returnKeyType="next"
+                    autoCorrect={false}
+                    onSubmitEditing={() => inputPasswordRef.current?.focus()}
+                  />
+                  <Input
+                    Icon={IconPassword}
+                    ref={inputPasswordRef}
+                    secureTextEntry
+                    name="password"
+                    placeholder="senha"
+                    returnKeyType="send"
+                    onSubmitEditing={() => handleSubmitLogin}
+                  />
+                </InputGroup>
+              </ContainerLogin>
+
+              <Bottom>
+                <Button
+                  loading={loading}
+                  text="entrar"
+                  onPress={() => {
+                    formRef.current?.submitForm()
+                  }}
+                />
+                <CreateAccount>
+                  <SubtitleBottom>novo por aqui?</SubtitleBottom>
+                  <ButtonTouchableOpacity>
+                    <TextTouchableOpacity>criar conta</TextTouchableOpacity>
+                  </ButtonTouchableOpacity>
+                </CreateAccount>
+              </Bottom>
+            </Form>
+          </Body>
         </Animated.View>
-      </Body>
-      <Bottom>
-        <Button
-          onPress={handleClickButtonLogin}
-          loading={loading}
-          text="entrar"
-        />
-        <CreateAccount>
-          <SubtitleBottom>novo por aqui?</SubtitleBottom>
-          <ButtonTouchableOpacity onPress={handleClickButtonSignUp}>
-            <TextTouchableOpacity>criar conta</TextTouchableOpacity>
-          </ButtonTouchableOpacity>
-        </CreateAccount>
-      </Bottom>
-    </Container>
+      </Container>
+    </KeyboardAvoidingView>
   )
 }
