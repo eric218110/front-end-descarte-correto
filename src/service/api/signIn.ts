@@ -1,10 +1,10 @@
 import api from './index'
 import { Account } from '../domain/account'
 
-export interface UserProps
-  extends Omit<Account, 'id' | 'accessToken' | 'role' | 'name'> {
-  password: string
-}
+export type UserProps = Omit<
+  Account,
+  'id' | 'accessToken' | 'role' | 'name' | 'passwordConfirmation'
+>
 
 export const signInApi = async (user: UserProps): Promise<Account> => {
   try {

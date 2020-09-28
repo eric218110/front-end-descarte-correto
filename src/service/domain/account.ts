@@ -4,4 +4,6 @@ export type Account = {
   email: string
   accessToken: string
   role: string
+  password: string
+  passwordConfirmation: string
 }
