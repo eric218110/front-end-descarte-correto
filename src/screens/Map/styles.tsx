@@ -54,7 +54,7 @@ export const ContentAction = styled(RectButton)`
   height: 45px;
   width: 45px;
   margin-top: 22px;
-  background: ${colors.actions.success.dark};
+  background: ${colors.primary};
   justify-content: center;
   align-items: center;
 `
