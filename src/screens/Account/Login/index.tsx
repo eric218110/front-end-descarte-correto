@@ -16,7 +16,6 @@ import {
 import { InputGroup, ContainerLogin, IconEmail, IconPassword } from './styles'
 import { Button } from '../../../components/Button'
 import {
-  Alert,
   Animated,
   Keyboard,
   KeyboardAvoidingView,
@@ -31,12 +30,22 @@ import * as Yup from 'yup'
 import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
 import { useAccountContext } from '../../../service/context/account-context'
 import { useNavigation } from '@react-navigation/native'
-
+import { AlertAnimated } from '../../../components/Alert'
+type ErrorAlert = {
+  active: boolean
+  title: string
+  description: string
+}
 export const LoginAccount = (): JSX.Element => {
-  const [loading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [offSet] = useState(new Animated.ValueXY({ x: 0, y: 150 }))
   const [opacity] = useState(new Animated.Value(0.5))
   const [opacityText] = useState(new Animated.Value(1))
+  const [alert, setActiveAlert] = useState<ErrorAlert>({
+    active: false,
+    title: '',
+    description: ''
+  })
   const [openKeyboard, setOpenKeyboard] = useState<boolean>()
   const inputPasswordRef = useRef<TextInput>(null)
   const formRef = useRef<FormHandles>(null)
@@ -100,6 +109,7 @@ export const LoginAccount = (): JSX.Element => {
 
   const handleSubmitLogin = useCallback(async (data: SignInFormDataType) => {
     try {
+      setLoading(true)
       formRef.current?.setErrors({})
       const schemasYup = Yup.object().shape({
         email: Yup.string()
@@ -118,18 +128,43 @@ export const LoginAccount = (): JSX.Element => {
       })
 
       if (success) {
+        setLoading(false)
         navigator.navigate('AddPoint')
       } else {
-        Alert.alert('Erro no login', error)
+        setLoading(false)
+        setActiveAlert({
+          active: true,
+          title: `error: ${error}`,
+          description: error
+        })
+        setTimeout(() => {
+          setActiveAlert({
+            active: false,
+            title: '',
+            description: ''
+          })
+        }, 5000)
       }
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         const errors = getValidationErrorsYup(error)
         formRef.current?.setErrors(errors)
+        setLoading(false)
         return ''
       }
-
-      Alert.alert('Erro no login', 'Ocorreu um erro na requisição')
+      setLoading(false)
+      setActiveAlert({
+        active: true,
+        title: 'Erro no login',
+        description: 'email ou senha incorretos'
+      })
+      setTimeout(() => {
+        setActiveAlert({
+          active: false,
+          title: '',
+          description: ''
+        })
+      }, 5000)
     }
   }, [])
 
@@ -220,6 +255,15 @@ export const LoginAccount = (): JSX.Element => {
           </Body>
         </Animated.View>
       </Container>
+      {alert.active && (
+        <AlertAnimated
+          title={alert.title}
+          description={alert.description}
+          backgroundColor="#f2cccc"
+          colorActions="#FF0000"
+          iconName="alert"
+        />
+      )}
     </KeyboardAvoidingView>
   )
 }
