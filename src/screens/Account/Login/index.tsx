@@ -246,7 +246,9 @@ export const LoginAccount = (): JSX.Element => {
                 />
                 <CreateAccount>
                   <SubtitleBottom>novo por aqui?</SubtitleBottom>
-                  <ButtonTouchableOpacity>
+                  <ButtonTouchableOpacity
+                    onPress={() => navigator.navigate('SignUp')}
+                  >
                     <TextTouchableOpacity>criar conta</TextTouchableOpacity>
                   </ButtonTouchableOpacity>
                 </CreateAccount>
