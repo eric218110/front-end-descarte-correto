@@ -1,6 +1,5 @@
 import styled from 'styled-components/native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { colors } from '../../../styles/colors'
 
 export const ContainerLogin = styled.View`
   justify-content: center;
