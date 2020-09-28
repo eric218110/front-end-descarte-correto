@@ -91,7 +91,8 @@ export const TextButtonBottom = styled.Text`
 export const ContentRight = styled.View<{ disable: boolean }>`
   height: 52px;
   width: 52px;
-  background: ${props => (props.disable ? colors.primaryDark : '#8B958A')};
+  background: ${props =>
+    props.disable ? colors.actions.success.dark : '#8B958A'};
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   position: absolute;
