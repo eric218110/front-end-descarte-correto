@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 import { colors } from '../../styles/colors'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { RawButton } from 'react-native-gesture-handler'
+import { RectButton } from 'react-native-gesture-handler'
 
 export const Container = styled.View`
   height: 52px;
@@ -53,7 +53,7 @@ export const TextEmail = styled.Text`
   font-size: 14px;
 `
 
-export const ExitAppActionIconContent = styled(RawButton)`
+export const ExitAppActionIconContent = styled(RectButton)`
   margin-right: 22px;
   padding: 3px;
   align-items: center;
@@ -63,12 +63,6 @@ export const ExitAppActionIconContent = styled(RawButton)`
 
 export const ExitAppActionIcon = styled(MaterialCommunityIcons).attrs(() => ({
   name: 'logout',
-  size: 28,
-  color: colors.primary
-}))``
-
-export const EnterAppActionIcon = styled(MaterialCommunityIcons).attrs(() => ({
-  name: 'login',
   size: 28,
   color: colors.primary
 }))``

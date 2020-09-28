@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
 import { colors } from '../../styles/colors'
-import LogoSVG from '../../assets/logo.svg'
 import {
   Container,
   Avatar,
@@ -11,9 +10,10 @@ import {
   ExitAppActionIconContent,
   ExitAppActionIcon,
   TextName,
-  TextEmail,
-  EnterAppActionIcon
+  TextEmail
 } from './style'
+import { useAccountContext } from '../../service/context/account-context'
+import { AlertAnimated } from '../Alert'
 
 type Account = {
   name: string
@@ -21,29 +21,41 @@ type Account = {
 }
 
 export const Header = (): JSX.Element => {
+  const { signed, signOut, getAccount } = useAccountContext()
+  const [activeAlert, setActiveAlert] = useState<boolean>(false)
+  const [activeInScreen, setActiveInScreen] = useState<boolean>(signed)
   const [account, setAccount] = useState<Account>({ name: '', email: '' })
-  const [logged, setLogged] = useState<boolean>(false)
 
   useEffect(() => {
-    async function getAccount() {
-      setAccount({
-        name: 'Fake User name',
-        email: 'fakeemail@email.com'
-      })
+    async function setAccountDataInitial() {
+      const { email, name } = getAccount
+      setAccount({ email, name })
     }
-    getAccount()
+    setAccountDataInitial()
   }, [])
 
   useEffect(() => {
-    async function getActiveUser() {
-      return setLogged(false)
+    async function setAccountData() {
+      const { email, name } = getAccount
+      setAccount({ email, name })
     }
-    getActiveUser()
-  }, [])
+    setAccountData()
+    setActiveInScreen(signed)
+  }, [signed])
+
+  const handleButtonSignOut = useCallback(async () => {
+    await signOut()
+    setActiveAlert(true)
+    setTimeout(() => {
+      setActiveInScreen(false)
+      setActiveAlert(false)
+    }, 3000)
+  }, [activeAlert, activeInScreen])
+
   return (
-    <Container>
-      {logged ? (
-        <>
+    <>
+      {activeInScreen && (
+        <Container>
           <Avatar>
             <IconAvatar>
               <FontAwesome
@@ -58,17 +70,20 @@ export const Header = (): JSX.Element => {
               <TextEmail numberOfLines={1}>{account.email}</TextEmail>
             </TextAvatar>
           </Avatar>
-        </>
-      ) : (
-        <>
-          <Avatar>
-            <LogoSVG width={35} />
-          </Avatar>
-        </>
+          <ExitAppActionIconContent onPress={handleButtonSignOut}>
+            <ExitAppActionIcon />
+          </ExitAppActionIconContent>
+        </Container>
       )}
-      <ExitAppActionIconContent>
-        {logged ? <ExitAppActionIcon /> : <EnterAppActionIcon />}
-      </ExitAppActionIconContent>
-    </Container>
+      {activeAlert && (
+        <AlertAnimated
+          title="Logout"
+          description="Sucesso no logout"
+          backgroundColor="#AFC996"
+          colorActions="#072602"
+          iconName="check"
+        />
+      )}
+    </>
   )
 }
