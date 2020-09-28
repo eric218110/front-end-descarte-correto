@@ -8,7 +8,13 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { Container, InputStyled } from './style'
+import {
+  Wrapper,
+  Container,
+  InputStyled,
+  TextErrorContainer,
+  TextError
+} from './style'
 import { TextInput, TextInputProps } from 'react-native'
 import { colors } from '../../styles/colors'
 import { useField } from '@unform/core'
@@ -79,18 +85,25 @@ export const Input = forwardRef(
     }, [error, isFocused, isFilled])
 
     return (
-      <Container isFocused={isFocused} isError={!!error}>
-        {Icon && <Icon color={getColorField()} />}
-        <InputStyled
-          ref={inputElementRef}
-          placeholderTextColor={getColorField()}
-          defaultValue={defaultValue}
-          onChangeText={value => (inputValueRef.current.value = value)}
-          onFocus={handleIsFocused}
-          onBlur={handleIsBlur}
-          {...rest}
-        />
-      </Container>
+      <Wrapper>
+        <Container isFocused={isFocused} isError={!!error}>
+          {Icon && <Icon color={getColorField()} />}
+          <InputStyled
+            ref={inputElementRef}
+            placeholderTextColor={getColorField()}
+            defaultValue={defaultValue}
+            onChangeText={value => (inputValueRef.current.value = value)}
+            onFocus={handleIsFocused}
+            onBlur={handleIsBlur}
+            {...rest}
+          />
+        </Container>
+        {error && (
+          <TextErrorContainer>
+            <TextError>{error}</TextError>
+          </TextErrorContainer>
+        )}
+      </Wrapper>
     )
   }
 )
