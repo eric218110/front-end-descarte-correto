@@ -1,20 +1,25 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import React, { createContext, useCallback, useContext } from 'react'
 import { signInApi, UserProps } from '../api/signIn'
+import { SignUpApi, SignUpProps } from '../api/signUp'
 import { Account } from '../domain/account'
 
-type ResponseSignIn = {
+type ResponseData = {
   success: boolean
   error: string
 }
 
-type AccountWithoutIdAndRole = Omit<Account, 'id' | 'role'>
+type AccountLoginData = Omit<
+  Account,
+  'id' | 'role' | 'passwordConfirmation' | 'password'
+>
 
 type AccountContextData = {
   signed: boolean
-  getAccount: AccountWithoutIdAndRole
-  signIn: (user: UserProps) => Promise<ResponseSignIn>
+  getAccount: AccountLoginData
+  signIn: (user: UserProps) => Promise<ResponseData>
   signOut: () => Promise<boolean>
+  signUp: (account: SignUpProps) => Promise<ResponseData>
 }
 
 const AccountContext = createContext<AccountContextData>(
@@ -26,9 +31,7 @@ export const AccountProvider = ({
 }: {
   children: JSX.Element
 }): JSX.Element => {
-  const [accountContext, setAccountContext] = React.useState<
-    AccountWithoutIdAndRole
-  >({
+  const [accountContext, setAccountContext] = React.useState<AccountLoginData>({
     accessToken: '',
     email: '',
     name: ''
@@ -52,9 +55,7 @@ export const AccountProvider = ({
     loadStorage()
   }, [])
 
-  const signIn = useCallback(async (user: UserProps): Promise<
-    ResponseSignIn
-  > => {
+  const signIn = useCallback(async (user: UserProps): Promise<ResponseData> => {
     const account = await signInApi(user)
     if (!account.accessToken) {
       return {
@@ -84,12 +85,44 @@ export const AccountProvider = ({
     return false
   }, [])
 
+  const signUp = useCallback(
+    async ({
+      name,
+      email,
+      password,
+      passwordConfirmation
+    }: SignUpProps): Promise<ResponseData> => {
+      const account = await SignUpApi({
+        name,
+        email,
+        password,
+        passwordConfirmation
+      })
+      if (!account.accessToken) {
+        return {
+          error: 'Email informado é invalido',
+          success: false
+        }
+      }
+      await AsyncStorage.setItem('@TccApp:account:token', account.accessToken)
+      await AsyncStorage.setItem('@TccApp:account:email', account.email)
+      await AsyncStorage.setItem('@TccApp:account:name', account.name)
+      setAccountContext(account)
+      return {
+        error: '',
+        success: true
+      }
+    },
+    []
+  )
+
   return (
     <AccountContext.Provider
       value={{
         signed: !!accountContext.accessToken,
         signIn,
         signOut,
+        signUp,
         getAccount: accountContext
       }}
     >
