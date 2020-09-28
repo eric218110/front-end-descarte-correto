@@ -40,8 +40,15 @@ export const SubtitleBottom = styled.Text`
   text-transform: uppercase;
 `
 
-export const Header = styled.View`
+export const Header = styled.View<{ keyboardOpen?: boolean }>`
   align-items: center;
+  ${props =>
+    props.keyboardOpen &&
+    css`
+      position: absolute;
+      top: 0;
+      opacity: 0;
+    `}
 `
 
 export const Body = styled.View`
@@ -54,18 +61,19 @@ export const Bottom = styled.View<{ keyboardOpen?: boolean }>`
   align-items: center;
   margin-bottom: 75px;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 60px;
   ${props =>
     props.keyboardOpen &&
     css`
       flex-direction: row;
-      justify-content: center;
+      justify-content: space-between;
       width: 320px;
       align-items: center;
-      margin-top: 20px;
-      margin-bottom: 0px;
+      padding-top: 20px;
       height: 40px;
       margin: auto;
+      margin-top: 30px;
+      margin-bottom: 30px;
     `}
 `
 
