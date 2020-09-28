@@ -54,6 +54,7 @@ export const Bottom = styled.View<{ keyboardOpen?: boolean }>`
   align-items: center;
   margin-bottom: 75px;
   justify-content: center;
+  margin-top: 20px;
   ${props =>
     props.keyboardOpen &&
     css`
