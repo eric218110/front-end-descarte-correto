@@ -235,7 +235,6 @@ export const LoginAccount = (): JSX.Element => {
                   />
                 </InputGroup>
               </ContainerLogin>
-
               <Bottom>
                 <Button
                   loading={loading}
