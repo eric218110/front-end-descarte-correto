@@ -137,7 +137,7 @@ export const Map: React.FC = () => {
         </ContentAction>
       </ContainerAction>
       <ModalizeContainer ref={modalRefFilterItems}>
-        <Filter />
+        <Filter title="Filtre os items" />
       </ModalizeContainer>
       <ItemsListContainer>
         {itemsSelected.map(({ id, title, active, activeColor }) =>
