@@ -16,19 +16,27 @@ import { Loading } from '../../Loading'
 import { View } from 'react-native'
 import { useItemsContext } from '../../../service/context/items-context'
 
-export const Filter: React.FC = () => {
+type FilterItemsProps = {
+  title: string
+}
+
+export const Filter = ({ title }: FilterItemsProps): JSX.Element => {
   const { loadItemsSelected, getItemsSelected } = useItemsContext()
   const selectedsItems = getItemsSelected()
   const [loading, setLoading] = useState<boolean>(true)
-
   useEffect(() => {
     if (selectedsItems !== undefined) setLoading(false)
   }, [])
 
   const lengthSelected = useCallback(() => {
-    let length = selectedsItems.map(({ active }) => (active ? 1 : '')).join()
-    length = length.replace(',', '')
-    return length.length - 2
+    const length = selectedsItems.map(({ active }) => (active ? 1 : 0))
+    let x = ''
+    length.map(stringLength => {
+      if (stringLength === 1) {
+        x = x + 'x'
+      }
+    })
+    return x.length
   }, [])
 
   return (
@@ -46,8 +54,8 @@ export const Filter: React.FC = () => {
           {selectedsItems.length !== 0 ? (
             <>
               <Header>
-                <Text>Filter items</Text>
-                <Text>{`Selecteds ${lengthSelected()}`}</Text>
+                <Text>{title}</Text>
+                <Text>{`selecionados ${lengthSelected()}`}</Text>
               </Header>
               {selectedsItems.map(
                 ({ id, color, activeColor, title, active }) => (
@@ -76,7 +84,7 @@ export const Filter: React.FC = () => {
                 )
               )}
               <Bottom>
-                <Text>Clear all</Text>
+                <Text>limpar todos</Text>
               </Bottom>
             </>
           ) : (
@@ -84,7 +92,7 @@ export const Filter: React.FC = () => {
               <ContentEmptyLottieView
                 source={require('../../../assets/lottie/empty.json')}
               />
-              <TextEmpty>List Empty</TextEmpty>
+              <TextEmpty>zero items :|</TextEmpty>
             </ContainerEmpty>
           )}
         </ListItems>

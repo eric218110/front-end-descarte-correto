@@ -42,7 +42,7 @@ export const ItemContent = styled(RectButton)<{
   ${props =>
     !props.active &&
     css`
-      background: #d1d1d1;
+      background: ${colors.secundary};
     `};
 `
 export const NameItem = styled.Text<{ active?: boolean; color: string }>`
