@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { getItemsApi } from '../api/items'
 
-type IItemsProps = {
+export type ItemsProps = {
   id: string
   title: string
   color: string
@@ -10,9 +10,9 @@ type IItemsProps = {
 }
 
 type ItemsContextData = {
-  items: IItemsProps[]
-  getItemsSelected(): IItemsProps[]
-  loadItemsSelected(item: IItemsProps): void
+  items: ItemsProps[]
+  getItemsSelected(): ItemsProps[]
+  loadItemsSelected(item: ItemsProps): void
 }
 const ItemsContext = createContext<ItemsContextData>({} as ItemsContextData)
 
@@ -21,7 +21,7 @@ export const ItemsProvider = ({
 }: {
   children: JSX.Element
 }): JSX.Element => {
-  const [itemsSelected, setItemsSelected] = useState<IItemsProps[]>([])
+  const [itemsSelected, setItemsSelected] = useState<ItemsProps[]>([])
 
   useEffect(() => {
     async function getItems() {
@@ -34,11 +34,11 @@ export const ItemsProvider = ({
     getItems()
   }, [])
 
-  function getItemsSelected(): IItemsProps[] {
+  function getItemsSelected(): ItemsProps[] {
     return itemsSelected
   }
 
-  function loadItemsSelected(item: IItemsProps): void {
+  function loadItemsSelected(item: ItemsProps): void {
     const internalItems = [...itemsSelected]
     const ids = internalItems.map(({ id }) => id)
 
