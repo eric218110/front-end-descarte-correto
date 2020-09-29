@@ -18,6 +18,19 @@ export const Container = styled(RectButton)<{ disable?: boolean }>`
     props.disable ? colors.actions.disable.dark : colors.primary};
 `
 
+export const ContainerCircle = styled(RectButton)<{ disable?: boolean }>`
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${props =>
+    props.disable ? colors.actions.disable.dark : colors.primary};
+`
+
 export const Loading = styled.ActivityIndicator.attrs({
   color: '#FFF'
 })`
