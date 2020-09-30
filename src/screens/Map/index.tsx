@@ -19,11 +19,11 @@ import { Filter } from '../../components/Item/Filter'
 import { Loading } from '../../components/Loading'
 import { Point } from '../../components/Point'
 import { Modalize } from 'react-native-modalize'
-import { useItemsContext } from '../../service/context/items-context'
 import { Item } from '../../components/Item'
-import { getPointsApi, PointsProps } from '../../service/api/points'
 import { Marker } from 'react-native-maps'
 import { useNavigation } from '@react-navigation/native'
+import { useItemsContext } from '../../service/context/items-context'
+import { usePointContext } from '../../service/context/point-context'
 
 type IState = {
   latitude: number
@@ -35,13 +35,6 @@ export const Map: React.FC = () => {
     latitude: 0,
     longitude: 0
   })
-
-  const navigation = useNavigation()
-  const [points, setPoints] = useState<PointsProps[]>([])
-
-  const { getItemsSelected } = useItemsContext()
-  const itemsSelected = getItemsSelected()
-
   useEffect(() => {
     async function loadPosition() {
       const { status } = await Location.requestPermissionsAsync()
@@ -58,14 +51,10 @@ export const Map: React.FC = () => {
 
     loadPosition()
   }, [])
-
-  useEffect(() => {
-    async function getPoints() {
-      const points = await getPointsApi()
-      setPoints(points)
-    }
-    getPoints()
-  }, [])
+  const { getItemsSelected } = useItemsContext()
+  const { points } = usePointContext()
+  const navigation = useNavigation()
+  const itemsSelected = getItemsSelected()
 
   const modalRefFilterItems = useRef<Modalize>(null)
 
