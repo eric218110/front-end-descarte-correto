@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import {
   Container,
   ImageContainer,
+  ContentPhotoPreview,
   ContentIconCamera,
   IconCamera,
   ContentMain,
@@ -19,22 +20,34 @@ import {
   DescriptionContentRightText,
   HelpContainer,
   HelpText,
-  ContentRight
+  ContentRight,
+  IconDeletePhotoContainer,
+  IconDeletePhoto
 } from './styles'
-import { Filter } from '../../../../components/Item/Filter'
-import { FormHandles } from '@unform/core'
-import {
-  ItemsProps,
-  useItemsContext
-} from '../../../../service/context/items-context'
+import { useItemsContext } from '../../../../service/context/items-context'
 import getValidationErrorsYup from '../../../../utils/getValidationErrorYup'
 import { AlertAnimated } from '../../../../components/Alert'
 import { colors } from '../../../../styles/colors'
+import { Filter } from '../../../../components/Item/Filter'
+import { FormHandles } from '@unform/core'
+import * as Permissions from 'expo-permissions'
+import * as ImagePicker from 'expo-image-picker'
+import { StatusBar } from 'react-native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { AddressFormData } from '../AddPoint'
 
 type DetailsPointFormData = {
   titlePoint: string
-  imagePoint: string
-  itemsSelected: ItemsProps[]
+  file: string
+  items: string[]
+  city: string
+  latitude: string
+  longitude: string
+  neighborhood: string
+  referencePoint: string
+  state: string
+  street: string
+  zipCode: string
 }
 
 type ErrorAlert = {
@@ -43,18 +56,25 @@ type ErrorAlert = {
   description: string
 }
 
+type AddressFormDataScreenProps = RouteProp<
+  Record<'AddressFormData', AddressFormData>,
+  'AddressFormData'
+>
+
 export const AddPointDetails: React.FC = () => {
+  const { params } = useRoute<AddressFormDataScreenProps>()
+  const { goBack } = useNavigation()
   const formRef = useRef<FormHandles>(null)
   const { items } = useItemsContext()
   const [loading, setLoading] = useState<boolean>(false)
-  const [detailsPoints, setDetailsPoints] = useState<DetailsPointFormData>(
-    {} as DetailsPointFormData
-  )
+  const [hasPermissionCamera, setHasPermissionCamera] = useState<boolean>(true)
+  const [dataImageUri, setDataImageUri] = useState<string>('')
+  const [itemsSelecteds, setItemsSelecteds] = useState<string[]>([])
   const [alert, setActiveAlert] = useState<ErrorAlert>({} as ErrorAlert)
   const handleButtonCreatePoint = useCallback(
     async (data: DetailsPointFormData) => {
+      setLoading(true)
       try {
-        setLoading(true)
         formRef.current?.setErrors({})
         const schemasYup = Yup.object().shape({
           title: Yup.string().required('Campo titulo é obrigatório')
@@ -64,7 +84,7 @@ export const AddPointDetails: React.FC = () => {
           abortEarly: false
         })
 
-        if (detailsPoints.itemsSelected.length === 0) {
+        if (itemsSelecteds.length === 0) {
           setActiveAlert({
             active: true,
             description: 'Selecione no mínimo 1 item para coleta',
@@ -77,7 +97,35 @@ export const AddPointDetails: React.FC = () => {
               title: ''
             })
           }, 5000)
+          return ''
         }
+        if (dataImageUri === '') {
+          setActiveAlert({
+            active: true,
+            description: 'É preciso enviar uma foto do local',
+            title: 'Foto não encontrada'
+          })
+          setTimeout(() => {
+            setActiveAlert({
+              active: false,
+              description: '',
+              title: ''
+            })
+          }, 5000)
+          return ''
+        }
+
+        console.log('CREATE NEW POINT')
+        data.city = params.city
+        data.latitude = params.latitude
+        data.longitude = params.longitude
+        data.neighborhood = params.neighborhood
+        data.referencePoint = params.referencePoint
+        data.street = params.street
+        data.zipCode = params.zipCode
+        data.file = dataImageUri
+        data.items = itemsSelecteds
+        console.log(data)
 
         setLoading(false)
       } catch (error) {
@@ -89,10 +137,11 @@ export const AddPointDetails: React.FC = () => {
         }
       }
     },
-    [detailsPoints]
+    [itemsSelecteds, dataImageUri]
   )
 
   useEffect(() => {
+    if (!params) goBack()
     setActiveAlert({
       active: false,
       description: '',
@@ -101,17 +150,79 @@ export const AddPointDetails: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    const itemsSelected = items.filter((items: ItemsProps) => items.active)
-    setDetailsPoints({ ...detailsPoints, itemsSelected })
+    const itemsSelected = items
+      .filter(element => element.active)
+      .map(items => items.id)
+    setItemsSelecteds(itemsSelected)
   }, [items])
+
+  useEffect(() => {
+    async function getPermission() {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA)
+      if (status !== 'granted') {
+        setActiveAlert({
+          active: true,
+          description: 'Não foi possível ter acesso a câmera',
+          title: 'Permissão negada'
+        })
+        setTimeout(() => {
+          setActiveAlert({
+            active: false,
+            description: '',
+            title: ''
+          })
+        }, 5000)
+        setHasPermissionCamera(false)
+      }
+    }
+    getPermission()
+  }, [])
+
+  const handleClickButtonCamera = useCallback(async () => {
+    if (hasPermissionCamera) {
+      const photo = await ImagePicker.launchCameraAsync()
+      if (!photo.cancelled) {
+        setDataImageUri(photo.uri)
+      }
+    }
+  }, [dataImageUri])
+
+  const handleButtonDeletePhoto = useCallback(() => {
+    setDataImageUri('')
+    setActiveAlert({
+      active: true,
+      description: 'Arquivo de imagem deletada',
+      title: 'Foto deletada'
+    })
+    setTimeout(() => {
+      setActiveAlert({
+        active: false,
+        description: '',
+        title: ''
+      })
+    }, 5000)
+  }, [])
 
   return (
     <Container>
-      <ImageContainer>
-        <ContentIconCamera>
-          <IconCamera />
-        </ContentIconCamera>
-      </ImageContainer>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
+      {dataImageUri === '' ? (
+        <ImageContainer>
+          <ContentIconCamera onPress={handleClickButtonCamera}>
+            <IconCamera />
+          </ContentIconCamera>
+        </ImageContainer>
+      ) : (
+        <ContentPhotoPreview source={{ uri: dataImageUri }}>
+          <IconDeletePhotoContainer onPress={handleButtonDeletePhoto}>
+            <IconDeletePhoto on />
+          </IconDeletePhotoContainer>
+        </ContentPhotoPreview>
+      )}
       <Form
         ref={formRef}
         style={{ height: '70%' }}

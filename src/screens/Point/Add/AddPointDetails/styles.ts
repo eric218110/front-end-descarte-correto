@@ -19,7 +19,35 @@ export const ImageContainer = styled.View`
   align-items: center;
   justify-content: center;
   background: ${colors.secundary};
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 `
+
+export const ContentPhotoPreview = styled.ImageBackground.attrs(() => ({
+  imageStyle: { borderBottomRightRadius: 15, borderBottomLeftRadius: 15 }
+}))`
+  width: 100%;
+  height: 30%;
+  align-items: center;
+  justify-content: center;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+`
+
+export const IconDeletePhotoContainer = styled.TouchableOpacity`
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  align-items: center;
+  background: ${colors.primary};
+  justify-content: center;
+`
+
+export const IconDeletePhoto = styled(MaterialCommunityIcons).attrs(() => ({
+  name: 'delete-outline',
+  size: 18,
+  color: colors.text.light
+}))``
 
 export const ContentIconCamera = styled.TouchableOpacity`
   height: 50px;
