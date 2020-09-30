@@ -9,7 +9,10 @@ export type Point = {
   city: string
   state: string
   image: string
-  phone: string
-  account: Account
   items: Item[]
+  account: Account
+  neighborhood: string
+  reference: string
+  street: string
+  zipCode: string
 }
