@@ -1,8 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import getValidationErrorsYup from '../../../../utils/getValidationErrorYup'
+import Modal from 'react-native-modal'
+import * as Yup from 'yup'
+import * as Permissions from 'expo-permissions'
+import * as ImagePicker from 'expo-image-picker'
 import { Form } from '@unform/mobile'
 import { Button } from '../../../../components/Button'
+import { useItemsContext } from '../../../../service/context/items-context'
 import { Input } from '../../../../components/Input'
-import * as Yup from 'yup'
+import { AlertAnimated } from '../../../../components/Alert'
+import { colors } from '../../../../styles/colors'
+import { Filter } from '../../../../components/Item/Filter'
+import { FormHandles } from '@unform/core'
+import { StatusBar } from 'react-native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { AddressFormData } from '../AddPoint'
+import { usePointContext } from '../../../../service/context/point-context'
+import { useAccountContext } from '../../../../service/context/account-context'
 import {
   Container,
   ImageContainer,
@@ -22,33 +36,16 @@ import {
   HelpText,
   ContentRight,
   IconDeletePhotoContainer,
-  IconDeletePhoto
+  IconDeletePhoto,
+  ModalContent,
+  ModalSuccessText,
+  ModalContentSVG,
+  ContentCheckLottie,
+  ModalContentBottom,
+  ModalContentText,
+  ModalSuccessTextDescription,
+  ModalContentButton
 } from './styles'
-import { useItemsContext } from '../../../../service/context/items-context'
-import getValidationErrorsYup from '../../../../utils/getValidationErrorYup'
-import { AlertAnimated } from '../../../../components/Alert'
-import { colors } from '../../../../styles/colors'
-import { Filter } from '../../../../components/Item/Filter'
-import { FormHandles } from '@unform/core'
-import * as Permissions from 'expo-permissions'
-import * as ImagePicker from 'expo-image-picker'
-import { StatusBar } from 'react-native'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { AddressFormData } from '../AddPoint'
-
-type DetailsPointFormData = {
-  titlePoint: string
-  file: string
-  items: string[]
-  city: string
-  latitude: string
-  longitude: string
-  neighborhood: string
-  referencePoint: string
-  state: string
-  street: string
-  zipCode: string
-}
 
 type ErrorAlert = {
   active: boolean
@@ -62,83 +59,18 @@ type AddressFormDataScreenProps = RouteProp<
 >
 
 export const AddPointDetails: React.FC = () => {
-  const { params } = useRoute<AddressFormDataScreenProps>()
-  const { goBack } = useNavigation()
   const formRef = useRef<FormHandles>(null)
+  const { params } = useRoute<AddressFormDataScreenProps>()
+  const { goBack, navigate } = useNavigation()
   const { items } = useItemsContext()
+  const { addPoint } = usePointContext()
+  const { getAccount } = useAccountContext()
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
   const [hasPermissionCamera, setHasPermissionCamera] = useState<boolean>(true)
   const [dataImageUri, setDataImageUri] = useState<string>('')
-  const [itemsSelecteds, setItemsSelecteds] = useState<string[]>([])
+  const [itemsSelecteds, setItemsSelecteds] = useState<string>('')
   const [alert, setActiveAlert] = useState<ErrorAlert>({} as ErrorAlert)
-  const handleButtonCreatePoint = useCallback(
-    async (data: DetailsPointFormData) => {
-      setLoading(true)
-      try {
-        formRef.current?.setErrors({})
-        const schemasYup = Yup.object().shape({
-          title: Yup.string().required('Campo titulo é obrigatório')
-        })
-
-        await schemasYup.validate(data, {
-          abortEarly: false
-        })
-
-        if (itemsSelecteds.length === 0) {
-          setActiveAlert({
-            active: true,
-            description: 'Selecione no mínimo 1 item para coleta',
-            title: 'Nenhum item selecionado'
-          })
-          setTimeout(() => {
-            setActiveAlert({
-              active: false,
-              description: '',
-              title: ''
-            })
-          }, 5000)
-          return ''
-        }
-        if (dataImageUri === '') {
-          setActiveAlert({
-            active: true,
-            description: 'É preciso enviar uma foto do local',
-            title: 'Foto não encontrada'
-          })
-          setTimeout(() => {
-            setActiveAlert({
-              active: false,
-              description: '',
-              title: ''
-            })
-          }, 5000)
-          return ''
-        }
-
-        console.log('CREATE NEW POINT')
-        data.city = params.city
-        data.latitude = params.latitude
-        data.longitude = params.longitude
-        data.neighborhood = params.neighborhood
-        data.referencePoint = params.referencePoint
-        data.street = params.street
-        data.zipCode = params.zipCode
-        data.file = dataImageUri
-        data.items = itemsSelecteds
-        console.log(data)
-
-        setLoading(false)
-      } catch (error) {
-        if (error instanceof Yup.ValidationError) {
-          const errors = getValidationErrorsYup(error)
-          formRef.current?.setErrors(errors)
-          setLoading(false)
-          return ''
-        }
-      }
-    },
-    [itemsSelecteds, dataImageUri]
-  )
 
   useEffect(() => {
     if (!params) goBack()
@@ -153,6 +85,7 @@ export const AddPointDetails: React.FC = () => {
     const itemsSelected = items
       .filter(element => element.active)
       .map(items => items.id)
+      .join(',')
     setItemsSelecteds(itemsSelected)
   }, [items])
 
@@ -178,6 +111,95 @@ export const AddPointDetails: React.FC = () => {
     getPermission()
   }, [])
 
+  const handleAlertError = useCallback(
+    ({ description, title }: { description: string; title: string }) => {
+      setActiveAlert({
+        active: true,
+        description,
+        title
+      })
+      setTimeout(() => {
+        setActiveAlert({
+          active: false,
+          description: '',
+          title: ''
+        })
+      }, 5000)
+      setLoading(false)
+      return ''
+    },
+    [loading, alert]
+  )
+
+  const handleButtonCreatePoint = useCallback(
+    async (data: { name: string }) => {
+      setLoading(true)
+      try {
+        formRef.current?.setErrors({})
+        const schemasYup = Yup.object().shape({
+          name: Yup.string().required('Campo titulo é obrigatório')
+        })
+
+        await schemasYup.validate(data, {
+          abortEarly: false
+        })
+
+        if (itemsSelecteds.length === 0) {
+          handleAlertError({
+            title: 'Nenhum item selecionado',
+            description: 'Selecione no mínimo 1 item da lista'
+          })
+          return ''
+        }
+        if (dataImageUri === '') {
+          handleAlertError({
+            title: 'Foto não encontrada',
+            description: 'É preciso enviar uma foto do local'
+          })
+          return ''
+        }
+        const { error } = await addPoint({
+          token: getAccount.accessToken,
+          city: params.city,
+          state: params.state,
+          latitude: params.latitude,
+          longitude: params.longitude,
+          neighborhood: params.neighborhood,
+          reference: params.reference,
+          street: params.street,
+          zipCode: params.zipCode,
+          file: dataImageUri,
+          name: data.name,
+          items: itemsSelecteds
+        })
+
+        if (error) {
+          handleAlertError({
+            title: 'Erro ao criar novo ponto',
+            description: error
+          })
+          return ''
+        }
+
+        setIsOpenModal(true)
+        setTimeout(() => {
+          setIsOpenModal(false)
+          navigate('Maps')
+        }, 10000)
+
+        setLoading(false)
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrorsYup(error)
+          formRef.current?.setErrors(errors)
+          setLoading(false)
+          return ''
+        }
+      }
+    },
+    [itemsSelecteds, dataImageUri]
+  )
+
   const handleClickButtonCamera = useCallback(async () => {
     if (hasPermissionCamera) {
       const photo = await ImagePicker.launchCameraAsync()
@@ -189,19 +211,17 @@ export const AddPointDetails: React.FC = () => {
 
   const handleButtonDeletePhoto = useCallback(() => {
     setDataImageUri('')
-    setActiveAlert({
-      active: true,
-      description: 'Arquivo de imagem deletada',
-      title: 'Foto deletada'
+    handleAlertError({
+      title: 'Foto deletada',
+      description: 'Arquivo de imagem deletada'
     })
-    setTimeout(() => {
-      setActiveAlert({
-        active: false,
-        description: '',
-        title: ''
-      })
-    }, 5000)
+    return ''
   }, [])
+
+  const handleCloseButtonModal = useCallback(() => {
+    setIsOpenModal(false)
+    navigate('Maps')
+  }, [isOpenModal])
 
   return (
     <Container>
@@ -232,7 +252,7 @@ export const AddPointDetails: React.FC = () => {
           <Body>
             <DescriptionText>detalhes do ponto de descarte</DescriptionText>
             <ContentItems>
-              <Input placeholder="Titulo" name="title" Icon={IconTextInput} />
+              <Input placeholder="Titulo" name="name" Icon={IconTextInput} />
               <ListItems>
                 <Filter title="Selecione os items" />
               </ListItems>
@@ -269,6 +289,34 @@ export const AddPointDetails: React.FC = () => {
           iconName="alert"
         />
       )}
+      <Modal
+        style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}
+        isVisible={isOpenModal}
+      >
+        <ModalContent>
+          <ModalContentSVG>
+            <ContentCheckLottie
+              loop={false}
+              source={require('../../../../assets/lottie/check.json')}
+            />
+          </ModalContentSVG>
+          <ModalContentBottom>
+            <ModalContentText>
+              <ModalSuccessText>Parabéns</ModalSuccessText>
+              <ModalSuccessTextDescription numberOfLines={2}>
+                ponto de descarte salvo com sucesso
+              </ModalSuccessTextDescription>
+            </ModalContentText>
+            <ModalContentButton>
+              <Button
+                onPress={handleCloseButtonModal}
+                style={{ width: '100%' }}
+                text="fechar"
+              />
+            </ModalContentButton>
+          </ModalContentBottom>
+        </ModalContent>
+      </Modal>
     </Container>
   )
 }

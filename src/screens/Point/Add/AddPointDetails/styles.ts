@@ -1,4 +1,5 @@
 import styled from 'styled-components/native'
+import LottieView from 'lottie-react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { colors } from '../../../../styles/colors'
 import { Dimensions } from 'react-native'
@@ -135,4 +136,58 @@ export const HelpText = styled.Text`
 export const ContentRight = styled.View`
   align-items: center;
   width: 50%;
+`
+
+export const ModalContent = styled.View`
+  height: 70%;
+  width: 90%;
+  background: ${colors.background};
+  border-radius: 22px;
+`
+
+export const ModalContentSVG = styled.View`
+  height: 50%;
+  width: 100%;
+`
+
+export const ModalContentBottom = styled.View`
+  height: 50%;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+`
+
+export const ModalContentText = styled.View`
+  justify-content: space-around;
+  height: 50%;
+`
+
+export const ModalSuccessText = styled.Text`
+  text-transform: uppercase;
+  font-family: roboto_700;
+  color: ${colors.primary};
+  font-size: 28px;
+  text-align: center;
+`
+
+export const ModalSuccessTextDescription = styled.Text`
+  text-transform: uppercase;
+  font-family: roboto_700;
+  color: ${colors.primary};
+  font-size: 15px;
+  text-align: center;
+  max-width: 50%;
+`
+
+export const ModalContentButton = styled.View`
+  width: 50%;
+  height: 50%;
+  justify-content: center;
+`
+
+export const ContentCheckLottie = styled(LottieView).attrs({
+  autoPlay: true,
+  hardwareAccelerationAndroid: true
+})`
+  flex: 1;
 `
