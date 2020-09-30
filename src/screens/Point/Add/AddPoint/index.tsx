@@ -30,7 +30,7 @@ import { FormHandles } from '@unform/core'
 import getValidationErrorsYup from '../../../../utils/getValidationErrorYup'
 import { useNavigation } from '@react-navigation/native'
 
-type AddressFormData = {
+export type AddressFormData = {
   referencePoint: string
   street: string
   neighborhood: string
