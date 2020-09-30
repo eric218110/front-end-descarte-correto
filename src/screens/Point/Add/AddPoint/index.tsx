@@ -31,7 +31,7 @@ import getValidationErrorsYup from '../../../../utils/getValidationErrorYup'
 import { useNavigation } from '@react-navigation/native'
 
 export type AddressFormData = {
-  referencePoint: string
+  reference: string
   street: string
   neighborhood: string
   state: string
@@ -92,7 +92,7 @@ export const AddPoint = (): JSX.Element => {
         setLoading(true)
         formRef.current?.setErrors({})
         const schemasYup = Yup.object().shape({
-          referencePoint: Yup.string().required(
+          reference: Yup.string().required(
             'Campo ponto de referência é obrigatório'
           )
         })
@@ -102,7 +102,7 @@ export const AddPoint = (): JSX.Element => {
         })
         setLoading(false)
         const addressParams: AddressFormData = {
-          referencePoint: data.referencePoint,
+          reference: data.reference,
           ...address
         }
         navigator.navigate('AddPointDetails', addressParams)
@@ -151,7 +151,7 @@ export const AddPoint = (): JSX.Element => {
                       <Input
                         placeholder="ponto de referência"
                         Icon={DirectionLocation}
-                        name={'referencePoint'}
+                        name={'reference'}
                         autoCapitalize="words"
                         returnKeyType="send"
                         onSubmitEditing={() => formRef.current?.submitForm()}
