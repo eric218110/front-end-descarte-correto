@@ -185,7 +185,7 @@ export const AddPointDetails: React.FC = () => {
         setTimeout(() => {
           setIsOpenModal(false)
           navigate('Maps')
-        }, 10000)
+        }, 5000)
 
         setLoading(false)
       } catch (error) {

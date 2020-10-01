@@ -14,7 +14,8 @@ import {
   ContainerCalloutText,
   TextCallout,
   DividerCallout,
-  IconLinkDetailsPoint
+  IconLinkDetailsPoint,
+  ActionIconCloseDirection
 } from './styles'
 import * as Location from 'expo-location'
 import { Alert, StatusBar } from 'react-native'
@@ -24,10 +25,19 @@ import { Filter } from '../../components/Item/Filter'
 import { Loading } from '../../components/Loading'
 import { Modalize } from 'react-native-modalize'
 import { Item } from '../../components/Item'
-import { Marker, Callout } from 'react-native-maps'
+import MapView, { Marker, Callout } from 'react-native-maps'
 import { useNavigation } from '@react-navigation/native'
 import { useItemsContext } from '../../service/context/items-context'
 import { usePointContext } from '../../service/context/point-context'
+import {
+  DirectionsProps,
+  DestinationMapsComponent
+} from '../../components/Destination'
+
+export type DestinationPropsCallBackDetailsPoint = Omit<
+  DirectionsProps,
+  'origin'
+>
 
 type IState = {
   latitude: number
@@ -35,10 +45,15 @@ type IState = {
 }
 
 export const Map: React.FC = () => {
+  const [directionEnable, setDirectionEnable] = useState<DirectionsProps>(
+    {} as DirectionsProps
+  )
+
   const [initialLocation, setInitialLocation] = useState<IState>({
     latitude: 0,
     longitude: 0
   })
+
   useEffect(() => {
     async function loadPosition() {
       const { status } = await Location.requestPermissionsAsync()
@@ -55,16 +70,61 @@ export const Map: React.FC = () => {
 
     loadPosition()
   }, [])
+
+  useEffect(() => {
+    setDirectionEnable({
+      origin: {
+        latitude: 0,
+        longitude: 0
+      },
+      destination: {
+        longitude: 0,
+        latitude: 0
+      }
+    })
+  }, [])
+
   const { getItemsSelected } = useItemsContext()
   const { points } = usePointContext()
   const navigation = useNavigation()
   const itemsSelected = getItemsSelected()
-
   const modalRefFilterItems = useRef<Modalize>(null)
+  const mapRef = useRef<MapView>(null)
+
+  const handleCloseNavigationDirection = useCallback(() => {
+    setDirectionEnable({
+      origin: {
+        latitude: 0,
+        longitude: 0
+      },
+      destination: {
+        longitude: 0,
+        latitude: 0
+      }
+    })
+  }, [directionEnable])
 
   const handleOnOpenModalFilterItems = () => {
     modalRefFilterItems.current?.open()
   }
+
+  const handleDirectionCallBack = useCallback(
+    ({ destination }: DestinationPropsCallBackDetailsPoint) => {
+      async function setDestination() {
+        const location = await Location.getCurrentPositionAsync({})
+        const { latitude, longitude } = location.coords
+        setDirectionEnable({
+          origin: {
+            latitude,
+            longitude
+          },
+          destination
+        })
+      }
+      setDestination()
+    },
+    [directionEnable]
+  )
 
   const handleNavigateAddPoint = useCallback(() => {
     navigation.navigate('AddPoint')
@@ -78,6 +138,7 @@ export const Map: React.FC = () => {
         {initialLocation.latitude !== 0 ? (
           <>
             <MapViewContainer
+              ref={mapRef}
               showsUserLocation
               showsMyLocationButton={false}
               showsTraffic={false}
@@ -94,6 +155,28 @@ export const Map: React.FC = () => {
                 longitudeDelta: 0.014
               }}
             >
+              {directionEnable.origin.latitude !== 0 && (
+                <DestinationMapsComponent
+                  destination={directionEnable.destination}
+                  origin={directionEnable.origin}
+                  onReady={() =>
+                    mapRef.current?.fitToCoordinates(
+                      [
+                        {
+                          latitude: directionEnable.origin.latitude,
+                          longitude: directionEnable.origin.longitude
+                        },
+                        {
+                          latitude: directionEnable.destination.latitude,
+                          longitude: directionEnable.destination.longitude
+                        }
+                      ],
+                      { animated: true }
+                    )
+                  }
+                />
+              )}
+              {console.log(itemsSelected)}
               {points.length > 0 &&
                 points.map(({ id, latitude, longitude, name }) => (
                   <Marker
@@ -107,7 +190,10 @@ export const Map: React.FC = () => {
                     <Callout
                       onPress={event => {
                         if (event.nativeEvent.action === 'callout-press') {
-                          navigation.navigate('DetailsPoint', { id })
+                          navigation.navigate('DetailsPoint', {
+                            id,
+                            handleDirectionCallBack
+                          })
                         }
                       }}
                     >
@@ -137,6 +223,11 @@ export const Map: React.FC = () => {
         <ContentAction onPress={handleNavigateAddPoint}>
           <ActionIconAddPoint />
         </ContentAction>
+        {directionEnable.origin.latitude !== 0 && (
+          <ContentAction onPress={handleCloseNavigationDirection}>
+            <ActionIconCloseDirection />
+          </ContentAction>
+        )}
       </ContainerAction>
       <ModalizeContainer ref={modalRefFilterItems}>
         <Filter title="Filtre os items" />

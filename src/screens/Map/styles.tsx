@@ -6,7 +6,12 @@ import Constants from 'expo-constants'
 import MapView, { Marker } from 'react-native-maps'
 import { Modalize } from 'react-native-modalize'
 import { RectButton } from 'react-native-gesture-handler'
-import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
+import {
+  Feather,
+  Ionicons,
+  MaterialIcons,
+  MaterialCommunityIcons
+} from '@expo/vector-icons'
 
 const statusBarHeight =
   Platform.OS === 'android' ? Constants.statusBarHeight : 0
@@ -72,6 +77,12 @@ export const ActionIconFixLocation = styled(Ionicons).attrs({
 
 export const ActionIconAddPoint = styled(MaterialIcons).attrs({
   name: 'add',
+  size: 24,
+  color: '#FFF'
+})``
+
+export const ActionIconCloseDirection = styled(MaterialCommunityIcons).attrs({
+  name: 'map-marker-remove',
   size: 24,
   color: '#FFF'
 })``

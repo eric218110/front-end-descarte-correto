@@ -4,6 +4,10 @@ import { ResponseListPoints, getOnePointApi } from '../../../service/api/points'
 import { Loading } from '../../../components/Loading'
 import { AlertAnimated } from '../../../components/Alert'
 import { colors } from '../../../styles/colors'
+import { StatusBar } from 'react-native'
+import HeaderImageScrollView from 'react-native-image-header-scroll-view'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { DestinationPropsCallBackDetailsPoint } from '../../Map/index'
 import {
   Container,
   ImageContainer,
@@ -25,11 +29,17 @@ import {
   StarIcon,
   StarIconOutline
 } from './styles'
-import { StatusBar } from 'react-native'
-import HeaderImageScrollView from 'react-native-image-header-scroll-view'
 
 type PointDataScreenParams = RouteProp<
-  Record<'PointDataScreenParams', { id: string }>,
+  Record<
+    'PointDataScreenParams',
+    {
+      id: string
+      handleDirectionCallBack: ({
+        destination
+      }: DestinationPropsCallBackDetailsPoint) => void
+    }
+  >,
   'PointDataScreenParams'
 >
 
@@ -40,7 +50,9 @@ type ErrorAlert = {
 }
 
 export const DetailsPoint = (): JSX.Element => {
-  const { id } = useRoute<PointDataScreenParams>().params
+  const { id, handleDirectionCallBack } = useRoute<
+    PointDataScreenParams
+  >().params
   const { goBack } = useNavigation()
   const [point, setPoint] = useState<ResponseListPoints | null>(null)
   const [alert, setActiveAlert] = useState<ErrorAlert>({} as ErrorAlert)
@@ -183,7 +195,17 @@ export const DetailsPoint = (): JSX.Element => {
           )}
         </Container>
       </HeaderImageScrollView>
-      <ContainerActionRouteButton>
+      <ContainerActionRouteButton
+        onPress={() => {
+          handleDirectionCallBack({
+            destination: {
+              latitude: Number(point?.latitude),
+              longitude: Number(point?.longitude)
+            }
+          })
+          goBack()
+        }}
+      >
         <IconActionRouteButton />
       </ContainerActionRouteButton>
       {alert.active && (
