@@ -1,14 +1,9 @@
 import styled from 'styled-components/native'
 import { colors } from '../../../styles/colors'
-import { Dimensions } from 'react-native'
 import { RectButton } from 'react-native-gesture-handler'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-const { height, width } = Dimensions.get('window')
-
 export const Container = styled.SafeAreaView`
-  height: ${height}px;
-  width: ${width}px;
   background: ${colors.background};
   justify-content: center;
   align-items: center;
@@ -22,11 +17,9 @@ export const ImageContainer = styled.Image.attrs(() => ({
   }
 }))`
   width: 100%;
-  height: 30%;
 `
 
-export const Body = styled.ScrollView`
-  height: 70%;
+export const Body = styled.View`
   width: 100%;
   padding-bottom: 20px;
 `
