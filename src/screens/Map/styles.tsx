@@ -99,3 +99,35 @@ export const ModalizeContainer = styled(Modalize).attrs(() => {
     )
   }
 })``
+
+export const ContainerCallout = styled.View`
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
+  padding: 3px 20px 3px 20px;
+`
+
+export const ContainerCalloutText = styled.View`
+  flex: 1;
+`
+
+export const TextCallout = styled.Text`
+  font-size: 18px;
+  font-family: roboto_700;
+  text-transform: uppercase;
+  color: ${colors.primary};
+`
+
+export const DividerCallout = styled.View`
+  flex: 1;
+`
+
+export const IconLinkDetailsPoint = styled(Feather).attrs({
+  name: 'external-link',
+  size: 24,
+  color: colors.primary
+})`
+  margin-left: 10px;
+`

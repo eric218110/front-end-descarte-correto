@@ -9,7 +9,12 @@ import {
   ActionIconFilter,
   ActionIconFixLocation,
   ActionIconAddPoint,
-  ItemsListContainer
+  ItemsListContainer,
+  ContainerCallout,
+  ContainerCalloutText,
+  TextCallout,
+  DividerCallout,
+  IconLinkDetailsPoint
 } from './styles'
 import * as Location from 'expo-location'
 import { Alert, StatusBar } from 'react-native'
@@ -17,10 +22,9 @@ import { colors } from '../../styles/colors'
 import { Header } from '../../components/Header'
 import { Filter } from '../../components/Item/Filter'
 import { Loading } from '../../components/Loading'
-import { Point } from '../../components/Point'
 import { Modalize } from 'react-native-modalize'
 import { Item } from '../../components/Item'
-import { Marker } from 'react-native-maps'
+import { Marker, Callout } from 'react-native-maps'
 import { useNavigation } from '@react-navigation/native'
 import { useItemsContext } from '../../service/context/items-context'
 import { usePointContext } from '../../service/context/point-context'
@@ -91,21 +95,30 @@ export const Map: React.FC = () => {
               }}
             >
               {points.length > 0 &&
-                points.map(({ id, name, latitude, longitude, items }) => (
+                points.map(({ id, latitude, longitude, name }) => (
                   <Marker
                     key={id}
-                    title={name}
-                    description={`Description: ${name}`}
                     coordinate={{
                       latitude: Number(latitude),
                       longitude: Number(longitude)
                     }}
+                    image={require('../../assets/icon-make.png')}
                   >
-                    <Point
-                      backgroundColor={
-                        items.length > 1 ? colors.primary : items[0].activeColor
-                      }
-                    />
+                    <Callout
+                      onPress={event => {
+                        if (event.nativeEvent.action === 'callout-press') {
+                          Alert.alert('callout pressed')
+                        }
+                      }}
+                    >
+                      <ContainerCallout>
+                        <ContainerCalloutText>
+                          <TextCallout>{name}</TextCallout>
+                        </ContainerCalloutText>
+                        <DividerCallout />
+                        <IconLinkDetailsPoint />
+                      </ContainerCallout>
+                    </Callout>
                   </Marker>
                 ))}
             </MapViewContainer>
