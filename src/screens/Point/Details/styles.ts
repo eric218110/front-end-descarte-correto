@@ -15,9 +15,7 @@ export const ImageContainer = styled.Image.attrs(() => ({
     borderBottomLeftRadius: 15,
     resizeMode: 'center'
   }
-}))`
-  width: 100%;
-`
+}))``
 
 export const Body = styled.View`
   width: 100%;

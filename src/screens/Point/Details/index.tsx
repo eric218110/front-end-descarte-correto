@@ -99,10 +99,11 @@ export const DetailsPoint = (): JSX.Element => {
         barStyle="light-content"
       />
       <HeaderImageScrollView
+        showsVerticalScrollIndicator={false}
         minOverlayOpacity={0}
-        maxOverlayOpacity={0.5}
+        maxOverlayOpacity={0.9}
         maxHeight={400}
-        minHeight={80}
+        minHeight={10}
         bounces={true}
         headerImage={{ uri: point?.image }}
       >
