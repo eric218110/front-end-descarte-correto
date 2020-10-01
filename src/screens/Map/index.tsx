@@ -107,7 +107,7 @@ export const Map: React.FC = () => {
                     <Callout
                       onPress={event => {
                         if (event.nativeEvent.action === 'callout-press') {
-                          Alert.alert('callout pressed')
+                          navigation.navigate('DetailsPoint', { id })
                         }
                       }}
                     >
