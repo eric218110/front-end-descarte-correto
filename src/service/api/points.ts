@@ -94,8 +94,44 @@ export const addPointApi = async ({
       }
     }
   }
-  return {
-    data: false,
-    error: 'Erro ao cadastrar'
+}
+
+type ResponseOnePoint = {
+  error: string
+  data: ResponseListPoints | null
+}
+
+export const getOnePointApi = async ({
+  id
+}: {
+  id: string
+}): Promise<ResponseOnePoint> => {
+  try {
+    const { data } = await api.get<ResponseListPoints>(`point/${id}`)
+    return {
+      error: '',
+      data
+    }
+  } catch (error) {
+    if (error.response) {
+      return {
+        data: null,
+        error: error.response.data.error
+      }
+    } else if (error.request) {
+      return {
+        data: null,
+        error: 'Erro ao buscar, tente novamente'
+      }
+    } else {
+      return {
+        data: null,
+        error: 'Erro ao listar ponto'
+      }
+    }
+    return {
+      data: null,
+      error: 'Erro ao buscar'
+    }
   }
 }
