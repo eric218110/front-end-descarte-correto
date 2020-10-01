@@ -5,6 +5,7 @@ import { Home as HomeScreen } from '../screens/Home'
 import { Map as MapScreen } from '../screens/Map'
 import { AddPoint as AddPointScreen } from '../screens/Point/Add'
 import { AddPointDetails as AddPointDetailsScreen } from '../screens/Point/Add/AddPointDetails'
+import { DetailsPoint as DetailsPointScreen } from '../screens/Point/Details'
 import { Account as AccountScreen } from '../screens/Account'
 import { LoginAccount as LoginAccountScreen } from '../screens/Account/Login'
 import { SignUpAccount as SignUpAccountScreen } from '../screens/Account/SignUp'
@@ -44,6 +45,15 @@ export const AppRoutes: React.FC = () => (
           })}
           name="AddPointDetails"
           component={AddPointDetailsScreen}
+        />
+        <Stack.Screen
+          options={() => ({
+            title: '',
+            headerTintColor: colors.primary,
+            headerTransparent: true
+          })}
+          name="DetailsPoint"
+          component={DetailsPointScreen}
         />
         <Stack.Screen
           options={() => ({
