@@ -197,13 +197,15 @@ export const DetailsPoint = (): JSX.Element => {
       </HeaderImageScrollView>
       <ContainerActionRouteButton
         onPress={() => {
-          handleDirectionCallBack({
-            destination: {
-              latitude: Number(point?.latitude),
-              longitude: Number(point?.longitude)
-            }
-          })
-          goBack()
+          if (handleDirectionCallBack) {
+            handleDirectionCallBack({
+              destination: {
+                latitude: Number(point?.latitude),
+                longitude: Number(point?.longitude)
+              }
+            })
+            goBack()
+          }
         }}
       >
         <IconActionRouteButton />
