@@ -9,7 +9,9 @@ import {
   addPointApi,
   AddPointsProps,
   ResponseAddPointsProps,
-  getPointsApi
+  getPointsApi,
+  ResponseListPoints,
+  getPointsFilterApi
 } from '../api/points'
 import { Point } from '../domain/point'
 
@@ -21,8 +23,17 @@ interface PointContextProps extends Omit<Point, 'account'> {
   }
 }
 
+export type ResponseLoadPoints = {
+  data: ResponseListPoints[]
+  error: string
+}
+
+type idsItemProps = {
+  ids: string
+}
+
 type PointContextData = {
-  points: PointContextProps[]
+  loadPoints: (ids: idsItemProps) => Promise<ResponseLoadPoints>
   addPoint: (pointData: AddPointsProps) => Promise<ResponseAddPointsProps>
 }
 
@@ -56,10 +67,34 @@ export const PointProvider = ({
     [points]
   )
 
+  const loadPoints = useCallback(
+    async ({ ids }: idsItemProps): Promise<ResponseLoadPoints> => {
+      if (ids.length === 0) {
+        const points = await getPointsApi()
+        return {
+          data: points,
+          error: ''
+        }
+      }
+      if (ids.length >= 1) {
+        const points = await getPointsFilterApi({ ids })
+        return {
+          data: points,
+          error: ''
+        }
+      }
+      return {
+        data: [],
+        error: 'No load points'
+      }
+    },
+    [points]
+  )
+
   return (
     <PointContext.Provider
       value={{
-        points,
+        loadPoints,
         addPoint
       }}
     >
