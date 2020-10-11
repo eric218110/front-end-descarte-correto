@@ -33,6 +33,7 @@ import {
   DirectionsProps,
   DestinationMapsComponent
 } from '../../components/Destination'
+import { ResponseListPoints } from '../../service/api/points'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<
   DirectionsProps,
@@ -45,14 +46,27 @@ type IState = {
 }
 
 export const Map: React.FC = () => {
-  const [directionEnable, setDirectionEnable] = useState<DirectionsProps>(
-    {} as DirectionsProps
-  )
-
+  const [points, setPoints] = useState<ResponseListPoints[]>([])
+  const [directionEnable, setDirectionEnable] = useState<DirectionsProps>({
+    origin: {
+      longitude: 0,
+      latitude: 0
+    },
+    destination: {
+      latitude: 0,
+      longitude: 0
+    }
+  })
   const [initialLocation, setInitialLocation] = useState<IState>({
     latitude: 0,
     longitude: 0
   })
+  const { getItemsSelected } = useItemsContext()
+  const { loadPoints } = usePointContext()
+  const navigation = useNavigation()
+  const itemsSelected = getItemsSelected()
+  const modalRefFilterItems = useRef<Modalize>(null)
+  const mapRef = useRef<MapView>(null)
 
   useEffect(() => {
     async function loadPosition() {
@@ -84,12 +98,20 @@ export const Map: React.FC = () => {
     })
   }, [])
 
-  const { getItemsSelected } = useItemsContext()
-  const { points } = usePointContext()
-  const navigation = useNavigation()
-  const itemsSelected = getItemsSelected()
-  const modalRefFilterItems = useRef<Modalize>(null)
-  const mapRef = useRef<MapView>(null)
+  useEffect(() => {
+    async function pointsLoad() {
+      const ids = itemsSelected
+        .filter(item => item.active)
+        .map(item => item.id)
+        .join()
+
+      const { data, error } = await loadPoints({ ids })
+      if (!error) {
+        setPoints(data)
+      }
+    }
+    pointsLoad()
+  }, [itemsSelected])
 
   const handleCloseNavigationDirection = useCallback(() => {
     setDirectionEnable({
@@ -176,7 +198,6 @@ export const Map: React.FC = () => {
                   }
                 />
               )}
-              {console.log(itemsSelected)}
               {points.length > 0 &&
                 points.map(({ id, latitude, longitude, name }) => (
                   <Marker
