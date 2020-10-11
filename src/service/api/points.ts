@@ -11,6 +11,22 @@ export interface ResponseListPoints extends Omit<Point, 'account'> {
   account: PickAccountIdNameEmail
 }
 
+export const getPointsFilterApi = async ({
+  ids
+}: {
+  ids: string
+}): Promise<ResponseListPoints[]> => {
+  try {
+    const { data } = await api.get<ResponseListPoints[]>(`points/filter/${ids}`)
+    if (!data) {
+      return []
+    }
+    return data
+  } catch (error) {
+    return []
+  }
+}
+
 export const getPointsApi = async (): Promise<ResponseListPoints[]> => {
   try {
     const { data } = await api.get<ResponseListPoints[]>('points')
