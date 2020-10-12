@@ -25,7 +25,7 @@ import { Filter } from '../../components/Item/Filter'
 import { Loading } from '../../components/Loading'
 import { Modalize } from 'react-native-modalize'
 import { Item } from '../../components/Item'
-import MapView, { Marker, Callout } from 'react-native-maps'
+import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useNavigation } from '@react-navigation/native'
 import { useItemsContext } from '../../service/context/items-context'
 import { usePointContext } from '../../service/context/point-context'
@@ -34,6 +34,7 @@ import {
   DestinationMapsComponent
 } from '../../components/Destination'
 import { ResponseListPoints } from '../../service/api/points'
+import { mapStyleDefault } from '../../styles/maps'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<
   DirectionsProps,
@@ -152,6 +153,17 @@ export const Map: React.FC = () => {
     navigation.navigate('AddPoint')
   }, [])
 
+  const handleZoomInCurrentLocation = useCallback(async () => {
+    const location = await Location.getCurrentPositionAsync()
+    const { latitude, longitude } = location.coords
+    mapRef.current?.animateToRegion({
+      latitude,
+      longitude,
+      latitudeDelta: 0.008,
+      longitudeDelta: 0.008
+    })
+  }, [])
+
   return (
     <Wrapper>
       <StatusBar backgroundColor={colors.background} />
@@ -160,6 +172,7 @@ export const Map: React.FC = () => {
         {initialLocation.latitude !== 0 ? (
           <>
             <MapViewContainer
+              customMapStyle={mapStyleDefault}
               ref={mapRef}
               showsUserLocation
               showsMyLocationButton={false}
@@ -170,6 +183,7 @@ export const Map: React.FC = () => {
               showsScale={false}
               showsIndoorLevelPicker={false}
               showsPointsOfInterest={false}
+              provider={PROVIDER_GOOGLE}
               initialRegion={{
                 latitude: initialLocation.latitude,
                 longitude: initialLocation.longitude,
@@ -235,19 +249,22 @@ export const Map: React.FC = () => {
         )}
       </Container>
       <ContainerAction>
-        <ContentAction onPress={handleOnOpenModalFilterItems}>
-          <ActionIconFilter />
-        </ContentAction>
-        <ContentAction>
-          <ActionIconFixLocation />
-        </ContentAction>
-        <ContentAction onPress={handleNavigateAddPoint}>
-          <ActionIconAddPoint />
-        </ContentAction>
-        {directionEnable.origin.latitude !== 0 && (
+        {directionEnable.origin.latitude !== 0 ? (
           <ContentAction onPress={handleCloseNavigationDirection}>
             <ActionIconCloseDirection />
           </ContentAction>
+        ) : (
+          <>
+            <ContentAction onPress={handleOnOpenModalFilterItems}>
+              <ActionIconFilter />
+            </ContentAction>
+            <ContentAction onPress={handleZoomInCurrentLocation}>
+              <ActionIconFixLocation />
+            </ContentAction>
+            <ContentAction onPress={handleNavigateAddPoint}>
+              <ActionIconAddPoint />
+            </ContentAction>
+          </>
         )}
       </ContainerAction>
       <ModalizeContainer ref={modalRefFilterItems}>
