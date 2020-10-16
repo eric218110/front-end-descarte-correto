@@ -16,7 +16,6 @@ import {
   TextError
 } from './style'
 import { TextInput, TextInputProps } from 'react-native'
-import { colors } from '../../styles/colors'
 import { useField } from '@unform/core'
 
 interface PropsInputStyled extends TextInputProps {
@@ -78,9 +77,9 @@ export const Input = forwardRef(
     }, [])
 
     const getColorField = useCallback((): string => {
-      if (isFocused) return colors.primary
-      if (isFilled) return colors.primary
-      if (error) return colors.actions.error.dark
+      if (isFocused) return '#005005'
+      if (isFilled) return '#005005'
+      if (error) return '#7f0000'
       return '#a1a1a1'
     }, [error, isFocused, isFilled])
 

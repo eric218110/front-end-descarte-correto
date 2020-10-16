@@ -1,12 +1,11 @@
 import styled, { css } from 'styled-components/native'
-import { colors } from '../../styles/colors'
 
 export const Wrapper = styled.View``
 
 export const Container = styled.View<{ isFocused: boolean; isError: boolean }>`
   width: 320px;
   height: 50px;
-  background-color: ${colors.primaryLight};
+  background-color: ${({ theme }) => theme.backgroundSecundary};
   border-radius: 10px;
   border: 2px solid transparent;
   flex-direction: row;
@@ -16,12 +15,12 @@ export const Container = styled.View<{ isFocused: boolean; isError: boolean }>`
   ${props =>
     props.isFocused &&
     css`
-      border-color: ${colors.primary};
+      border-color: ${({ theme }) => theme.primary};
     `}
   ${props =>
     props.isError &&
     css`
-      border-color: ${colors.actions.error.dark};
+      border-color: ${({ theme }) => theme.actions.error.light};
     `}
     z-index: 4;
 `
@@ -33,11 +32,11 @@ export const InputStyled = styled.TextInput`
   font-size: 18px;
   width: 90%;
   flex: 1;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.secundary};
   font-weight: bold;
 `
 export const TextErrorContainer = styled.View`
-  background-color: ${colors.actions.error.dark};
+  background-color: ${({ theme }) => theme.actions.error.light};
   width: 100%;
   padding-left: 20px;
   padding-top: 15px;
@@ -51,6 +50,6 @@ export const TextErrorContainer = styled.View`
 
 export const TextError = styled.Text`
   font-size: 10px;
-  color: ${colors.text.light};
+  color: ${({ theme }) => theme.text.light};
   letter-spacing: 2px;
 `
