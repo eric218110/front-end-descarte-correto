@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { MaterialIcons, Feather } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
 
 export const Container = styled.View<{ color: string }>`
   background: ${props => props.color};
@@ -11,29 +11,21 @@ export const Container = styled.View<{ color: string }>`
   align-items: center;
 `
 
-export const IconPointLocation = styled(MaterialIcons).attrs({
+export const IconPointLocation = styled(MaterialIcons).attrs(({ color }) => ({
   name: 'location-on',
   size: 24,
-  color: '#FFF'
-})`
+  color: color
+}))<{ color: string }>`
   position: absolute;
   left: 3px;
+  width: 25%;
 `
 
-export const TextNamePoint = styled.Text`
-  color: #fff;
+export const TextNamePoint = styled.Text<{ color: string }>`
+  color: ${({ color }) => color};
   font-family: roboto_700;
   font-size: 14px;
-  width: 60%;
+  width: 70%;
   position: absolute;
   left: 25%;
-`
-
-export const IconRemoveFilterPoint = styled(Feather).attrs({
-  name: 'x',
-  size: 24,
-  color: '#FFF'
-})`
-  position: absolute;
-  right: 3px;
 `

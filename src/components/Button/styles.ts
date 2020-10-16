@@ -1,6 +1,5 @@
 import { RectButton } from 'react-native-gesture-handler'
 import styled from 'styled-components/native'
-import { colors } from '../../styles/colors'
 
 export const Container = styled(RectButton)<{ disable?: boolean }>`
   display: flex;
@@ -14,8 +13,8 @@ export const Container = styled(RectButton)<{ disable?: boolean }>`
   height: 37px;
   justify-content: center;
   align-items: center;
-  background-color: ${props =>
-    props.disable ? colors.actions.disable.dark : colors.primary};
+  background-color: ${({ theme, disable }) =>
+    disable ? theme.actions.disable.dark : theme.primary};
 `
 
 export const ContainerCircle = styled(RectButton)<{ disable?: boolean }>`
@@ -27,19 +26,20 @@ export const ContainerCircle = styled(RectButton)<{ disable?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${props =>
-    props.disable ? colors.actions.disable.dark : colors.primary};
+  background-color: ${({ disable, theme }) =>
+    disable ? theme.actions.disable.dark : theme.primary};
 `
 
-export const Loading = styled.ActivityIndicator.attrs({
-  color: '#FFF'
-})`
+export const Loading = styled.ActivityIndicator.attrs(({ theme }) => ({
+  color: theme.text.light
+}))`
   flex: 1;
 `
 
 export const Text = styled.Text<{ disable?: boolean }>`
   text-transform: uppercase;
-  color: ${props => (props.disable ? '#d6d6d6' : colors.text.light)};
+  color: ${({ theme, disable }) =>
+    disable ? theme.actions.disable.light : theme.text.light};
   text-align: center;
   width: 100%;
 `

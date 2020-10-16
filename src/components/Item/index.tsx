@@ -1,20 +1,21 @@
 import React from 'react'
-import {
-  Container,
-  IconPointLocation,
-  TextNamePoint,
-  IconRemoveFilterPoint
-} from './styles'
+import { Container, IconPointLocation, TextNamePoint } from './styles'
 
 type IPropsItem = {
   name: string
   colorBackground: string
+  activeColor: string
 }
 
-export const Item = ({ name, colorBackground }: IPropsItem): JSX.Element => (
+export const Item = ({
+  name,
+  colorBackground,
+  activeColor
+}: IPropsItem): JSX.Element => (
   <Container color={colorBackground}>
-    <IconPointLocation />
-    <TextNamePoint numberOfLines={1}>{name}</TextNamePoint>
-    <IconRemoveFilterPoint />
+    <IconPointLocation color={activeColor} />
+    <TextNamePoint color={activeColor} numberOfLines={1}>
+      {name}
+    </TextNamePoint>
   </Container>
 )

@@ -273,9 +273,14 @@ export const Map: React.FC = () => {
         <Filter title="Filtre os items" />
       </ModalizeContainer>
       <ItemsListContainer>
-        {itemsSelected.map(({ id, title, active, activeColor }) =>
+        {itemsSelected.map(({ id, title, active, color, activeColor }) =>
           active ? (
-            <Item name={title} key={id} colorBackground={activeColor} />
+            <Item
+              name={title}
+              key={id}
+              colorBackground={color}
+              activeColor={activeColor}
+            />
           ) : null
         )}
       </ItemsListContainer>

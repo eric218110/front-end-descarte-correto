@@ -1,7 +1,6 @@
 import styled from 'styled-components/native'
 import LottieView from 'lottie-react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { colors } from '../../../../styles/colors'
 import { Dimensions } from 'react-native'
 
 const { height, width } = Dimensions.get('window')
@@ -9,7 +8,7 @@ const { height, width } = Dimensions.get('window')
 export const Container = styled.SafeAreaView`
   height: ${height}px;
   width: ${width}px;
-  background: ${colors.background};
+  background: ${({ theme }) => theme.background};
   justify-content: center;
   align-items: center;
 `
@@ -19,7 +18,7 @@ export const ImageContainer = styled.View`
   height: 30%;
   align-items: center;
   justify-content: center;
-  background: ${colors.secundary};
+  background: ${({ theme }) => theme.secundary};
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 `
@@ -40,29 +39,31 @@ export const IconDeletePhotoContainer = styled.TouchableOpacity`
   width: 30px;
   border-radius: 15px;
   align-items: center;
-  background: ${colors.primary};
+  background: ${({ theme }) => theme.primary};
   justify-content: center;
 `
 
-export const IconDeletePhoto = styled(MaterialCommunityIcons).attrs(() => ({
-  name: 'delete-outline',
-  size: 18,
-  color: colors.text.light
-}))``
+export const IconDeletePhoto = styled(MaterialCommunityIcons).attrs(
+  ({ theme }) => ({
+    name: 'delete-outline',
+    size: 18,
+    color: theme.text.light
+  })
+)``
 
 export const ContentIconCamera = styled.TouchableOpacity`
   height: 50px;
   width: 50px;
   border-radius: 25px;
   align-items: center;
-  background: ${colors.primary};
+  background: ${({ theme }) => theme.primary};
   justify-content: center;
 `
 
-export const IconCamera = styled(MaterialCommunityIcons).attrs(() => ({
+export const IconCamera = styled(MaterialCommunityIcons).attrs(({ theme }) => ({
   name: 'camera-plus',
   size: 24,
-  color: colors.text.light
+  color: theme.text.light
 }))``
 
 export const ContentMain = styled.View`
@@ -87,7 +88,7 @@ export const DescriptionText = styled.Text`
   text-transform: uppercase;
   margin-top: 5px;
   font-weight: bold;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
 `
 
 export const ContentItems = styled.View``
@@ -96,7 +97,7 @@ export const ListItems = styled.ScrollView`
   flex: 1;
   margin-top: 10px;
   border-radius: 10px;
-  border: 1px solid ${colors.secundary};
+  border: 1px solid ${({ theme }) => theme.secundary};
 `
 
 export const IconTextInput = styled(MaterialCommunityIcons).attrs(() => ({
@@ -119,7 +120,7 @@ export const ContentLeft = styled.View`
 export const DescriptionContentRightText = styled.Text`
   font-family: roboto_200;
   font-size: 10px;
-  color: ${colors.text.dark};
+  color: ${({ theme }) => theme.text.dark};
   text-transform: uppercase;
 `
 
@@ -128,7 +129,7 @@ export const HelpContainer = styled.TouchableOpacity``
 export const HelpText = styled.Text`
   font-family: roboto_700;
   font-size: 10px;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   letter-spacing: 2px;
   text-transform: uppercase;
 `
@@ -141,7 +142,7 @@ export const ContentRight = styled.View`
 export const ModalContent = styled.View`
   height: 70%;
   width: 90%;
-  background: ${colors.background};
+  background: ${({ theme }) => theme.background};
   border-radius: 22px;
 `
 
@@ -165,7 +166,7 @@ export const ModalContentText = styled.View`
 export const ModalSuccessText = styled.Text`
   text-transform: uppercase;
   font-family: roboto_700;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-size: 28px;
   text-align: center;
 `
@@ -173,7 +174,7 @@ export const ModalSuccessText = styled.Text`
 export const ModalSuccessTextDescription = styled.Text`
   text-transform: uppercase;
   font-family: roboto_700;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-size: 15px;
   text-align: center;
   max-width: 50%;

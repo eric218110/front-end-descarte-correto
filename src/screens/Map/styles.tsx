@@ -62,11 +62,11 @@ export const ContentAction = styled(RectButton)`
   justify-content: center;
   align-items: center;
 `
-export const ActionIconFilter = styled(Feather).attrs({
+export const ActionIconFilter = styled(Feather).attrs(({ theme }) => ({
   name: 'filter',
   size: 24,
-  color: '#FFF'
-})``
+  color: theme.text.light
+}))``
 
 export const ActionIconFixLocation = styled(Ionicons).attrs(({ theme }) => ({
   name: 'md-locate',
@@ -97,13 +97,16 @@ const HeaderModal = styled.View`
   width: 65px;
   height: 5px;
   border-radius: 9px;
-  background: ${({ theme }) => theme.background};
+  background: ${({ theme }) => theme.actions.disable.light};
 `
 
-export const ModalizeContainer = styled(Modalize).attrs(() => {
+export const ModalizeContainer = styled(Modalize).attrs(({ theme }) => {
   return {
     snapPoint: 569,
     withHandle: false,
+    modalStyle: {
+      backgroundColor: theme.background
+    },
     HeaderComponent: (
       <HeaderModalContainer>
         <HeaderModal />

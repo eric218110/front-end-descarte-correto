@@ -1,6 +1,5 @@
 import { RectButton } from 'react-native-gesture-handler'
 import styled, { css } from 'styled-components/native'
-import { colors } from '../../../styles/colors'
 import LottieView from 'lottie-react-native'
 
 export const Container = styled.View`
@@ -19,7 +18,7 @@ export const Header = styled.TouchableOpacity`
 `
 
 export const Text = styled.Text`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.secundary};
   text-transform: uppercase;
   font-size: 12px;
   font-family: roboto_700;
@@ -38,22 +37,22 @@ export const ItemContent = styled(RectButton)<{
   align-items: center;
   flex-direction: row;
   margin-bottom: 10px;
-  background: ${props => props.background};
-  ${props =>
-    !props.active &&
+  background: ${({ background }) => background};
+  ${({ active, theme }) =>
+    !active &&
     css`
-      background: ${colors.secundary};
+      background: ${theme.actions.disable.light};
     `};
 `
 export const NameItem = styled.Text<{ active?: boolean; color: string }>`
   margin-left: 24px;
-  color: ${props => props.color};
+  color: ${({ color }) => color};
   font-size: 17px;
   font-family: roboto_700;
-  ${props =>
-    !props.active &&
+  ${({ active, theme }) =>
+    !active &&
     css`
-      color: #828282;
+      color: ${theme.actions.disable.dark};
     `};
 `
 
@@ -79,5 +78,5 @@ export const ContentEmptyLottieView = styled(LottieView).attrs({
 
 export const TextEmpty = styled.Text`
   font-size: 25px;
-  color: #c4c4d9;
+  color: ${({ theme }) => theme.actions.disable.dark};
 `
