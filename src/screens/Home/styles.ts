@@ -1,7 +1,6 @@
 import styled from 'styled-components/native'
 import { Dimensions, Platform } from 'react-native'
 import Constants from 'expo-constants'
-import { colors } from '../../styles/colors'
 import { RectButton } from 'react-native-gesture-handler'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
@@ -10,7 +9,7 @@ const statusBarHeight =
   Platform.OS === 'android' ? Constants.statusBarHeight : 0
 
 export const Wrapper = styled.SafeAreaView`
-  background: ${colors.background};
+  background: ${({ theme }) => theme.background};
   padding-top: ${statusBarHeight}px;
   height: ${height}px;
   width: ${width}px;
@@ -45,7 +44,7 @@ export const Icon = styled.Image.attrs({
   flex: 1;
 `
 export const TextLogo = styled.Text`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-family: 'roboto_500';
   font-size: 25.89px;
   font-weight: bold;
@@ -58,8 +57,8 @@ export const TitleContent = styled.View`
 `
 
 export const TextMain = styled.Text<{ color: 'green' | 'grey' }>`
-  color: ${({ color }) =>
-    color === 'green' ? colors.secundary : colors.secundaryLight};
+  color: ${({ color, theme }) =>
+    color === 'green' ? theme.secundary : theme.secundary400};
   font-size: 22px;
   font-family: 'roboto_500';
   font-weight: bold;
@@ -70,8 +69,8 @@ export const ButtonBottom = styled(RectButton)<{ disable: boolean }>`
   width: 80%;
   height: 52px;
   border-radius: 10px;
-  background: ${props =>
-    props.disable ? colors.primary : colors.actions.disable.dark};
+  background: ${({ disable, theme }) =>
+    disable ? theme.primary : theme.actions.disable.dark};
   justify-content: space-around;
   align-items: center;
   flex-direction: row;
@@ -80,12 +79,14 @@ export const ButtonBottom = styled(RectButton)<{ disable: boolean }>`
 export const TextButtonBottom = styled.Text`
   font-size: 16px;
   font-family: 'roboto_500';
-  color: ${colors.text.light};
+  color: ${({ theme }) => theme.text.light};
   text-transform: uppercase;
 `
 
-export const IconLeftButtom = styled(MaterialCommunityIcons).attrs(() => ({
-  name: 'arrow-right',
-  size: 28,
-  color: colors.text.light
-}))``
+export const IconLeftButtom = styled(MaterialCommunityIcons).attrs(
+  ({ theme }) => ({
+    name: 'arrow-right',
+    size: 28,
+    color: theme.text.light
+  })
+)``

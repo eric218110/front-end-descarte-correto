@@ -14,11 +14,14 @@ import {
   Icon
 } from './styles'
 import HumanIcon from '../../assets/human.svg'
+import HumanIconDark from '../../assets/dark/humanDark.svg'
 import { useNavigation } from '@react-navigation/native'
 import NetInfo from '@react-native-community/netinfo'
 import { AlertAnimated } from '../../components/Alert'
+import { useColorScheme } from 'react-native-appearance'
 
 export const Home: React.FC = () => {
+  const colorScheme = useColorScheme()
   const navigation = useNavigation()
   const [isConnected, setIsConnected] = useState<boolean>()
   useEffect(() => {
@@ -48,11 +51,17 @@ export const Home: React.FC = () => {
         />
       )}
       <Header>
-        <Icon source={require('../../assets/logo.png')} />
+        <Icon
+          source={
+            colorScheme === 'dark'
+              ? require('../../assets/dark/logo.png')
+              : require('../../assets/logo.png')
+          }
+        />
       </Header>
       <Body>
         <TextLogo>Descarte correto</TextLogo>
-        <HumanIcon />
+        {colorScheme === 'dark' ? <HumanIconDark /> : <HumanIcon />}
         <TitleContent>
           <TextMain color="grey">Bem vindo</TextMain>
           <TextMain color="green">Vamos ajudar o planeta</TextMain>

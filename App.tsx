@@ -3,6 +3,7 @@ import { StatusBar } from 'react-native'
 import React from 'react'
 import { Routes } from './src/routes'
 import { AppLoading } from 'expo'
+import { AppearanceProvider } from 'react-native-appearance'
 import {
   useFonts,
   Roboto_500Medium,
@@ -22,14 +23,14 @@ const App: React.FC = () => {
   if (!fontsLoaded) return <AppLoading />
 
   return (
-    <React.Fragment>
+    <AppearanceProvider>
       <StatusBar
         backgroundColor="transparent"
         barStyle="dark-content"
         translucent
       />
       <Routes />
-    </React.Fragment>
+    </AppearanceProvider>
   )
 }
 
