@@ -43,17 +43,22 @@ export const Icon = styled.Image.attrs({
 })`
   flex: 1;
 `
-export const TextLogo = styled.Text`
-  color: ${({ theme }) => theme.primary};
-  font-family: 'roboto_500';
-  font-size: 25.89px;
-  font-weight: bold;
+
+export const TextLogo = styled.Text<{ grenColor?: boolean }>`
+  font-family: roboto_700;
+  font-size: 26px;
+  color: ${({ grenColor, theme }) =>
+    grenColor ? theme.primary : theme.text.dark};
+`
+
+export const ContentTitle = styled.View`
+  flex-direction: row;
 `
 
 export const TitleContent = styled.View`
   width: 100%;
-  height: 57px;
   align-items: center;
+  justify-content: center;
 `
 
 export const TextMain = styled.Text<{ color: 'green' | 'grey' }>`

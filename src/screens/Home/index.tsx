@@ -11,7 +11,8 @@ import {
   Header,
   Body,
   Footer,
-  Icon
+  Icon,
+  ContentTitle
 } from './styles'
 import HumanIcon from '../../assets/human.svg'
 import HumanIconDark from '../../assets/dark/humanDark.svg'
@@ -60,7 +61,10 @@ export const Home: React.FC = () => {
         />
       </Header>
       <Body>
-        <TextLogo>Descarte correto</TextLogo>
+        <ContentTitle>
+          <TextLogo>Descarte</TextLogo>
+          <TextLogo grenColor> correto</TextLogo>
+        </ContentTitle>
         {colorScheme === 'dark' ? <HumanIconDark /> : <HumanIcon />}
         <TitleContent>
           <TextMain color="grey">Bem vindo</TextMain>
