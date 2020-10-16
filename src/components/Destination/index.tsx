@@ -1,7 +1,5 @@
 import React from 'react'
-import MapViewDirections from 'react-native-maps-directions'
-import { colors } from '../../styles/colors'
-
+import { MapViewDirectionsStyled } from './style'
 export type DirectionsProps = {
   origin: {
     latitude: number
@@ -19,12 +17,10 @@ export const DestinationMapsComponent = ({
   destination,
   onReady
 }: DirectionsProps): JSX.Element => (
-  <MapViewDirections
+  <MapViewDirectionsStyled
     origin={origin}
     destination={destination}
     onReady={onReady}
-    strokeColor={colors.primary}
-    strokeWidth={3}
     apikey={'AIzaSyBHAXOz2WSqIt4HziGNdnWXjlz2bf03-k4'}
   />
 )
