@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { FontAwesome } from '@expo/vector-icons'
-import { colors } from '../../styles/colors'
 import {
   Container,
   Avatar,
@@ -10,10 +8,11 @@ import {
   ExitAppActionIconContent,
   ExitAppActionIcon,
   TextName,
-  TextEmail
+  TextEmail,
+  UserCircleIcon
 } from './style'
 import { useAccountContext } from '../../service/context/account-context'
-import { AlertAnimated } from '../Alert'
+import { AlertAnimatedSuccessLoggout } from '../Alert'
 
 type Account = {
   name: string
@@ -58,11 +57,7 @@ export const Header = (): JSX.Element => {
         <Container>
           <Avatar>
             <IconAvatar>
-              <FontAwesome
-                name="user-circle-o"
-                size={29}
-                color={colors.primary}
-              />
+              <UserCircleIcon />
               <ActiveIcon />
             </IconAvatar>
             <TextAvatar>
@@ -75,15 +70,7 @@ export const Header = (): JSX.Element => {
           </ExitAppActionIconContent>
         </Container>
       )}
-      {activeAlert && (
-        <AlertAnimated
-          title="Logout"
-          description="Sucesso no logout"
-          backgroundColor="#AFC996"
-          colorActions="#072602"
-          iconName="check"
-        />
-      )}
+      {activeAlert && <AlertAnimatedSuccessLoggout />}
     </>
   )
 }

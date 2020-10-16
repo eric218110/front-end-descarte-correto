@@ -69,3 +69,13 @@ export const AlertAnimated = ({
     </Wrapper>
   )
 }
+
+export const AlertAnimatedSuccessLoggout = (): JSX.Element => (
+  <AlertAnimated
+    title="Logout"
+    description="Sucesso no logout"
+    backgroundColor="#AFC996"
+    colorActions="#072602"
+    iconName="check"
+  />
+)

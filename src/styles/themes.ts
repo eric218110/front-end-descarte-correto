@@ -9,6 +9,7 @@ export const light: DefaultTheme = {
   secundary600: '#002118',
   background: '#F8F9FB',
   backgroundSecundary: '#E7F4ED',
+  backgroundDark: '#95A39C',
   text: {
     dark: '#000000',
     light: '#ffffff'
@@ -38,14 +39,15 @@ export const dark: DefaultTheme = {
   secundary600: '#045a4b',
   background: '#111e25',
   backgroundSecundary: '#38454d',
+  backgroundDark: '#00000f',
   text: {
     dark: '#000000',
     light: '#ffffff'
   },
   actions: {
     disable: {
-      light: '#d1d1d1',
-      dark: '#a0a0a0'
+      light: '#263238',
+      dark: '#121212'
     },
     success: {
       light: '#80e27e',
