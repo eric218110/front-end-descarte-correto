@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components/native'
-import { colors } from '../../styles/colors'
 import { Platform } from 'react-native'
 import Constants from 'expo-constants'
 import MapView, { Marker } from 'react-native-maps'
@@ -17,7 +16,7 @@ const statusBarHeight =
   Platform.OS === 'android' ? Constants.statusBarHeight : 0
 
 export const Wrapper = styled.SafeAreaView`
-  background: ${colors.background};
+  background: ${({ theme }) => theme.background};
   flex: 1;
   padding-top: ${statusBarHeight}px;
 `
@@ -59,7 +58,7 @@ export const ContentAction = styled(RectButton)`
   height: 45px;
   width: 45px;
   margin-top: 22px;
-  background: ${colors.primary};
+  background: ${({ theme }) => theme.primary};
   justify-content: center;
   align-items: center;
 `
@@ -69,23 +68,25 @@ export const ActionIconFilter = styled(Feather).attrs({
   color: '#FFF'
 })``
 
-export const ActionIconFixLocation = styled(Ionicons).attrs({
+export const ActionIconFixLocation = styled(Ionicons).attrs(({ theme }) => ({
   name: 'md-locate',
   size: 24,
-  color: '#FFF'
-})``
+  color: theme.text.light
+}))``
 
-export const ActionIconAddPoint = styled(MaterialIcons).attrs({
+export const ActionIconAddPoint = styled(MaterialIcons).attrs(({ theme }) => ({
   name: 'add',
   size: 24,
-  color: '#FFF'
-})``
+  color: theme.text.light
+}))``
 
-export const ActionIconCloseDirection = styled(MaterialCommunityIcons).attrs({
-  name: 'map-marker-remove',
-  size: 24,
-  color: '#FFF'
-})``
+export const ActionIconCloseDirection = styled(MaterialCommunityIcons).attrs(
+  ({ theme }) => ({
+    name: 'map-marker-remove',
+    size: 24,
+    color: theme.text.light
+  })
+)``
 
 export const HeaderModalContainer = styled.View`
   align-items: center;
@@ -96,7 +97,7 @@ const HeaderModal = styled.View`
   width: 65px;
   height: 5px;
   border-radius: 9px;
-  background: ${colors.secundary};
+  background: ${({ theme }) => theme.background};
 `
 
 export const ModalizeContainer = styled(Modalize).attrs(() => {
@@ -128,17 +129,17 @@ export const TextCallout = styled.Text`
   font-size: 18px;
   font-family: roboto_700;
   text-transform: uppercase;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
 `
 
 export const DividerCallout = styled.View`
   flex: 1;
 `
 
-export const IconLinkDetailsPoint = styled(Feather).attrs({
+export const IconLinkDetailsPoint = styled(Feather).attrs(({ theme }) => ({
   name: 'external-link',
   size: 24,
-  color: colors.primary
-})`
+  color: theme.primary
+}))`
   margin-left: 10px;
 `

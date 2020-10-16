@@ -18,8 +18,7 @@ import {
   ActionIconCloseDirection
 } from './styles'
 import * as Location from 'expo-location'
-import { Alert, StatusBar } from 'react-native'
-import { colors } from '../../styles/colors'
+import { Alert } from 'react-native'
 import { Header } from '../../components/Header'
 import { Filter } from '../../components/Item/Filter'
 import { Loading } from '../../components/Loading'
@@ -34,7 +33,8 @@ import {
   DestinationMapsComponent
 } from '../../components/Destination'
 import { ResponseListPoints } from '../../service/api/points'
-import { mapStyleDefault } from '../../styles/maps'
+import { mapStyleDefault, mapStyledDark } from '../../styles/maps'
+import { useColorScheme } from 'react-native-appearance'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<
   DirectionsProps,
@@ -68,6 +68,7 @@ export const Map: React.FC = () => {
   const itemsSelected = getItemsSelected()
   const modalRefFilterItems = useRef<Modalize>(null)
   const mapRef = useRef<MapView>(null)
+  const colorScheme = useColorScheme()
 
   useEffect(() => {
     async function loadPosition() {
@@ -166,13 +167,14 @@ export const Map: React.FC = () => {
 
   return (
     <Wrapper>
-      <StatusBar backgroundColor={colors.background} />
       <Header />
       <Container>
         {initialLocation.latitude !== 0 ? (
           <>
             <MapViewContainer
-              customMapStyle={mapStyleDefault}
+              customMapStyle={
+                colorScheme === 'dark' ? mapStyledDark : mapStyleDefault
+              }
               ref={mapRef}
               showsUserLocation
               showsMyLocationButton={false}

@@ -13,7 +13,11 @@ export const Routes: React.FC = () => {
     colorScheme === 'light' ? 'dark-content' : 'light-content'
   return (
     <ThemeProvider theme={colorScheme === 'dark' ? dark : light}>
-      <StatusBar barStyle={themeStatusBarStyle} />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={themeStatusBarStyle}
+      />
       <AccountProvider>
         <PointProvider>
           <AppRoutes />
