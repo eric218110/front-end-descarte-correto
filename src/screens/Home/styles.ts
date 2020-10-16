@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from 'styled-components/native'
 import { Dimensions, Platform } from 'react-native'
 import Constants from 'expo-constants'
@@ -6,11 +5,7 @@ import { colors } from '../../styles/colors'
 import { RectButton } from 'react-native-gesture-handler'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-interface IProps {
-  color: 'green' | 'grey'
-}
-
-const { height, width } = Dimensions.get('screen')
+const { height, width } = Dimensions.get('window')
 const statusBarHeight =
   Platform.OS === 'android' ? Constants.statusBarHeight : 0
 
@@ -23,60 +18,61 @@ export const Wrapper = styled.SafeAreaView`
   justify-content: center;
 `
 
-export const Container = styled.ScrollView`
-  flex: 1;
+export const Header = styled.View`
+  height: 15%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 `
-export const Logo = styled.View`
-  width: ${width}px;
-  height: 134px;
-  margin-top: 23px;
+
+export const Body = styled.View`
+  height: 70%;
+  width: 100%;
+  justify-content: space-between;
   align-items: center;
 `
 
+export const Footer = styled.View`
+  height: 15%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`
+
+export const Icon = styled.Image.attrs({
+  resizeMode: 'contain'
+})`
+  flex: 1;
+`
 export const TextLogo = styled.Text`
-  color: ${colors.text.dark};
+  color: ${colors.primary};
   font-family: 'roboto_500';
   font-size: 25.89px;
   font-weight: bold;
 `
 
-export const Main = styled.View`
-  margin-top: 20px;
-  align-items: center;
-  margin-bottom: 43px;
-`
-
-export const ImageMain = styled.Image`
-  height: 200px;
-  width: 50px;
-`
-
 export const TitleContent = styled.View`
-  margin-top: 21.81px;
-  width: 205px;
+  width: 100%;
   height: 57px;
   align-items: center;
 `
 
-export const TextMain = styled.Text<IProps>`
-  color: ${props =>
-    props.color === 'green' ? colors.primary : colors.text.dark};
-  font-size: 21.89px;
+export const TextMain = styled.Text<{ color: 'green' | 'grey' }>`
+  color: ${({ color }) =>
+    color === 'green' ? colors.secundary : colors.secundaryLight};
+  font-size: 22px;
   font-family: 'roboto_500';
   font-weight: bold;
-`
-
-export const Bottom = styled.View`
-  align-items: center;
-  padding-bottom: 20px;
+  letter-spacing: 2px;
 `
 
 export const ButtonBottom = styled(RectButton)<{ disable: boolean }>`
-  width: 300px;
+  width: 80%;
   height: 52px;
   border-radius: 10px;
-  background: ${props => (props.disable ? colors.primary : '#8B958A')};
-  justify-content: center;
+  background: ${props =>
+    props.disable ? colors.primary : colors.actions.disable.dark};
+  justify-content: space-around;
   align-items: center;
   flex-direction: row;
 `
@@ -86,19 +82,6 @@ export const TextButtonBottom = styled.Text`
   font-family: 'roboto_500';
   color: ${colors.text.light};
   text-transform: uppercase;
-  padding-right: 10px;
-`
-export const ContentRight = styled.View<{ disable: boolean }>`
-  height: 52px;
-  width: 52px;
-  background: ${props =>
-    props.disable ? colors.actions.success.dark : '#8B958A'};
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  position: absolute;
-  right: 0;
-  justify-content: center;
-  align-items: center;
 `
 
 export const IconLeftButtom = styled(MaterialCommunityIcons).attrs(() => ({

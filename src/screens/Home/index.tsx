@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react'
 
 import {
-  Container,
   Wrapper,
-  Logo,
   TextLogo,
-  Main,
   TextMain,
-  Bottom,
   ButtonBottom,
   TitleContent,
   TextButtonBottom,
-  ContentRight,
-  IconLeftButtom
+  IconLeftButtom,
+  Header,
+  Body,
+  Footer,
+  Icon
 } from './styles'
 import HumanIcon from '../../assets/human.svg'
-import LogoIcon from '../../assets/logo.svg'
 import { useNavigation } from '@react-navigation/native'
 import NetInfo from '@react-native-community/netinfo'
 import { AlertAnimated } from '../../components/Alert'
@@ -40,40 +38,32 @@ export const Home: React.FC = () => {
   }
   return (
     <Wrapper>
-      <Container>
-        {!isConnected && (
-          <AlertAnimated
-            title="No connection"
-            description="Verify you connection"
-            backgroundColor="#f2cccc"
-            colorActions="#FF0000"
-            iconName="wifi-off"
-          />
-        )}
-
-        <Logo>
-          <LogoIcon />
-          <TextLogo>Any Name</TextLogo>
-        </Logo>
-        <Main>
-          <HumanIcon style={{ flex: 1 }} />
-          <TitleContent>
-            <TextMain color="grey">Welcome my App</TextMain>
-            <TextMain color="green">Let´s help our planet</TextMain>
-          </TitleContent>
-        </Main>
-        <Bottom>
-          <ButtonBottom
-            disable={!!isConnected}
-            onPress={() => handleNavigate()}
-          >
-            <TextButtonBottom>Find Collect points</TextButtonBottom>
-            <ContentRight disable={!!isConnected}>
-              <IconLeftButtom />
-            </ContentRight>
-          </ButtonBottom>
-        </Bottom>
-      </Container>
+      {!isConnected && (
+        <AlertAnimated
+          title="No connection"
+          description="Verify you connection"
+          backgroundColor="#f2cccc"
+          colorActions="#FF0000"
+          iconName="wifi-off"
+        />
+      )}
+      <Header>
+        <Icon source={require('../../assets/logo.png')} />
+      </Header>
+      <Body>
+        <TextLogo>Descarte correto</TextLogo>
+        <HumanIcon />
+        <TitleContent>
+          <TextMain color="grey">Bem vindo</TextMain>
+          <TextMain color="green">Vamos ajudar o planeta</TextMain>
+        </TitleContent>
+      </Body>
+      <Footer>
+        <ButtonBottom disable={!!isConnected} onPress={() => handleNavigate()}>
+          <TextButtonBottom>Buscar pontos de descartes</TextButtonBottom>
+          <IconLeftButtom />
+        </ButtonBottom>
+      </Footer>
     </Wrapper>
   )
 }
