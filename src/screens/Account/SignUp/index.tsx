@@ -1,24 +1,29 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
+import * as Yup from 'yup'
+import { Input } from '../../../components/Input'
+import { FormHandles } from '@unform/core'
+import { useAccountContext } from '../../../service/context/account-context'
+import { useNavigation } from '@react-navigation/native'
+import { AlertAnimated } from '../../../components/Alert'
 import {
-  Container,
   Header,
   ContentTitle,
+  Bottom,
   Title,
   Subtitle,
   SubtitleBottom,
-  Body,
-  Bottom,
   CreateAccount,
   ButtonTouchableOpacity,
-  TextTouchableOpacity
-} from '../styles'
-import {
+  TextTouchableOpacity,
   InputGroup,
   ContainerLogin,
   IconEmail,
   IconPassword,
-  IconName
+  IconName,
+  TextAnimated,
+  FormStyled,
+  Wrapper
 } from './styles'
 import { Button } from '../../../components/Button'
 import {
@@ -28,20 +33,13 @@ import {
   Platform,
   TextInput
 } from 'react-native'
-import { colors } from '../../../styles/colors'
-import { Input } from '../../../components/Input'
-import { Form } from '@unform/mobile'
-import { FormHandles } from '@unform/core'
-import * as Yup from 'yup'
-import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
-import { useAccountContext } from '../../../service/context/account-context'
-import { useNavigation } from '@react-navigation/native'
-import { AlertAnimated } from '../../../components/Alert'
+
 type ErrorAlert = {
   active: boolean
   title: string
   description: string
 }
+
 export const SignUpAccount = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false)
   const [offSet] = useState(new Animated.ValueXY({ x: 0, y: 150 }))
@@ -191,7 +189,7 @@ export const SignUpAccount = (): JSX.Element => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       enabled
     >
-      <Container>
+      <Wrapper>
         <Animated.View
           style={{
             flex: 1,
@@ -204,86 +202,82 @@ export const SignUpAccount = (): JSX.Element => {
             ]
           }}
         >
-          <Header keyboardOpen={openKeyboard}>
+          <Header openKeyboard={!!openKeyboard}>
             <ContentTitle>
               <Title>Descarte </Title>
               <Title grenColor>correto</Title>
             </ContentTitle>
             <Subtitle>Vamos cuidar do nosso planeta</Subtitle>
           </Header>
-          <Body>
-            <Form ref={formRef} onSubmit={handleSubmitLogin}>
-              <ContainerLogin>
-                <Animated.Text
-                  style={[
-                    {
-                      fontSize: 36,
-                      marginTop: 60,
-                      color: colors.primary,
-                      fontFamily: 'roboto_700',
-                      marginBottom: openKeyboard ? 0 : 23
-                    },
-                    {
-                      opacity: opacityText
-                    }
-                  ]}
-                >
-                  Criar conta
-                </Animated.Text>
-                <InputGroup>
-                  <Input
-                    Icon={IconName}
-                    name="name"
-                    placeholder="nome completo"
-                    keyboardType="default"
-                    autoCapitalize="words"
-                    autoCorrect={false}
-                  />
-                  <Input
-                    Icon={IconEmail}
-                    name="email"
-                    placeholder="email"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    returnKeyType="next"
-                  />
-                  <Input
-                    Icon={IconPassword}
-                    ref={inputPasswordRef}
-                    secureTextEntry
-                    name="password"
-                    placeholder="senha"
-                  />
-                  <Input
-                    Icon={IconPassword}
-                    ref={inputPasswordRef}
-                    secureTextEntry
-                    name="passwordConfirmation"
-                    placeholder="confirme a senha"
-                  />
-                </InputGroup>
-              </ContainerLogin>
-              <Bottom keyboardOpen={openKeyboard}>
-                <Button
-                  loading={loading}
-                  text="criar conta"
-                  onPress={() => {
-                    formRef.current?.submitForm()
-                  }}
+          <FormStyled
+            openKeyboard={!!openKeyboard}
+            ref={formRef}
+            onSubmit={handleSubmitLogin}
+          >
+            <ContainerLogin>
+              <TextAnimated
+                style={[
+                  {
+                    opacity: opacityText
+                  }
+                ]}
+                openKeyboard={!!openKeyboard}
+              >
+                Criar conta
+              </TextAnimated>
+              <InputGroup>
+                <Input
+                  Icon={IconName}
+                  name="name"
+                  placeholder="nome completo"
+                  keyboardType="default"
+                  autoCapitalize="words"
+                  autoCorrect={false}
                 />
-                <CreateAccount>
-                  <SubtitleBottom>já possui conta?</SubtitleBottom>
-                  <ButtonTouchableOpacity
-                    onPress={() => navigator.navigate('Login')}
-                  >
-                    <TextTouchableOpacity>Entrar</TextTouchableOpacity>
-                  </ButtonTouchableOpacity>
-                </CreateAccount>
-              </Bottom>
-            </Form>
-          </Body>
+                <Input
+                  Icon={IconEmail}
+                  name="email"
+                  placeholder="email"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  returnKeyType="next"
+                />
+                <Input
+                  Icon={IconPassword}
+                  ref={inputPasswordRef}
+                  secureTextEntry
+                  name="password"
+                  placeholder="senha"
+                />
+                <Input
+                  Icon={IconPassword}
+                  ref={inputPasswordRef}
+                  secureTextEntry
+                  name="passwordConfirmation"
+                  placeholder="confirme a senha"
+                />
+              </InputGroup>
+            </ContainerLogin>
+            <Bottom keyboardOpen={openKeyboard}>
+              <Button
+                loading={loading}
+                text="criar conta"
+                onPress={() => {
+                  formRef.current?.submitForm()
+                }}
+              />
+              <CreateAccount keyboardOpen={openKeyboard}>
+                <SubtitleBottom>já possui conta?</SubtitleBottom>
+                <ButtonTouchableOpacity
+                  onPress={() => navigator.navigate('Login')}
+                >
+                  <TextTouchableOpacity>Entrar</TextTouchableOpacity>
+                </ButtonTouchableOpacity>
+              </CreateAccount>
+            </Bottom>
+          </FormStyled>
         </Animated.View>
-      </Container>
+      </Wrapper>
       {alert.active && (
         <AlertAnimated
           title={alert.title}
