@@ -1,18 +1,17 @@
 import React, { useCallback, useState } from 'react'
 import {
-  Container,
+  Wrapper,
   Header,
   ContentTitle,
   Title,
   Subtitle,
   SubtitleBottom,
-  Body,
   Bottom,
   CreateAccount,
   ButtonTouchableOpacity,
-  TextTouchableOpacity
+  TextTouchableOpacity,
+  WomanIconSVG
 } from './styles'
-import Woman from '../../assets/woman.svg'
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 
@@ -34,7 +33,7 @@ export const Account = (): JSX.Element => {
   }, [])
 
   return (
-    <Container>
+    <Wrapper>
       <Header>
         <ContentTitle>
           <Title>Descarte </Title>
@@ -42,9 +41,7 @@ export const Account = (): JSX.Element => {
         </ContentTitle>
         <Subtitle>Vamos cuidar do nosso planeta</Subtitle>
       </Header>
-      <Body>
-        <Woman />
-      </Body>
+      <WomanIconSVG />
       <Bottom>
         <Button
           onPress={handleClickButtonLogin}
@@ -58,6 +55,6 @@ export const Account = (): JSX.Element => {
           </ButtonTouchableOpacity>
         </CreateAccount>
       </Bottom>
-    </Container>
+    </Wrapper>
   )
 }

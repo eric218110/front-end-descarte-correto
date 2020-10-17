@@ -1,32 +1,36 @@
 import styled, { css } from 'styled-components/native'
-import { colors } from '../../styles/colors'
+import Woman from '../../assets/woman.svg'
+import { Dimensions, Platform } from 'react-native'
+import Constants from 'expo-constants'
 
-export const Wrapper = styled.SafeAreaView``
+const { height, width } = Dimensions.get('window')
+const statusBarHeight =
+  Platform.OS === 'android' ? Constants.statusBarHeight : 0
 
-export const Container = styled.ScrollView.attrs(() => ({
-  keyboardShouldPersistTaps: 'handled',
-  contentContainerStyle: {
-    flex: 1
-  }
-}))`
-  background: ${colors.background};
-  flex: 1;
-  padding-top: 102px;
+export const Wrapper = styled.SafeAreaView`
+  height: ${height}px;
+  width: ${width}px;
+  background: ${({ theme }) => theme.background};
+  padding-top: ${statusBarHeight}px;
+  justify-content: space-around;
+  align-items: center;
 `
 
 export const ContentTitle = styled.Text`
   justify-content: center;
+  width: 100%;
 `
 
 export const Title = styled.Text<{ grenColor?: boolean }>`
   font-family: roboto_700;
   font-size: 26px;
-  color: ${props => (props.grenColor ? colors.primary : '#000')};
+  color: ${({ grenColor, theme }) =>
+    grenColor ? theme.primary : theme.text.dark};
 `
 
 export const Subtitle = styled.Text`
   font-family: roboto_200;
-  color: ${colors.actions.success.dark};
+  color: ${({ theme }) => theme.primary};
   font-size: 18px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -34,7 +38,7 @@ export const Subtitle = styled.Text`
 
 export const SubtitleBottom = styled.Text`
   font-family: roboto_200;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primary};
   font-size: 13px;
   margin-top: 20px;
   text-transform: uppercase;
@@ -42,27 +46,15 @@ export const SubtitleBottom = styled.Text`
 
 export const Header = styled.View<{ keyboardOpen?: boolean }>`
   align-items: center;
-  ${props =>
-    props.keyboardOpen &&
-    css`
-      position: absolute;
-      top: 0;
-      opacity: 0;
-    `}
-`
-
-export const Body = styled.View`
-  flex: 1;
-  align-items: center;
   justify-content: center;
+  height: 20%;
 `
 
 export const Bottom = styled.View<{ keyboardOpen?: boolean }>`
   align-items: center;
   margin-bottom: 75px;
   justify-content: center;
-  margin-top: 60px;
-  ${props =>
+  /* ${props =>
     props.keyboardOpen &&
     css`
       flex-direction: row;
@@ -74,7 +66,8 @@ export const Bottom = styled.View<{ keyboardOpen?: boolean }>`
       margin: auto;
       margin-top: 30px;
       margin-bottom: 30px;
-    `}
+    `} */
+  width: 100%;
 `
 
 export const CreateAccount = styled.View<{ keyboardOpen?: boolean }>`
@@ -94,8 +87,12 @@ export const ButtonTouchableOpacity = styled.TouchableOpacity`
 
 export const TextTouchableOpacity = styled.Text`
   font-family: roboto_700;
-  color: ${colors.primaryDark};
+  color: ${({ theme }) => theme.primary400};
   font-size: 15px;
   margin-top: 5px;
   text-transform: uppercase;
+`
+
+export const WomanIconSVG = styled(Woman)`
+  flex: 1;
 `
