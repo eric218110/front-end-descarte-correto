@@ -10,11 +10,6 @@ import {
   ActionIconFixLocation,
   ActionIconAddPoint,
   ItemsListContainer,
-  ContainerCallout,
-  ContainerCalloutText,
-  TextCallout,
-  DividerCallout,
-  IconLinkDetailsPoint,
   ActionIconCloseDirection
 } from './styles'
 import * as Location from 'expo-location'
@@ -24,7 +19,7 @@ import { Filter } from '../../components/Item/Filter'
 import { Loading } from '../../components/Loading'
 import { Modalize } from 'react-native-modalize'
 import { Item } from '../../components/Item'
-import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useNavigation } from '@react-navigation/native'
 import { useItemsContext } from '../../service/context/items-context'
 import { usePointContext } from '../../service/context/point-context'
@@ -35,6 +30,8 @@ import {
 import { ResponseListPoints } from '../../service/api/points'
 import { mapStyleDefault, mapStyledDark } from '../../styles/maps'
 import { useColorScheme } from 'react-native-appearance'
+import { Point } from '../../components/Point'
+import { Callout } from '../../components/Callout'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<
   DirectionsProps,
@@ -46,7 +43,7 @@ type IState = {
   longitude: number
 }
 
-export const Map: React.FC = () => {
+export const Map = (): JSX.Element => {
   const [points, setPoints] = useState<ResponseListPoints[]>([])
   const [directionEnable, setDirectionEnable] = useState<DirectionsProps>({
     origin: {
@@ -128,10 +125,6 @@ export const Map: React.FC = () => {
     })
   }, [directionEnable])
 
-  const handleOnOpenModalFilterItems = () => {
-    modalRefFilterItems.current?.open()
-  }
-
   const handleDirectionCallBack = useCallback(
     ({ destination }: DestinationPropsCallBackDetailsPoint) => {
       async function setDestination() {
@@ -165,10 +158,14 @@ export const Map: React.FC = () => {
     })
   }, [])
 
+  const handleOnOpenModalFilterItems = () => {
+    modalRefFilterItems.current?.open()
+  }
+
   return (
     <Wrapper>
       <Header />
-      <Container>
+      <Container style={{ alignItems: 'center' }}>
         {initialLocation.latitude !== 0 ? (
           <>
             <MapViewContainer
@@ -215,16 +212,18 @@ export const Map: React.FC = () => {
                 />
               )}
               {points.length > 0 &&
-                points.map(({ id, latitude, longitude, name }) => (
+                points.map(({ id, latitude, longitude, items, name }) => (
                   <Marker
                     key={id}
                     coordinate={{
                       latitude: Number(latitude),
                       longitude: Number(longitude)
                     }}
-                    image={require('../../assets/icon-make.png')}
                   >
+                    <Point />
                     <Callout
+                      title={name}
+                      colorsItems={items.map(item => item.color)}
                       onPress={event => {
                         if (event.nativeEvent.action === 'callout-press') {
                           navigation.navigate('DetailsPoint', {
@@ -233,15 +232,7 @@ export const Map: React.FC = () => {
                           })
                         }
                       }}
-                    >
-                      <ContainerCallout>
-                        <ContainerCalloutText>
-                          <TextCallout>{name}</TextCallout>
-                        </ContainerCalloutText>
-                        <DividerCallout />
-                        <IconLinkDetailsPoint />
-                      </ContainerCallout>
-                    </Callout>
+                    />
                   </Marker>
                 ))}
             </MapViewContainer>
