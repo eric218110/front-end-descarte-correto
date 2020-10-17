@@ -1,19 +1,24 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
-  Container,
   Header,
   ContentTitle,
   Title,
   Subtitle,
   SubtitleBottom,
-  Body,
   Bottom,
   CreateAccount,
   ButtonTouchableOpacity,
-  TextTouchableOpacity
-} from '../styles'
-import { InputGroup, ContainerLogin, IconEmail, IconPassword } from './styles'
+  TextTouchableOpacity,
+  InputGroup,
+  ContainerLogin,
+  IconEmail,
+  IconPassword,
+  Wrapper,
+  FormStyled,
+  TextAnimated
+} from './styles'
+
 import { Button } from '../../../components/Button'
 import {
   Animated,
@@ -22,9 +27,7 @@ import {
   Platform,
   TextInput
 } from 'react-native'
-import { colors } from '../../../styles/colors'
 import { Input } from '../../../components/Input'
-import { Form } from '@unform/mobile'
 import { FormHandles } from '@unform/core'
 import * as Yup from 'yup'
 import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
@@ -174,7 +177,7 @@ export const LoginAccount = (): JSX.Element => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       enabled
     >
-      <Container>
+      <Wrapper>
         <Animated.View
           style={{
             flex: 1,
@@ -194,68 +197,64 @@ export const LoginAccount = (): JSX.Element => {
             </ContentTitle>
             <Subtitle>Vamos cuidar do nosso planeta</Subtitle>
           </Header>
-
-          <Body>
-            <Form ref={formRef} onSubmit={handleSubmitLogin}>
-              <ContainerLogin>
-                <Animated.Text
-                  style={[
-                    {
-                      fontSize: 36,
-                      color: colors.primary,
-                      fontFamily: 'roboto_700',
-                      marginBottom: openKeyboard ? 0 : 23
-                    },
-                    {
-                      opacity: opacityText
-                    }
-                  ]}
-                >
-                  Login
-                </Animated.Text>
-                <InputGroup>
-                  <Input
-                    Icon={IconEmail}
-                    name="email"
-                    placeholder="email"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    returnKeyType="next"
-                    autoCorrect={false}
-                    onSubmitEditing={() => inputPasswordRef.current?.focus()}
-                  />
-                  <Input
-                    Icon={IconPassword}
-                    ref={inputPasswordRef}
-                    secureTextEntry
-                    name="password"
-                    placeholder="senha"
-                    returnKeyType="send"
-                    onSubmitEditing={() => handleSubmitLogin}
-                  />
-                </InputGroup>
-              </ContainerLogin>
-              <Bottom>
-                <Button
-                  loading={loading}
-                  text="entrar"
-                  onPress={() => {
-                    formRef.current?.submitForm()
-                  }}
+          <FormStyled
+            openKeyboard={!openKeyboard}
+            ref={formRef}
+            onSubmit={handleSubmitLogin}
+          >
+            <ContainerLogin>
+              <TextAnimated
+                openKeyboard={!!openKeyboard}
+                style={[
+                  {
+                    opacity: opacityText
+                  }
+                ]}
+              >
+                Login
+              </TextAnimated>
+              <InputGroup>
+                <Input
+                  Icon={IconEmail}
+                  name="email"
+                  placeholder="email"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  returnKeyType="next"
+                  autoCorrect={false}
+                  onSubmitEditing={() => inputPasswordRef.current?.focus()}
                 />
-                <CreateAccount>
-                  <SubtitleBottom>novo por aqui?</SubtitleBottom>
-                  <ButtonTouchableOpacity
-                    onPress={() => navigator.navigate('SignUp')}
-                  >
-                    <TextTouchableOpacity>criar conta</TextTouchableOpacity>
-                  </ButtonTouchableOpacity>
-                </CreateAccount>
-              </Bottom>
-            </Form>
-          </Body>
+                <Input
+                  Icon={IconPassword}
+                  ref={inputPasswordRef}
+                  secureTextEntry
+                  name="password"
+                  placeholder="senha"
+                  returnKeyType="send"
+                  onSubmitEditing={() => handleSubmitLogin}
+                />
+              </InputGroup>
+            </ContainerLogin>
+            <Bottom>
+              <Button
+                loading={loading}
+                text="entrar"
+                onPress={() => {
+                  formRef.current?.submitForm()
+                }}
+              />
+              <CreateAccount>
+                <SubtitleBottom>novo por aqui?</SubtitleBottom>
+                <ButtonTouchableOpacity
+                  onPress={() => navigator.navigate('SignUp')}
+                >
+                  <TextTouchableOpacity>criar conta</TextTouchableOpacity>
+                </ButtonTouchableOpacity>
+              </CreateAccount>
+            </Bottom>
+          </FormStyled>
         </Animated.View>
-      </Container>
+      </Wrapper>
       {alert.active && (
         <AlertAnimated
           title={alert.title}
