@@ -161,7 +161,6 @@ export const Map = (): JSX.Element => {
 
   const getColorPoint = useCallback(
     ({ items }: { items: string[] }): string | undefined => {
-      console.log(items.length)
       const itemsActiveLenght = itemsSelected
         .filter(item => item.active)
         .map(item => item.id)
