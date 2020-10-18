@@ -3,32 +3,35 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { ResponseListPoints, getOnePointApi } from '../../../service/api/points'
 import { Loading } from '../../../components/Loading'
 import { AlertAnimated } from '../../../components/Alert'
-import { colors } from '../../../styles/colors'
 import { StatusBar } from 'react-native'
-import HeaderImageScrollView from 'react-native-image-header-scroll-view'
+import * as Location from 'expo-location'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { DestinationPropsCallBackDetailsPoint } from '../../Map/index'
 import {
+  HeaderImageScrollViewStyled,
   Container,
-  ImageContainer,
-  Body,
-  ContentBody,
-  Header,
-  TextCreateBy,
-  Stars,
-  TextTitle,
-  TextDescription,
-  Divider,
-  ContentBox,
-  RowAddressInfo,
-  TextStrong,
-  ItemContent,
-  NameItem,
+  ContainerMap,
   ContainerActionRouteButton,
   IconActionRouteButton,
-  StarIcon,
-  StarIconOutline
+  MapViewContainer,
+  MapViewStyled,
+  TextDirectionMap,
+  TextDirectionMapContainer,
+  TextDistance,
+  ContainerItems,
+  ContainerItem,
+  LeftContainer,
+  ContainerText,
+  Title,
+  TitleDescription,
+  ContainerFooter,
+  TextNamePoint,
+  ContainerListItem,
+  HeaderContainer
 } from './styles'
+import { Point } from '../../../components/Point'
+import { Marker } from 'react-native-maps'
+import * as geolib from 'geolib'
 
 type PointDataScreenParams = RouteProp<
   Record<
@@ -49,6 +52,11 @@ type ErrorAlert = {
   description: string
 }
 
+type LocationProps = {
+  latitude: number
+  longitude: number
+}
+
 export const DetailsPoint = (): JSX.Element => {
   const { id, handleDirectionCallBack } = useRoute<
     PointDataScreenParams
@@ -56,6 +64,10 @@ export const DetailsPoint = (): JSX.Element => {
   const { goBack } = useNavigation()
   const [point, setPoint] = useState<ResponseListPoints | null>(null)
   const [alert, setActiveAlert] = useState<ErrorAlert>({} as ErrorAlert)
+  const [locationUser, setLocationUser] = useState<LocationProps>({
+    latitude: 0,
+    longitude: 0
+  })
 
   useEffect(() => {
     if (!id) goBack()
@@ -84,6 +96,15 @@ export const DetailsPoint = (): JSX.Element => {
     getPointWitId()
   }, [])
 
+  useEffect(() => {
+    async function getLocation() {
+      const location = await Location.getCurrentPositionAsync()
+      const { latitude, longitude } = location.coords
+      setLocationUser({ longitude, latitude })
+    }
+    getLocation()
+  }, [])
+
   const handleAlertError = useCallback(
     ({ description, title }: { description: string; title: string }) => {
       setActiveAlert({
@@ -110,91 +131,83 @@ export const DetailsPoint = (): JSX.Element => {
         backgroundColor="transparent"
         barStyle="light-content"
       />
-      <HeaderImageScrollView
-        showsVerticalScrollIndicator={false}
-        minOverlayOpacity={0}
-        maxOverlayOpacity={0.9}
-        maxHeight={400}
-        minHeight={10}
-        bounces={true}
-        headerImage={{ uri: point?.image }}
-      >
+      <HeaderImageScrollViewStyled headerImage={{ uri: point?.image }}>
         <Container>
           {point ? (
-            <Container>
-              <ImageContainer
-                source={{
-                  uri: point.image
-                }}
-              />
-              <Header>
-                <TextCreateBy>
-                  <TextDescription>ponto de coleta criado por </TextDescription>
-                  <TextStrong>{point.account.name}</TextStrong>
-                </TextCreateBy>
-              </Header>
-              <Stars>
-                <StarIcon />
-                <StarIcon />
-                <StarIcon />
-                <StarIconOutline />
-                <StarIconOutline />
-              </Stars>
-              <ContentBody>
-                <Body>
-                  <ContentBox>
-                    <TextTitle>descrição</TextTitle>
-                    <TextCreateBy>
-                      <TextStrong>Ponto de descarte </TextStrong>
-                      <TextDescription>{point.name}</TextDescription>
-                    </TextCreateBy>
-                  </ContentBox>
-                  <Divider />
-                  <ContentBox>
-                    <TextTitle>endereço</TextTitle>
-                    <RowAddressInfo>
-                      <TextStrong>Rua: </TextStrong>
-                      <TextDescription>{point.street}</TextDescription>
-                    </RowAddressInfo>
-                    <RowAddressInfo>
-                      <TextStrong small>Bairro: </TextStrong>
-                      <TextDescription small>
-                        {point.neighborhood}
-                      </TextDescription>
-                    </RowAddressInfo>
-                    <RowAddressInfo>
-                      <TextStrong small>cidade: </TextStrong>
-                      <TextDescription small>{point.city}</TextDescription>
-                    </RowAddressInfo>
-                    <RowAddressInfo>
-                      <TextStrong small>cep: </TextStrong>
-                      <TextDescription small>{point.zipCode}</TextDescription>
-                    </RowAddressInfo>
-                  </ContentBox>
-                  <Divider />
-                  <ContentBox>
-                    <TextTitle>ponto de REFERÊNCIA</TextTitle>
-                    <TextDescription>{point.reference}</TextDescription>
-                  </ContentBox>
-                  <Divider />
-                  <ContentBox endList>
-                    <TextTitle>recebe os items</TextTitle>
-                    {point.items.map(item => (
-                      <ItemContent background={item.color} key={item.id}>
-                        <NameItem color={item.activeColor}>
-                          {item.title}
-                        </NameItem>
-                      </ItemContent>
-                    ))}
-                  </ContentBox>
-                </Body>
-              </ContentBody>
-            </Container>
+            <>
+              <ContainerMap>
+                <HeaderContainer>
+                  <TextNamePoint>{point.name}</TextNamePoint>
+                  <TextDirectionMapContainer
+                    onPress={() => {
+                      if (handleDirectionCallBack) {
+                        handleDirectionCallBack({
+                          destination: {
+                            latitude: Number(point?.latitude),
+                            longitude: Number(point?.longitude)
+                          }
+                        })
+                        goBack()
+                      }
+                    }}
+                  >
+                    <TextDirectionMap>Ir ao local</TextDirectionMap>
+                  </TextDirectionMapContainer>
+                </HeaderContainer>
+                <MapViewContainer>
+                  <MapViewStyled
+                    region={{
+                      longitudeDelta: 0.008,
+                      latitudeDelta: 0.008,
+                      longitude: Number(point.longitude),
+                      latitude: Number(point.latitude)
+                    }}
+                  >
+                    <Marker
+                      coordinate={{
+                        latitude: Number(point.latitude),
+                        longitude: Number(point.longitude)
+                      }}
+                    >
+                      <Point />
+                    </Marker>
+                  </MapViewStyled>
+                </MapViewContainer>
+                <TextDistance>{`${
+                  geolib.getPreciseDistance(
+                    {
+                      latitude: point.latitude,
+                      longitude: point.longitude
+                    },
+                    {
+                      latitude: locationUser.latitude,
+                      longitude: locationUser.longitude
+                    }
+                  ) / 1000
+                } km até o local de descarte`}</TextDistance>
+              </ContainerMap>
+              <ContainerItems>
+                <ContainerListItem>
+                  {point.items.map(item => (
+                    <ContainerItem key={item.id}>
+                      <LeftContainer color={item.activeColor} />
+                      <ContainerText>
+                        <Title>{item.title}</Title>
+                        <TitleDescription>
+                          Teste Name point Description
+                        </TitleDescription>
+                      </ContainerText>
+                    </ContainerItem>
+                  ))}
+                </ContainerListItem>
+              </ContainerItems>
+              <ContainerFooter />
+            </>
           ) : (
             <Loading />
           )}
         </Container>
-      </HeaderImageScrollView>
+      </HeaderImageScrollViewStyled>
       <ContainerActionRouteButton
         onPress={() => {
           if (handleDirectionCallBack) {
@@ -214,8 +227,8 @@ export const DetailsPoint = (): JSX.Element => {
         <AlertAnimated
           title={alert.title}
           description={alert.description}
-          backgroundColor={colors.actions.error.light}
-          colorActions={colors.actions.error.dark}
+          backgroundColor={'#f05545'}
+          colorActions={'#7f0000'}
           iconName="alert"
         />
       )}
