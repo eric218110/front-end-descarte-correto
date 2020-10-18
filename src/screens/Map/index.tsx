@@ -10,7 +10,8 @@ import {
   ActionIconFixLocation,
   ActionIconAddPoint,
   ItemsListContainer,
-  ActionIconCloseDirection
+  ActionIconCloseDirection,
+  AddItemsIcon
 } from './styles'
 import * as Location from 'expo-location'
 import { Alert } from 'react-native'
@@ -30,6 +31,7 @@ import {
 import { ResponseListPoints } from '../../service/api/points'
 import { Point } from '../../components/Point'
 import { Callout } from '../../components/Callout'
+import { useAccountContext } from '../../service/context/account-context'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<
   DirectionsProps,
@@ -63,6 +65,16 @@ export const Map = (): JSX.Element => {
   const itemsSelected = getItemsSelected()
   const modalRefFilterItems = useRef<Modalize>(null)
   const mapRef = useRef<MapView>(null)
+  const { getAccount } = useAccountContext()
+  const [account, setAccount] = useState<{ role: string }>({ role: '' })
+
+  useEffect(() => {
+    async function setAccountDataInitial() {
+      const { role } = getAccount
+      setAccount({ role })
+    }
+    setAccountDataInitial()
+  }, [getAccount])
 
   useEffect(() => {
     async function loadPosition() {
@@ -142,6 +154,10 @@ export const Map = (): JSX.Element => {
 
   const handleNavigateAddPoint = useCallback(() => {
     navigation.navigate('AddPoint')
+  }, [])
+
+  const handleNavigateAddItem = useCallback(() => {
+    navigation.navigate('AddItem')
   }, [])
 
   const handleZoomInCurrentLocation = useCallback(async () => {
@@ -248,6 +264,11 @@ export const Map = (): JSX.Element => {
           </ContentAction>
         ) : (
           <>
+            {account.role === 'admin' && (
+              <ContentAction onPress={handleNavigateAddItem}>
+                <AddItemsIcon />
+              </ContentAction>
+            )}
             <ContentAction onPress={handleOnOpenModalFilterItems}>
               <ActionIconFilter />
             </ContentAction>

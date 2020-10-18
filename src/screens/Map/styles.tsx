@@ -125,3 +125,9 @@ export const ActionIconCloseDirection = styled(MaterialCommunityIcons).attrs(
     color: theme.text.light
   })
 )``
+
+export const AddItemsIcon = styled(MaterialIcons).attrs(({ theme }) => ({
+  name: 'playlist-add',
+  size: 24,
+  color: theme.text.light
+}))``
