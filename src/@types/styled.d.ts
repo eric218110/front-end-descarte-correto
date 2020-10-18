@@ -11,6 +11,7 @@ declare module 'styled-components' {
     background: string
     backgroundSecundary: string
     backgroundDark: string
+    mapStyle: Array<any>
     text: {
       light: string
       dark: string
