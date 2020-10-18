@@ -1,11 +1,15 @@
 import React from 'react'
 import { Container, Icon, LogoStyled } from './styles'
 
-export const Point = (): JSX.Element => {
+export const Point = ({
+  backgroundColor
+}: {
+  backgroundColor?: string
+}): JSX.Element => {
   return (
     <Container>
       <LogoStyled />
-      <Icon />
+      <Icon backgroundColor={backgroundColor} />
     </Container>
   )
 }
