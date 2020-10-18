@@ -1,5 +1,5 @@
 import { DefaultTheme } from 'styled-components'
-
+import { mapStyleDefault, mapStyledDark } from './maps'
 export const light: DefaultTheme = {
   primary: '#285d19',
   primary400: '#568b44',
@@ -10,6 +10,7 @@ export const light: DefaultTheme = {
   background: '#F8F9FB',
   backgroundSecundary: '#E7F4ED',
   backgroundDark: '#95A39C',
+  mapStyle: mapStyleDefault,
   text: {
     dark: '#000000',
     light: '#ffffff'
@@ -40,6 +41,7 @@ export const dark: DefaultTheme = {
   background: '#111e25',
   backgroundSecundary: '#38454d',
   backgroundDark: '#00000f',
+  mapStyle: mapStyledDark,
   text: {
     dark: '#000000',
     light: '#ffffff'

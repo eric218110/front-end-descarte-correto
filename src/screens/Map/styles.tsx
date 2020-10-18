@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components/native'
 import { Platform } from 'react-native'
 import Constants from 'expo-constants'
-import MapView, { Marker } from 'react-native-maps'
+import MapView from 'react-native-maps'
 import { Modalize } from 'react-native-modalize'
 import { RectButton } from 'react-native-gesture-handler'
 import {
@@ -26,15 +26,25 @@ export const Container = styled.View`
   justify-content: center;
 `
 
-export const MapViewContainer = styled(MapView)`
+export const MapViewContainer = styled(MapView).attrs(({ theme }) => ({
+  showsUserLocation: true,
+  showsMyLocationButton: false,
+  showsTraffic: false,
+  showsCompass: false,
+  showsBuildings: false,
+  showsIndoors: false,
+  showsScale: false,
+  showsIndoorLevelPicker: false,
+  showsPointsOfInterest: false,
+  customMapStyle: theme.mapStyle
+}))`
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  background: ${({ theme }) => theme.backgroundSecundary};
 `
-
-export const MarkerWrapper = styled(Marker)``
 
 export const ItemsListContainer = styled.ScrollView.attrs(() => ({
   horizontal: true,

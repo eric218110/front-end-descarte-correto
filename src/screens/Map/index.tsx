@@ -28,8 +28,6 @@ import {
   DestinationMapsComponent
 } from '../../components/Destination'
 import { ResponseListPoints } from '../../service/api/points'
-import { mapStyleDefault, mapStyledDark } from '../../styles/maps'
-import { useColorScheme } from 'react-native-appearance'
 import { Point } from '../../components/Point'
 import { Callout } from '../../components/Callout'
 
@@ -65,7 +63,6 @@ export const Map = (): JSX.Element => {
   const itemsSelected = getItemsSelected()
   const modalRefFilterItems = useRef<Modalize>(null)
   const mapRef = useRef<MapView>(null)
-  const colorScheme = useColorScheme()
 
   useEffect(() => {
     async function loadPosition() {
@@ -162,6 +159,18 @@ export const Map = (): JSX.Element => {
     modalRefFilterItems.current?.open()
   }
 
+  const getColorPoint = useCallback(
+    ({ items }: { items: string[] }): string | undefined => {
+      console.log(items.length)
+      const itemsActiveLenght = itemsSelected
+        .filter(item => item.active)
+        .map(item => item.id)
+      if (itemsActiveLenght.length !== 1) return undefined
+      if (items.length === 1) return items[0]
+    },
+    [itemsSelected]
+  )
+
   return (
     <Wrapper>
       <Header />
@@ -169,19 +178,7 @@ export const Map = (): JSX.Element => {
         {initialLocation.latitude !== 0 ? (
           <>
             <MapViewContainer
-              customMapStyle={
-                colorScheme === 'dark' ? mapStyledDark : mapStyleDefault
-              }
               ref={mapRef}
-              showsUserLocation
-              showsMyLocationButton={false}
-              showsTraffic={false}
-              showsCompass={false}
-              showsBuildings={false}
-              showsIndoors={false}
-              showsScale={false}
-              showsIndoorLevelPicker={false}
-              showsPointsOfInterest={false}
               provider={PROVIDER_GOOGLE}
               initialRegion={{
                 latitude: initialLocation.latitude,
@@ -220,7 +217,11 @@ export const Map = (): JSX.Element => {
                       longitude: Number(longitude)
                     }}
                   >
-                    <Point />
+                    <Point
+                      backgroundColor={getColorPoint({
+                        items: items.map(item => item.color)
+                      })}
+                    />
                     <Callout
                       title={name}
                       colorsItems={items.map(item => item.color)}
