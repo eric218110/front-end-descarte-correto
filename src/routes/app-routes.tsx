@@ -9,8 +9,9 @@ import { DetailsPoint as DetailsPointScreen } from '../screens/Point/Details'
 import { Account as AccountScreen } from '../screens/Account'
 import { LoginAccount as LoginAccountScreen } from '../screens/Account/Login'
 import { SignUpAccount as SignUpAccountScreen } from '../screens/Account/SignUp'
+import { AddItem as AddItemScreen } from '../screens/Item/Add'
 import { ItemsProvider } from '../service/context/items-context'
-import { colors } from '../styles/colors'
+const tintColor = '#285d19'
 
 const Stack = createStackNavigator()
 
@@ -31,7 +32,7 @@ export const AppRoutes: React.FC = () => (
         <Stack.Screen
           options={() => ({
             title: '',
-            headerTintColor: colors.primary,
+            headerTintColor: tintColor,
             headerTransparent: true
           })}
           name="AddPoint"
@@ -40,7 +41,7 @@ export const AppRoutes: React.FC = () => (
         <Stack.Screen
           options={() => ({
             title: '',
-            headerTintColor: colors.primary,
+            headerTintColor: tintColor,
             headerTransparent: true
           })}
           name="AddPointDetails"
@@ -49,7 +50,7 @@ export const AppRoutes: React.FC = () => (
         <Stack.Screen
           options={() => ({
             title: '',
-            headerTintColor: colors.primary,
+            headerTintColor: tintColor,
             headerTransparent: true
           })}
           name="DetailsPoint"
@@ -58,7 +59,7 @@ export const AppRoutes: React.FC = () => (
         <Stack.Screen
           options={() => ({
             title: '',
-            headerTintColor: colors.primary,
+            headerTintColor: tintColor,
             headerTransparent: true
           })}
           name="Account"
@@ -67,7 +68,7 @@ export const AppRoutes: React.FC = () => (
         <Stack.Screen
           options={() => ({
             title: '',
-            headerTintColor: colors.primary,
+            headerTintColor: tintColor,
             headerTransparent: true
           })}
           name="Login"
@@ -76,11 +77,20 @@ export const AppRoutes: React.FC = () => (
         <Stack.Screen
           options={() => ({
             title: '',
-            headerTintColor: colors.primary,
+            headerTintColor: tintColor,
             headerTransparent: true
           })}
           name="SignUp"
           component={SignUpAccountScreen}
+        />
+        <Stack.Screen
+          options={() => ({
+            title: '',
+            headerTintColor: tintColor,
+            headerTransparent: true
+          })}
+          name="AddItem"
+          component={AddItemScreen}
         />
       </Stack.Navigator>
     </ItemsProvider>
