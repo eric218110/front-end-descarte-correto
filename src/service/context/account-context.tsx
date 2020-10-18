@@ -11,7 +11,7 @@ type ResponseData = {
 
 type AccountLoginData = Omit<
   Account,
-  'id' | 'role' | 'passwordConfirmation' | 'password'
+  'id' | 'passwordConfirmation' | 'password'
 >
 
 type AccountContextData = {
@@ -34,7 +34,8 @@ export const AccountProvider = ({
   const [accountContext, setAccountContext] = React.useState<AccountLoginData>({
     accessToken: '',
     email: '',
-    name: ''
+    name: '',
+    role: ''
   })
 
   React.useEffect(() => {
@@ -42,12 +43,14 @@ export const AccountProvider = ({
       const tokenStorage = await AsyncStorage.getItem('@TccApp:account:token')
       const emailStorage = await AsyncStorage.getItem('@TccApp:account:email')
       const nameStorage = await AsyncStorage.getItem('@TccApp:account:name')
+      const roleStorage = await AsyncStorage.getItem('@TccApp:account:role')
 
-      if (tokenStorage && emailStorage && nameStorage) {
+      if (tokenStorage && emailStorage && nameStorage && roleStorage) {
         setAccountContext({
           accessToken: tokenStorage,
           email: emailStorage,
-          name: nameStorage
+          name: nameStorage,
+          role: roleStorage
         })
       }
     }
@@ -66,6 +69,7 @@ export const AccountProvider = ({
     await AsyncStorage.setItem('@TccApp:account:token', account.accessToken)
     await AsyncStorage.setItem('@TccApp:account:email', account.email)
     await AsyncStorage.setItem('@TccApp:account:name', account.name)
+    await AsyncStorage.setItem('@TccApp:account:role', account.role)
     setAccountContext(account)
     return {
       error: '',
@@ -78,7 +82,8 @@ export const AccountProvider = ({
       setAccountContext({
         accessToken: '',
         email: '',
-        name: ''
+        name: '',
+        role: ''
       })
       return true
     })
