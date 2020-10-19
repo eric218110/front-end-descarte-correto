@@ -1,18 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { getItemsApi } from '../api/items'
-
-export type ItemsProps = {
-  id: string
-  title: string
-  color: string
-  active?: boolean
-  activeColor: string
-}
+import { getItemsApi, AddItemProps, addItemApi } from '../api/items'
+import { ResponseType } from '../api'
+import { Item } from '../domain/item'
 
 type ItemsContextData = {
-  items: ItemsProps[]
-  getItemsSelected(): ItemsProps[]
-  loadItemsSelected(item: ItemsProps): void
+  items: Item[]
+  getItemsSelected(): Item[]
+  loadItemsSelected(item: Item): void
+  addItem(item: AddItemProps): Promise<ResponseType<Item>>
 }
 const ItemsContext = createContext<ItemsContextData>({} as ItemsContextData)
 
@@ -21,7 +16,7 @@ export const ItemsProvider = ({
 }: {
   children: JSX.Element
 }): JSX.Element => {
-  const [itemsSelected, setItemsSelected] = useState<ItemsProps[]>([])
+  const [itemsSelected, setItemsSelected] = useState<Item[]>([])
 
   useEffect(() => {
     async function getItems() {
@@ -34,11 +29,11 @@ export const ItemsProvider = ({
     getItems()
   }, [])
 
-  function getItemsSelected(): ItemsProps[] {
+  function getItemsSelected(): Item[] {
     return itemsSelected
   }
 
-  function loadItemsSelected(item: ItemsProps): void {
+  function loadItemsSelected(item: Item): void {
     const internalItems = [...itemsSelected]
     const ids = internalItems.map(({ id }) => id)
 
@@ -54,9 +49,30 @@ export const ItemsProvider = ({
     setItemsSelected(internalItems)
   }
 
+  async function addItem(item: AddItemProps): Promise<ResponseType<Item>> {
+    const { dataResponse, error } = await addItemApi(item)
+    if (!error && dataResponse) {
+      const items = await getItemsApi()
+      items.map(item => {
+        item.active = false
+      })
+      setItemsSelected(items)
+      return {
+        dataResponse: dataResponse,
+        error: ''
+      }
+    }
+    return { dataResponse, error }
+  }
+
   return (
     <ItemsContext.Provider
-      value={{ getItemsSelected, items: itemsSelected, loadItemsSelected }}
+      value={{
+        getItemsSelected,
+        items: itemsSelected,
+        loadItemsSelected,
+        addItem
+      }}
     >
       {children}
     </ItemsContext.Provider>
