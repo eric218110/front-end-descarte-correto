@@ -21,16 +21,96 @@ import {
   ColorPickerStyled
 } from './styles'
 import { Button } from '../../../components/Button'
+import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
+import * as Yup from 'yup'
+import { AlertAnimatedError, ErrorAlert } from '../../../components/Alert'
+import { useItemsContext } from '../../../service/context/items-context'
+import { useNavigation } from '@react-navigation/native'
+import { useAccountContext } from '../../../service/context/account-context'
 import { fromHsv } from 'react-native-color-picker'
 
 export const AddItem = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false)
-  const [colorPrimary, setColorPrimary] = useState<string>('#FFF')
-  const [colorSecundary, setColorSecundary] = useState<string>('#000')
-  const handleSubmit = useCallback(() => {
-    setLoading(true)
-  }, [])
+  const [colorPrimary, setColorPrimary] = useState<string>('#ffffff')
+  const [colorSecundary, setColorSecundary] = useState<string>('#000000')
+  const [alert, setActiveAlert] = useState<ErrorAlert>({
+    active: false,
+    title: '',
+    description: ''
+  })
+
+  const { getAccount } = useAccountContext()
+  const navigator = useNavigation()
+  const { addItem } = useItemsContext()
+
   const formRef = useRef<FormHandles>(null)
+
+  const handleSubmit = useCallback(
+    async (data: { title: string; description: string }) => {
+      try {
+        setLoading(true)
+        formRef.current?.setErrors({})
+
+        const schemasYup = Yup.object().shape({
+          title: Yup.string().required('Campo obrigatório'),
+          description: Yup.string().required('Campo obrigatório')
+        })
+
+        await schemasYup.validate(data, {
+          abortEarly: false
+        })
+
+        const { accessToken } = getAccount
+
+        const { error } = await addItem({
+          title: data.title,
+          description: data.description,
+          color: colorPrimary.toLowerCase(),
+          activeColor: colorSecundary.toLowerCase(),
+          accessToken
+        })
+
+        if (!error) {
+          setLoading(false)
+          navigator.goBack()
+        } else {
+          setLoading(false)
+          setActiveAlert({
+            active: true,
+            title: `error: ${error}`,
+            description: error
+          })
+          setTimeout(() => {
+            setActiveAlert({
+              active: false,
+              title: '',
+              description: ''
+            })
+          }, 5000)
+        }
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrorsYup(error)
+          formRef.current?.setErrors(errors)
+          return ''
+        }
+        setActiveAlert({
+          active: true,
+          title: 'Erro ao criar',
+          description: 'Tente novamente mais tarde'
+        })
+        setTimeout(() => {
+          setActiveAlert({
+            active: false,
+            title: '',
+            description: ''
+          })
+        }, 5000)
+        setLoading(false)
+      }
+    },
+    [colorPrimary, colorSecundary]
+  )
 
   return (
     <Wrapper>
@@ -51,7 +131,7 @@ export const AddItem = (): JSX.Element => {
             />
             <Input
               Icon={IconTextDetails}
-              name="title"
+              name="description"
               placeholder="Detalhes do item"
               keyboardType="default"
               autoCapitalize="none"
@@ -72,7 +152,9 @@ export const AddItem = (): JSX.Element => {
                 </HeaderPalette>
               </TextColorPickerContainer>
               <ColorPickerStyled
-                onColorChange={color => setColorPrimary(fromHsv(color))}
+                onColorChange={selectedColor =>
+                  setColorPrimary(fromHsv(selectedColor))
+                }
               />
             </ColorPickerContainer>
             <ColorPickerContainer>
@@ -87,13 +169,15 @@ export const AddItem = (): JSX.Element => {
                 </HeaderPalette>
               </TextColorPickerContainer>
               <ColorPickerStyled
-                onColorChange={color => setColorSecundary(fromHsv(color))}
+                onColorChange={selectedColor =>
+                  setColorSecundary(fromHsv(selectedColor))
+                }
               />
             </ColorPickerContainer>
             <Button
               loading={loading}
               style={{
-                width: '80%'
+                width: '100%'
               }}
               text="Cadastrar novo item"
               onPress={() => {
@@ -103,6 +187,12 @@ export const AddItem = (): JSX.Element => {
           </ColorPickerWrapper>
         </Form>
       </Body>
+      {alert.active && (
+        <AlertAnimatedError
+          title={alert.title}
+          description={alert.description}
+        />
+      )}
     </Wrapper>
   )
 }
