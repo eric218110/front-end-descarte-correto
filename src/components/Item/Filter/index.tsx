@@ -58,11 +58,12 @@ export const Filter = ({ title }: FilterItemsProps): JSX.Element => {
                 <Text>{`selecionados ${lengthSelected()}`}</Text>
               </Header>
               {selectedsItems.map(
-                ({ id, color, activeColor, title, active }) => (
+                ({ id, color, activeColor, title, active, description }) => (
                   <ItemContent
                     key={id}
                     onPress={() => {
                       loadItemsSelected({
+                        description,
                         color,
                         activeColor,
                         title,
