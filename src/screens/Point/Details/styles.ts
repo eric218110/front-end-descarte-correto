@@ -100,13 +100,15 @@ export const TextDirectionMap = styled.Text`
   color: ${({ theme }) => theme.primary};
 `
 
-export const TextDistance = styled.Text`
+export const TextDistance = styled.Text.attrs(() => ({
+  numberOfLines: 1
+}))`
   text-transform: uppercase;
   font-size: 12px;
   font-family: roboto_500;
   width: 100%;
   height: 15%;
-  margin-top: 10px;
+  margin-top: 15px;
   text-align: left;
   color: ${({ theme }) => theme.primary};
 `
@@ -152,6 +154,7 @@ export const ContainerText = styled.View`
 export const Title = styled.Text.attrs(() => ({
   numberOfLines: 1
 }))`
+  max-width: 85%;
   text-transform: capitalize;
   font-size: 16px;
   font-family: roboto_700;
@@ -161,7 +164,8 @@ export const Title = styled.Text.attrs(() => ({
 export const TitleDescription = styled.Text.attrs(() => ({
   numberOfLines: 2
 }))`
-  text-transform: capitalize;
+  max-width: 95%;
+  text-transform: lowercase;
   font-size: 14px;
   font-family: roboto_500;
   color: ${({ theme }) => theme.primary600};
