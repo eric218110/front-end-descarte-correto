@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components/native'
 export const Wrapper = styled.View``
 
 export const Container = styled.View<{ isFocused: boolean; isError: boolean }>`
+  margin-bottom: 5px;
   width: 320px;
   height: 50px;
   background-color: ${({ theme }) => theme.backgroundSecundary};

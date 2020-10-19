@@ -15,12 +15,13 @@ import {
   TextErrorContainer,
   TextError
 } from './style'
-import { TextInput, TextInputProps } from 'react-native'
+import { StyleProp, TextInput, TextInputProps, ViewStyle } from 'react-native'
 import { useField } from '@unform/core'
 
 interface PropsInputStyled extends TextInputProps {
   name: string
   Icon?: any
+  customStyle?: StyleProp<ViewStyle>
 }
 
 interface InputValueReference {
@@ -33,7 +34,7 @@ interface RefElementInput {
 
 export const Input = forwardRef(
   (
-    { name, Icon, ...rest }: PropsInputStyled,
+    { name, Icon, customStyle, ...rest }: PropsInputStyled,
     ref: React.Ref<RefElementInput>
   ) => {
     const { registerField, defaultValue = '', fieldName, error } = useField(
@@ -85,7 +86,11 @@ export const Input = forwardRef(
 
     return (
       <Wrapper>
-        <Container isFocused={isFocused} isError={!!error}>
+        <Container
+          style={[customStyle]}
+          isFocused={isFocused}
+          isError={!!error}
+        >
           {Icon && <Icon color={getColorField()} />}
           <InputStyled
             ref={inputElementRef}

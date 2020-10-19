@@ -3,6 +3,7 @@ import { Dimensions, Platform, StyleSheet } from 'react-native'
 import Constants from 'expo-constants'
 import { Entypo, MaterialIcons } from '@expo/vector-icons'
 import { ColorPicker } from 'react-native-color-picker'
+import { Input } from '../../../components/Input'
 const widthBorder = StyleSheet.hairlineWidth
 const { height, width } = Dimensions.get('window')
 const statusBarHeight =
@@ -20,9 +21,16 @@ export const Wrapper = styled.View`
 export const Header = styled.View`
   height: 10%;
   width: 100%;
+  max-width: 250px;
   align-items: center;
   justify-content: center;
 `
+
+export const InputStyled = styled(Input).attrs(() => ({
+  customStyle: {
+    width: '100%'
+  }
+}))``
 
 export const TitleHeader = styled.Text`
   font-size: 16px;
@@ -38,6 +46,7 @@ export const Body = styled.KeyboardAvoidingView.attrs(() => ({
   flex: 1;
   justify-content: space-between;
   align-items: center;
+  max-width: 80%;
 `
 
 export const InputsGroup = styled.View`

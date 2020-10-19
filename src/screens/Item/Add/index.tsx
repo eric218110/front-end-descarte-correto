@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { Form } from '@unform/mobile'
 import { FormHandles } from '@unform/core'
-import { Input } from '../../../components/Input'
 import {
   Wrapper,
   Header,
@@ -18,7 +17,8 @@ import {
   IconPalette,
   TextPaletteColorSelected,
   CircleColorSelected,
-  ColorPickerStyled
+  ColorPickerStyled,
+  InputStyled
 } from './styles'
 import { Button } from '../../../components/Button'
 import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
@@ -120,7 +120,7 @@ export const AddItem = (): JSX.Element => {
       <Body>
         <Form ref={formRef} onSubmit={handleSubmit}>
           <InputsGroup>
-            <Input
+            <InputStyled
               Icon={IconText}
               name="title"
               placeholder="Nome do item"
@@ -129,7 +129,7 @@ export const AddItem = (): JSX.Element => {
               returnKeyType="next"
               autoCorrect={false}
             />
-            <Input
+            <InputStyled
               Icon={IconTextDetails}
               name="description"
               placeholder="Detalhes do item"
