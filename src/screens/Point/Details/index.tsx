@@ -173,7 +173,7 @@ export const DetailsPoint = (): JSX.Element => {
                     </Marker>
                   </MapViewStyled>
                 </MapViewContainer>
-                <TextDistance>{`${
+                <TextDistance>{`aproximadamente ${
                   geolib.getPreciseDistance(
                     {
                       latitude: point.latitude,
@@ -193,9 +193,7 @@ export const DetailsPoint = (): JSX.Element => {
                       <LeftContainer color={item.activeColor} />
                       <ContainerText>
                         <Title>{item.title}</Title>
-                        <TitleDescription>
-                          Teste Name point Description
-                        </TitleDescription>
+                        <TitleDescription>{item.description}</TitleDescription>
                       </ContainerText>
                     </ContainerItem>
                   ))}
