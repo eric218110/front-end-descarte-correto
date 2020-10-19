@@ -19,6 +19,12 @@ type IProps = {
   description: string
 }
 
+export type ErrorAlert = {
+  active: boolean
+  title: string
+  description: string
+}
+
 const opacity = new Animated.Value(0)
 
 export const AlertAnimated = ({
@@ -77,5 +83,21 @@ export const AlertAnimatedSuccessLoggout = (): JSX.Element => (
     backgroundColor="#AFC996"
     colorActions="#072602"
     iconName="check"
+  />
+)
+
+export const AlertAnimatedError = ({
+  title,
+  description
+}: {
+  title: string
+  description: string
+}): JSX.Element => (
+  <AlertAnimated
+    title={title}
+    description={description}
+    backgroundColor="#f2cccc"
+    colorActions="#FF0000"
+    iconName="alert"
   />
 )
