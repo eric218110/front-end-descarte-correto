@@ -57,9 +57,10 @@ export const addPointApi = async ({
   items,
   latitude,
   longitude,
-  name,
+  placeName,
+  referencePoint,
+  locationType,
   neighborhood,
-  reference,
   state,
   street,
   zipCode
@@ -76,9 +77,10 @@ export const addPointApi = async ({
     bodyRequest.append('items', items)
     bodyRequest.append('latitude', latitude)
     bodyRequest.append('longitude', longitude)
-    bodyRequest.append('name', name)
+    bodyRequest.append('placeName', placeName)
+    bodyRequest.append('referencePoint', referencePoint)
+    bodyRequest.append('locationType', locationType)
     bodyRequest.append('neighborhood', neighborhood)
-    bodyRequest.append('reference', reference)
     bodyRequest.append('state', state)
     bodyRequest.append('street', street)
     bodyRequest.append('zipCode', zipCode)
@@ -144,10 +146,6 @@ export const getOnePointApi = async ({
         data: null,
         error: 'Erro ao listar ponto'
       }
-    }
-    return {
-      data: null,
-      error: 'Erro ao buscar'
     }
   }
 }

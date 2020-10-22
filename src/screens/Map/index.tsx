@@ -224,33 +224,43 @@ export const Map = (): JSX.Element => {
                 />
               )}
               {points.length > 0 &&
-                points.map(({ id, latitude, longitude, items, name }) => (
-                  <Marker
-                    key={id}
-                    coordinate={{
-                      latitude: Number(latitude),
-                      longitude: Number(longitude)
-                    }}
-                  >
-                    <Point
-                      backgroundColor={getColorPoint({
-                        items: items.map(item => item.color)
-                      })}
-                    />
-                    <Callout
-                      title={name}
-                      colorsItems={items.map(item => item.color)}
-                      onPress={event => {
-                        if (event.nativeEvent.action === 'callout-press') {
-                          navigation.navigate('DetailsPoint', {
-                            id,
-                            handleDirectionCallBack
-                          })
-                        }
+                points.map(
+                  ({
+                    id,
+                    latitude,
+                    longitude,
+                    items,
+                    placeName,
+                    locationType
+                  }) => (
+                    <Marker
+                      key={id}
+                      coordinate={{
+                        latitude: Number(latitude),
+                        longitude: Number(longitude)
                       }}
-                    />
-                  </Marker>
-                ))}
+                    >
+                      <Point
+                        backgroundColor={getColorPoint({
+                          items: items.map(item => item.color)
+                        })}
+                      />
+                      <Callout
+                        title={placeName}
+                        locationType={locationType}
+                        colorsItems={items.map(item => item.color)}
+                        onPress={event => {
+                          if (event.nativeEvent.action === 'callout-press') {
+                            navigation.navigate('DetailsPoint', {
+                              id,
+                              handleDirectionCallBack
+                            })
+                          }
+                        }}
+                      />
+                    </Marker>
+                  )
+                )}
             </MapViewContainer>
           </>
         ) : (

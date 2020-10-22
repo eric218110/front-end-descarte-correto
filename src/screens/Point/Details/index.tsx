@@ -137,7 +137,7 @@ export const DetailsPoint = (): JSX.Element => {
             <>
               <ContainerMap>
                 <HeaderContainer>
-                  <TextNamePoint>{point.name}</TextNamePoint>
+                  <TextNamePoint>{point.placeName}</TextNamePoint>
                   <TextDirectionMapContainer
                     onPress={() => {
                       if (handleDirectionCallBack) {

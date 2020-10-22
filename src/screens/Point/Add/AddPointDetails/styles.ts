@@ -2,7 +2,7 @@ import styled from 'styled-components/native'
 import LottieView from 'lottie-react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Dimensions } from 'react-native'
-
+import { Form } from '@unform/mobile'
 const { height, width } = Dimensions.get('window')
 
 export const Container = styled.SafeAreaView`
@@ -11,6 +11,7 @@ export const Container = styled.SafeAreaView`
   background: ${({ theme }) => theme.background};
   justify-content: center;
   align-items: center;
+  margin: auto;
 `
 
 export const ImageContainer = styled.View`
@@ -18,9 +19,9 @@ export const ImageContainer = styled.View`
   height: 30%;
   align-items: center;
   justify-content: center;
-  background: ${({ theme }) => theme.secundary};
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  background: ${({ theme }) => theme.backgroundSecundary};
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 `
 
 export const ContentPhotoPreview = styled.ImageBackground.attrs(() => ({
@@ -66,32 +67,20 @@ export const IconCamera = styled(MaterialCommunityIcons).attrs(({ theme }) => ({
   color: theme.text.light
 }))``
 
-export const ContentMain = styled.View`
-  width: 100%;
-  padding-left: 40px;
-  height: 100%;
-  padding-right: 40px;
-  justify-content: space-between;
+export const FormContent = styled(Form)`
+  height: 70%;
   align-items: center;
+  width: 90%;
+  max-width: 360px;
+  margin: auto;
 `
 
 export const Body = styled.View`
   align-items: center;
-  height: 80%;
+  flex: 1;
   width: 100%;
   justify-content: space-between;
 `
-
-export const DescriptionText = styled.Text`
-  font-family: roboto_500;
-  font-size: 12px;
-  text-transform: uppercase;
-  margin-top: 5px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.primary};
-`
-
-export const ContentItems = styled.View``
 
 export const ListItems = styled.ScrollView`
   flex: 1;

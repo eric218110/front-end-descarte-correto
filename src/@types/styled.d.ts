@@ -11,10 +11,12 @@ declare module 'styled-components' {
     background: string
     backgroundSecundary: string
     backgroundDark: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mapStyle: Array<any>
     text: {
       light: string
       dark: string
+      input: string
     }
     actions: {
       success: {

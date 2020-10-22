@@ -19,13 +19,15 @@ type CalloutProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onPress: (event: any) => void
   colorsItems: string[]
+  locationType: string
   title: string
 }
 
 export const Callout = ({
   onPress,
   colorsItems,
-  title
+  title,
+  locationType
 }: CalloutProps): JSX.Element => {
   return (
     <CalloutContainerStyled onPress={onPress}>
@@ -33,7 +35,7 @@ export const Callout = ({
         <LeftContainerCallout>
           <ContainerCalloutTop>
             <TextCallout>{title}</TextCallout>
-            <TextCalloutDescription>{title}</TextCalloutDescription>
+            <TextCalloutDescription>{locationType}</TextCalloutDescription>
           </ContainerCalloutTop>
           <DividerCalloutHorizontal />
           <ContainerCalloutBottom>

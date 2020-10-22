@@ -13,7 +13,8 @@ export const light: DefaultTheme = {
   mapStyle: mapStyleDefault,
   text: {
     dark: '#000000',
-    light: '#ffffff'
+    light: '#ffffff',
+    input: '#d1d1d1'
   },
   actions: {
     disable: {
@@ -44,7 +45,8 @@ export const dark: DefaultTheme = {
   mapStyle: mapStyledDark,
   text: {
     dark: '#000000',
-    light: '#ffffff'
+    light: '#ffffff',
+    input: '#d1d1d1'
   },
   actions: {
     disable: {

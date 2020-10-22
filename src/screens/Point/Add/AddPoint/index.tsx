@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Input } from '../../../../components/Input'
 import { Form } from '@unform/mobile'
 import {
   Container,
@@ -13,32 +12,29 @@ import {
   Title,
   HelpText,
   NextIcon,
-  IconLocation,
-  DirectionLocation,
-  HelpContainer
+  IconPlacePoint,
+  HelpContainer,
+  PickerStyled,
+  PickerStyledContainer,
+  InputStyled,
+  PickerText,
+  PickerStyledContainerItems,
+  ReferencePoint
 } from './styles'
-import * as Location from 'expo-location'
 import { Loading } from '../../../../components/Loading'
 import { Alert } from 'react-native'
 import { CircleButton } from '../../../../components/Button'
-import * as Yup from 'yup'
-import {
-  geoLocationApi,
-  AddressComponentsData
-} from '../../../../service/api/geoLocation'
 import { FormHandles } from '@unform/core'
 import getValidationErrorsYup from '../../../../utils/getValidationErrorYup'
 import { useNavigation } from '@react-navigation/native'
+import * as Location from 'expo-location'
+import * as Yup from 'yup'
+import { Point } from '../../../../service/domain/point'
 
-export type AddressFormData = {
-  reference: string
-  street: string
-  neighborhood: string
-  state: string
-  city: string
-  zipCode: string
-  latitude: string
-  longitude: string
+export interface AddressFormData
+  extends Omit<Point, 'id' | 'image' | 'items' | 'account'> {
+  items?: Array<string>
+  account?: string
 }
 
 export const AddPoint = (): JSX.Element => {
@@ -49,10 +45,8 @@ export const AddPoint = (): JSX.Element => {
     latitude: 0,
     longitude: 0
   })
-  const [address, setAddress] = useState<AddressComponentsData>(
-    {} as AddressComponentsData
-  )
   const [loading, setLoading] = useState<boolean>(false)
+  const [selectedItem, setSelectedItem] = useState<string>('Empresa')
   const formRef = useRef<FormHandles>(null)
   const navigator = useNavigation()
 
@@ -72,19 +66,6 @@ export const AddPoint = (): JSX.Element => {
 
     loadPosition()
   }, [])
-  useEffect(() => {
-    async function getAddressComponents() {
-      if (initialLocation.latitude !== 0) {
-        const currentLocation = await geoLocationApi({
-          latitude: String(initialLocation.latitude),
-          longitude: String(initialLocation.longitude)
-        })
-        setAddress(currentLocation)
-      }
-    }
-
-    getAddressComponents()
-  }, [initialLocation])
 
   const onSubmitNextCreatePointScreen = useCallback(
     async (data: AddressFormData) => {
@@ -92,7 +73,10 @@ export const AddPoint = (): JSX.Element => {
         setLoading(true)
         formRef.current?.setErrors({})
         const schemasYup = Yup.object().shape({
-          reference: Yup.string().required(
+          placeName: Yup.string().required(
+            'Nome do estabelecimento é obrigatório'
+          ),
+          referencePoint: Yup.string().required(
             'Campo ponto de referência é obrigatório'
           )
         })
@@ -102,8 +86,11 @@ export const AddPoint = (): JSX.Element => {
         })
         setLoading(false)
         const addressParams: AddressFormData = {
-          reference: data.reference,
-          ...address
+          referencePoint: data.referencePoint,
+          placeName: data.placeName,
+          locationType: selectedItem,
+          longitude: String(initialLocation.longitude),
+          latitude: String(initialLocation.latitude)
         }
         navigator.navigate('AddPointDetails', addressParams)
       } catch (error) {
@@ -115,30 +102,27 @@ export const AddPoint = (): JSX.Element => {
         }
       }
     },
-    [address]
+    [initialLocation]
   )
+
+  const handleChangePickerItem = useCallback(
+    (itemValue: string | number) => {
+      setSelectedItem(String(itemValue))
+    },
+    [selectedItem]
+  )
+
   return (
     <Container>
       {initialLocation.latitude !== 0 ? (
         <>
           <ContainerMap>
             <MapViewStyled
-              showsUserLocation
-              showsMyLocationButton={false}
-              showsTraffic={false}
-              showsCompass={false}
-              showsBuildings={false}
-              showsIndoors={false}
-              showsScale={false}
-              showsIndoorLevelPicker={false}
-              showsPointsOfInterest={false}
-              zoomEnabled={false}
-              scrollEnabled={false}
               initialRegion={{
                 latitude: initialLocation.latitude,
                 longitude: initialLocation.longitude,
-                latitudeDelta: 0.014,
-                longitudeDelta: 0.014
+                latitudeDelta: 0.008,
+                longitudeDelta: 0.008
               }}
             />
           </ContainerMap>
@@ -146,44 +130,61 @@ export const AddPoint = (): JSX.Element => {
             <Form ref={formRef} onSubmit={onSubmitNextCreatePointScreen}>
               <Body>
                 <InputGroup>
-                  {address.street ? (
-                    <>
-                      <Input
-                        placeholder="ponto de referência"
-                        Icon={DirectionLocation}
-                        name={'reference'}
-                        autoCapitalize="words"
-                        returnKeyType="send"
-                        onSubmitEditing={() => formRef.current?.submitForm()}
-                      />
-                      <Input
-                        value={address.street}
-                        editable={false}
-                        Icon={IconLocation}
-                        name={'street'}
-                      />
-                      <Input
-                        value={address.neighborhood}
-                        editable={false}
-                        Icon={IconLocation}
-                        name={'neighborhood'}
-                      />
-                      <Input
-                        value={address.city}
-                        editable={false}
-                        Icon={IconLocation}
-                        name={'city'}
-                      />
-                      <Input
-                        value={address.state}
-                        editable={false}
-                        Icon={IconLocation}
-                        name={'state'}
-                      />
-                    </>
-                  ) : (
-                    <Loading />
-                  )}
+                  <>
+                    <InputStyled
+                      placeholder="Nome do estabelecimento"
+                      Icon={IconPlacePoint}
+                      name={'placeName'}
+                      autoCapitalize="words"
+                      returnKeyType="send"
+                      onSubmitEditing={() => formRef.current?.submitForm()}
+                    />
+                    <InputStyled
+                      placeholder="Ponto de referencia do ponto"
+                      Icon={ReferencePoint}
+                      name={'referencePoint'}
+                      autoCapitalize="words"
+                      returnKeyType="send"
+                      onSubmitEditing={() => formRef.current?.submitForm()}
+                    />
+                    <PickerStyledContainer>
+                      <PickerText>
+                        Selecione o tipo do estabelecimento
+                      </PickerText>
+                      <PickerStyledContainerItems>
+                        <PickerStyled
+                          selectedValue={selectedItem}
+                          onValueChange={handleChangePickerItem}
+                          style={{
+                            borderRadius: 10
+                          }}
+                        >
+                          <PickerStyled.Item label="Empresa" value="Empresa" />
+                          <PickerStyled.Item
+                            label="Faculdade"
+                            value="Faculdade"
+                          />
+                          <PickerStyled.Item
+                            label="Orgão público"
+                            value="Orgão público"
+                          />
+                          <PickerStyled.Item
+                            label="Praça ou locais aberto"
+                            value="Praça ou locais aberto"
+                          />
+                          <PickerStyled.Item
+                            label="Shopping"
+                            value="Shopping"
+                          />
+                          <PickerStyled.Item
+                            label="Condomínios"
+                            value="Condomínios"
+                          />
+                          <PickerStyled.Item label="Casa" value="Casa" />
+                        </PickerStyled>
+                      </PickerStyledContainerItems>
+                    </PickerStyledContainer>
+                  </>
                 </InputGroup>
               </Body>
               <Bottom>

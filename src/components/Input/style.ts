@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components/native'
 export const Wrapper = styled.View``
 
 export const Container = styled.View<{ isFocused: boolean; isError: boolean }>`
-  margin-bottom: 5px;
   width: 320px;
   height: 50px;
   background-color: ${({ theme }) => theme.backgroundSecundary};
@@ -11,7 +10,7 @@ export const Container = styled.View<{ isFocused: boolean; isError: boolean }>`
   border: 2px solid transparent;
   flex-direction: row;
   align-items: center;
-  padding: 10px;
+  padding: 0px 10px;
   margin-top: 30px;
   ${props =>
     props.isFocused &&

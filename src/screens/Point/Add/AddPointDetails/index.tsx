@@ -1,15 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import getValidationErrorsYup from '../../../../utils/getValidationErrorYup'
 import Modal from 'react-native-modal'
-import * as Yup from 'yup'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
-import { Form } from '@unform/mobile'
 import { Button } from '../../../../components/Button'
 import { useItemsContext } from '../../../../service/context/items-context'
-import { Input } from '../../../../components/Input'
 import { AlertAnimated } from '../../../../components/Alert'
-import { colors } from '../../../../styles/colors'
 import { Filter } from '../../../../components/Item/Filter'
 import { FormHandles } from '@unform/core'
 import { StatusBar } from 'react-native'
@@ -23,12 +18,8 @@ import {
   ContentPhotoPreview,
   ContentIconCamera,
   IconCamera,
-  ContentMain,
   Body,
-  DescriptionText,
-  ContentItems,
   ListItems,
-  IconTextInput,
   Bottom,
   ContentLeft,
   DescriptionContentRightText,
@@ -44,7 +35,8 @@ import {
   ModalContentBottom,
   ModalContentText,
   ModalSuccessTextDescription,
-  ModalContentButton
+  ModalContentButton,
+  FormContent
 } from './styles'
 
 type ErrorAlert = {
@@ -131,74 +123,56 @@ export const AddPointDetails: React.FC = () => {
     [loading, alert]
   )
 
-  const handleButtonCreatePoint = useCallback(
-    async (data: { name: string }) => {
-      setLoading(true)
-      try {
-        formRef.current?.setErrors({})
-        const schemasYup = Yup.object().shape({
-          name: Yup.string().required('Campo titulo é obrigatório')
-        })
+  const handleButtonCreatePoint = useCallback(async () => {
+    setLoading(true)
+    formRef.current?.setErrors({})
 
-        await schemasYup.validate(data, {
-          abortEarly: false
-        })
+    if (itemsSelecteds.length === 0) {
+      handleAlertError({
+        title: 'Nenhum item selecionado',
+        description: 'Selecione no mínimo 1 item da lista'
+      })
+      return ''
+    }
 
-        if (itemsSelecteds.length === 0) {
-          handleAlertError({
-            title: 'Nenhum item selecionado',
-            description: 'Selecione no mínimo 1 item da lista'
-          })
-          return ''
-        }
-        if (dataImageUri === '') {
-          handleAlertError({
-            title: 'Foto não encontrada',
-            description: 'É preciso enviar uma foto do local'
-          })
-          return ''
-        }
-        const { error } = await addPoint({
-          token: getAccount.accessToken,
-          city: params.city,
-          state: params.state,
-          latitude: params.latitude,
-          longitude: params.longitude,
-          neighborhood: params.neighborhood,
-          reference: params.reference,
-          street: params.street,
-          zipCode: params.zipCode,
-          file: dataImageUri,
-          name: data.name,
-          items: itemsSelecteds
-        })
+    if (dataImageUri === '') {
+      handleAlertError({
+        title: 'Foto não encontrada',
+        description: 'É preciso enviar uma foto do local'
+      })
+      return ''
+    }
 
-        if (error) {
-          handleAlertError({
-            title: 'Erro ao criar novo ponto',
-            description: error
-          })
-          return ''
-        }
+    const { accessToken } = getAccount
 
-        setIsOpenModal(true)
-        setTimeout(() => {
-          setIsOpenModal(false)
-          navigate('Maps')
-        }, 5000)
+    const { data, error } = await addPoint({
+      file: dataImageUri,
+      items: itemsSelecteds,
+      token: accessToken,
+      locationType: params.locationType,
+      placeName: params.placeName,
+      referencePoint: params.referencePoint,
+      latitude: params.latitude,
+      longitude: params.longitude
+    })
 
-        setLoading(false)
-      } catch (error) {
-        if (error instanceof Yup.ValidationError) {
-          const errors = getValidationErrorsYup(error)
-          formRef.current?.setErrors(errors)
-          setLoading(false)
-          return ''
-        }
-      }
-    },
-    [itemsSelecteds, dataImageUri]
-  )
+    if (error) {
+      handleAlertError({
+        title: 'Erro ao criar novo ponto',
+        description: error
+      })
+    }
+
+    if (data) {
+      setIsOpenModal(true)
+      setTimeout(() => {
+        setIsOpenModal(false)
+        navigate('Maps')
+      }, 5000)
+    }
+
+    setLoading(false)
+  }, [itemsSelecteds, dataImageUri])
 
   const handleClickButtonCamera = useCallback(async () => {
     if (hasPermissionCamera) {
@@ -243,49 +217,39 @@ export const AddPointDetails: React.FC = () => {
           </IconDeletePhotoContainer>
         </ContentPhotoPreview>
       )}
-      <Form
-        ref={formRef}
-        style={{ height: '70%' }}
-        onSubmit={handleButtonCreatePoint}
-      >
-        <ContentMain>
-          <Body>
-            <DescriptionText>detalhes do ponto de descarte</DescriptionText>
-            <ContentItems>
-              <Input placeholder="Titulo" name="name" Icon={IconTextInput} />
-              <ListItems>
-                <Filter title="Selecione os items" />
-              </ListItems>
-            </ContentItems>
-          </Body>
-          <Bottom>
-            <ContentLeft>
-              <DescriptionContentRightText>
-                preencha todos os campos
-              </DescriptionContentRightText>
-              <HelpContainer>
-                <HelpText>ajuda?</HelpText>
-              </HelpContainer>
-            </ContentLeft>
-            <ContentRight>
-              <Button
-                loading={loading}
-                onPress={() => {
-                  formRef.current?.submitForm()
-                }}
-                style={{ width: '100%' }}
-                text="cadastrar"
-              />
-            </ContentRight>
-          </Bottom>
-        </ContentMain>
-      </Form>
+      <FormContent ref={formRef} onSubmit={handleButtonCreatePoint}>
+        <Body>
+          <ListItems>
+            <Filter title="Selecione os items" />
+          </ListItems>
+        </Body>
+        <Bottom>
+          <ContentLeft>
+            <DescriptionContentRightText>
+              preencha todos os campos
+            </DescriptionContentRightText>
+            <HelpContainer>
+              <HelpText>ajuda?</HelpText>
+            </HelpContainer>
+          </ContentLeft>
+          <ContentRight>
+            <Button
+              loading={loading}
+              onPress={() => {
+                formRef.current?.submitForm()
+              }}
+              style={{ width: '100%' }}
+              text="cadastrar"
+            />
+          </ContentRight>
+        </Bottom>
+      </FormContent>
       {alert.active && (
         <AlertAnimated
           title={alert.title}
           description={alert.description}
-          backgroundColor={colors.actions.error.light}
-          colorActions={colors.actions.error.dark}
+          backgroundColor={'#f05545'}
+          colorActions={'#7f0000'}
           iconName="alert"
         />
       )}
