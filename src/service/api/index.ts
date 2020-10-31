@@ -6,7 +6,7 @@ export interface ResponseType<T> {
 }
 
 const api = axios.create({
-  baseURL: 'http://35.198.29.33/api'
+  baseURL: 'http://ec2-177-71-251-90.sa-east-1.compute.amazonaws.com/api'
 })
 
 export default api
