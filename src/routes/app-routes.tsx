@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { registerRoutes } from './routes'
+import { registeredRoutes } from './routes'
 
 const Stack = createStackNavigator()
 
 export const AppRoutes = (): JSX.Element => (
   <NavigationContainer>
     <Stack.Navigator>
-      {registerRoutes.map(({ name, component, options }) => (
+      {registeredRoutes.map(({ name, component, options }) => (
         <Stack.Screen
           key={Math.random()}
           name={name}

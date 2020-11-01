@@ -39,7 +39,7 @@ const NoTitleHeaderCustomTintColor = {
   headerTransparent: true
 }
 
-export const registerRoutes: RoutesProps[] = [
+export const registeredRoutes: RoutesProps[] = [
   {
     options: NotHeaderShown,
     component: HomeScreen,
