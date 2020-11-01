@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { StatusBar } from 'react-native'
 import React from 'react'
 import { Routes } from './src/routes'
 import { AppLoading } from 'expo'
@@ -24,11 +23,6 @@ const App = (): JSX.Element => {
 
   return (
     <AppearanceProvider>
-      <StatusBar
-        backgroundColor="transparent"
-        barStyle="dark-content"
-        translucent
-      />
       <Routes />
     </AppearanceProvider>
   )
