@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components'
 import { light, dark } from '../styles/themes'
 import { useColorScheme } from 'react-native-appearance'
 import { StatusBar } from 'react-native'
+import { ItemsProvider } from '../service/context/items-context'
 
 export const Routes: React.FC = () => {
   const colorScheme = useColorScheme()
@@ -20,7 +21,9 @@ export const Routes: React.FC = () => {
       />
       <AccountProvider>
         <PointProvider>
-          <AppRoutes />
+          <ItemsProvider>
+            <AppRoutes />
+          </ItemsProvider>
         </PointProvider>
       </AccountProvider>
     </ThemeProvider>

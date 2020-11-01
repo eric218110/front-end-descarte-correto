@@ -50,7 +50,7 @@ type AddressFormDataScreenProps = RouteProp<
   'AddressFormData'
 >
 
-export const AddPointDetails: React.FC = () => {
+export const AddPointDetails = (): JSX.Element => {
   const formRef = useRef<FormHandles>(null)
   const { params } = useRoute<AddressFormDataScreenProps>()
   const { goBack, navigate } = useNavigation()

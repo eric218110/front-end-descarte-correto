@@ -21,7 +21,7 @@ import NetInfo from '@react-native-community/netinfo'
 import { AlertAnimated } from '../../components/Alert'
 import { useColorScheme } from 'react-native-appearance'
 
-export const Home: React.FC = () => {
+export const Home = (): JSX.Element => {
   const colorScheme = useColorScheme()
   const navigation = useNavigation()
   const [isConnected, setIsConnected] = useState<boolean>()
