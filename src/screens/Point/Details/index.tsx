@@ -69,6 +69,25 @@ export const DetailsPoint = (): JSX.Element => {
     longitude: 0
   })
 
+  const handleAlertError = useCallback(
+    ({ description, title }: { description: string; title: string }) => {
+      setActiveAlert({
+        active: true,
+        description,
+        title
+      })
+      setTimeout(() => {
+        setActiveAlert({
+          active: false,
+          description: '',
+          title: ''
+        })
+      }, 5000)
+      return ''
+    },
+    [alert]
+  )
+
   useEffect(() => {
     if (!id) goBack()
     setActiveAlert({
@@ -104,25 +123,6 @@ export const DetailsPoint = (): JSX.Element => {
     }
     getLocation()
   }, [])
-
-  const handleAlertError = useCallback(
-    ({ description, title }: { description: string; title: string }) => {
-      setActiveAlert({
-        active: true,
-        description,
-        title
-      })
-      setTimeout(() => {
-        setActiveAlert({
-          active: false,
-          description: '',
-          title: ''
-        })
-      }, 5000)
-      return ''
-    },
-    [alert]
-  )
 
   return (
     <>
