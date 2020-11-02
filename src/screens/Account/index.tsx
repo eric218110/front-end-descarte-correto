@@ -14,6 +14,7 @@ import {
 } from './styles'
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
+import { RoutesName } from '../../routes/routes-names'
 
 export const Account = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false)
@@ -22,13 +23,13 @@ export const Account = (): JSX.Element => {
 
   const handleClickButtonLogin = useCallback(() => {
     setLoading(true)
-    navigator.navigate('Login')
+    navigator.navigate(RoutesName.LOGIN)
     setLoading(false)
   }, [])
 
   const handleClickButtonSignUp = useCallback(() => {
     setLoading(true)
-    navigator.navigate('SignUp')
+    navigator.navigate(RoutesName.SIGNUP)
     setLoading(false)
   }, [])
 

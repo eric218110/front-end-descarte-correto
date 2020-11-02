@@ -30,6 +30,7 @@ import { useNavigation } from '@react-navigation/native'
 import * as Location from 'expo-location'
 import * as Yup from 'yup'
 import { Point } from '../../../../service/domain/point'
+import { RoutesName } from '../../../../routes/routes-names'
 
 export interface AddressFormData
   extends Omit<Point, 'id' | 'image' | 'items' | 'account'> {
@@ -92,7 +93,7 @@ export const AddPoint = (): JSX.Element => {
           longitude: String(initialLocation.longitude),
           latitude: String(initialLocation.latitude)
         }
-        navigator.navigate('AddPointDetails', addressParams)
+        navigator.navigate(RoutesName.ADDDETAILSNEWPOINT, addressParams)
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrorsYup(error)

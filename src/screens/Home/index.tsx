@@ -20,6 +20,7 @@ import { useNavigation } from '@react-navigation/native'
 import NetInfo from '@react-native-community/netinfo'
 import { AlertAnimated } from '../../components/Alert'
 import { useColorScheme } from 'react-native-appearance'
+import { RoutesName } from '../../routes/routes-names'
 
 export const Home = (): JSX.Element => {
   const colorScheme = useColorScheme()
@@ -33,10 +34,10 @@ export const Home = (): JSX.Element => {
 
   const handleNavigate = () => {
     if (isConnected) {
-      navigation.navigate('Maps')
+      navigation.navigate(RoutesName.MAPS)
       navigation.reset({
         index: 1,
-        routes: [{ name: 'Maps' }]
+        routes: [{ name: RoutesName.MAPS }]
       })
     }
   }

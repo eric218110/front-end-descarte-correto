@@ -38,6 +38,7 @@ import {
   ModalContentButton,
   FormContent
 } from './styles'
+import { RoutesName } from '../../../../routes/routes-names'
 
 type ErrorAlert = {
   active: boolean
@@ -167,7 +168,7 @@ export const AddPointDetails = (): JSX.Element => {
       setIsOpenModal(true)
       setTimeout(() => {
         setIsOpenModal(false)
-        navigate('Maps')
+        navigate(RoutesName.MAPS)
       }, 5000)
     }
 
@@ -194,7 +195,7 @@ export const AddPointDetails = (): JSX.Element => {
 
   const handleCloseButtonModal = useCallback(() => {
     setIsOpenModal(false)
-    navigate('Maps')
+    navigate(RoutesName.MAPS)
   }, [isOpenModal])
 
   return (

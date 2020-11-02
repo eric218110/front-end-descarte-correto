@@ -33,6 +33,7 @@ import {
   Platform,
   TextInput
 } from 'react-native'
+import { RoutesName } from '../../../routes/routes-names'
 
 type ErrorAlert = {
   active: boolean
@@ -144,7 +145,7 @@ export const SignUpAccount = (): JSX.Element => {
 
       if (success) {
         setLoading(false)
-        navigator.navigate('AddPoint')
+        navigator.navigate(RoutesName.ADDNEWPOINT)
       } else {
         setLoading(false)
         setActiveAlert({
@@ -269,7 +270,7 @@ export const SignUpAccount = (): JSX.Element => {
               <CreateAccount keyboardOpen={openKeyboard}>
                 <SubtitleBottom>já possui conta?</SubtitleBottom>
                 <ButtonTouchableOpacity
-                  onPress={() => navigator.navigate('Login')}
+                  onPress={() => navigator.navigate(RoutesName.LOGIN)}
                 >
                   <TextTouchableOpacity>Entrar</TextTouchableOpacity>
                 </ButtonTouchableOpacity>

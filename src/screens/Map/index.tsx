@@ -32,6 +32,7 @@ import { ResponseListPoints } from '../../service/api/points'
 import { Point } from '../../components/Point'
 import { Callout } from '../../components/Callout'
 import { useAccountContext } from '../../service/context/account-context'
+import { RoutesName } from '../../routes/routes-names'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<
   DirectionsProps,
@@ -153,11 +154,11 @@ export const Map = (): JSX.Element => {
   )
 
   const handleNavigateAddPoint = useCallback(() => {
-    navigation.navigate('AddPoint')
+    navigation.navigate(RoutesName.ADDNEWPOINT)
   }, [])
 
   const handleNavigateAddItem = useCallback(() => {
-    navigation.navigate('AddItem')
+    navigation.navigate(RoutesName.ADDNEWITEM)
   }, [])
 
   const handleZoomInCurrentLocation = useCallback(async () => {
@@ -251,7 +252,7 @@ export const Map = (): JSX.Element => {
                         colorsItems={items.map(item => item.color)}
                         onPress={event => {
                           if (event.nativeEvent.action === 'callout-press') {
-                            navigation.navigate('DetailsPoint', {
+                            navigation.navigate(RoutesName.DETAILSPOINT, {
                               id,
                               handleDirectionCallBack
                             })

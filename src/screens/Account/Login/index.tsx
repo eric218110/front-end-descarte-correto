@@ -34,6 +34,7 @@ import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
 import { useAccountContext } from '../../../service/context/account-context'
 import { useNavigation } from '@react-navigation/native'
 import { AlertAnimated } from '../../../components/Alert'
+import { RoutesName } from '../../../routes/routes-names'
 type ErrorAlert = {
   active: boolean
   title: string
@@ -132,7 +133,7 @@ export const LoginAccount = (): JSX.Element => {
 
       if (success) {
         setLoading(false)
-        navigator.navigate('AddPoint')
+        navigator.navigate(RoutesName.ADDNEWPOINT)
       } else {
         setLoading(false)
         setActiveAlert({
@@ -246,7 +247,7 @@ export const LoginAccount = (): JSX.Element => {
               <CreateAccount>
                 <SubtitleBottom>novo por aqui?</SubtitleBottom>
                 <ButtonTouchableOpacity
-                  onPress={() => navigator.navigate('SignUp')}
+                  onPress={() => navigator.navigate(RoutesName.SIGNUP)}
                 >
                   <TextTouchableOpacity>criar conta</TextTouchableOpacity>
                 </ButtonTouchableOpacity>
