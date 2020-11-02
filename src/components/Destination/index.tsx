@@ -21,6 +21,6 @@ export const DestinationMapsComponent = ({
     origin={origin}
     destination={destination}
     onReady={onReady}
-    apikey={'AIzaSyBHAXOz2WSqIt4HziGNdnWXjlz2bf03-k4'}
+    apikey={'AIzaSyDaouL2YzYKvgTOGi3rGhS4DmqStoBdpyI'}
   />
 )
