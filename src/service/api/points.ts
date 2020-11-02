@@ -53,17 +53,12 @@ export interface AddPointsProps
 export const addPointApi = async ({
   token,
   file,
-  city,
   items,
   latitude,
   longitude,
   placeName,
   referencePoint,
-  locationType,
-  neighborhood,
-  state,
-  street,
-  zipCode
+  locationType
 }: AddPointsProps): Promise<ResponseAddPointsProps> => {
   try {
     const fileData = {
@@ -73,17 +68,12 @@ export const addPointApi = async ({
     }
     const bodyRequest = new FormData()
     bodyRequest.append('file', fileData)
-    bodyRequest.append('city', city)
     bodyRequest.append('items', items)
     bodyRequest.append('latitude', latitude)
     bodyRequest.append('longitude', longitude)
     bodyRequest.append('placeName', placeName)
     bodyRequest.append('referencePoint', referencePoint)
     bodyRequest.append('locationType', locationType)
-    bodyRequest.append('neighborhood', neighborhood)
-    bodyRequest.append('state', state)
-    bodyRequest.append('street', street)
-    bodyRequest.append('zipCode', zipCode)
 
     await api.post('point', bodyRequest, {
       headers: {
