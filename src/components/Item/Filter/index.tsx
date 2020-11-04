@@ -14,7 +14,7 @@ import {
 import { Checkbox } from 'react-native-paper'
 import { Loading } from '../../Loading'
 import { View } from 'react-native'
-import { useItemsContext } from '../../../service/context/items-context'
+import { useItemsContext } from '../../../services/context/items-context'
 
 type FilterItemsProps = {
   title: string

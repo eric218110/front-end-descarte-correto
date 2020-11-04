@@ -29,7 +29,7 @@ import getValidationErrorsYup from '../../../../utils/getValidationErrorYup'
 import { useNavigation } from '@react-navigation/native'
 import * as Location from 'expo-location'
 import * as Yup from 'yup'
-import { Point } from '../../../../service/domain/point'
+import { Point } from '../../../../services/domain/point'
 import { RoutesName } from '../../../../routes/routes-names'
 
 export interface AddressFormData

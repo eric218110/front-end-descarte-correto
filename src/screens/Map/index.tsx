@@ -22,16 +22,16 @@ import { Modalize } from 'react-native-modalize'
 import { Item } from '../../components/Item'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { useNavigation } from '@react-navigation/native'
-import { useItemsContext } from '../../service/context/items-context'
-import { usePointContext } from '../../service/context/point-context'
+import { useItemsContext } from '../../services/context/items-context'
+import { usePointContext } from '../../services/context/point-context'
 import {
   DirectionsProps,
   DestinationMapsComponent
 } from '../../components/Destination'
-import { ResponseListPoints } from '../../service/api/points'
+import { ResponseListPoints } from '../../services/api/points'
 import { Point } from '../../components/Point'
 import { Callout } from '../../components/Callout'
-import { useAccountContext } from '../../service/context/account-context'
+import { useAccountContext } from '../../services/context/account-context'
 import { RoutesName } from '../../routes/routes-names'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<

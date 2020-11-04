@@ -3,15 +3,15 @@ import Modal from 'react-native-modal'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
 import { Button } from '../../../../components/Button'
-import { useItemsContext } from '../../../../service/context/items-context'
+import { useItemsContext } from '../../../../services/context/items-context'
 import { AlertAnimated } from '../../../../components/Alert'
 import { Filter } from '../../../../components/Item/Filter'
 import { FormHandles } from '@unform/core'
 import { StatusBar } from 'react-native'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { AddressFormData } from '../AddPoint'
-import { usePointContext } from '../../../../service/context/point-context'
-import { useAccountContext } from '../../../../service/context/account-context'
+import { usePointContext } from '../../../../services/context/point-context'
+import { useAccountContext } from '../../../../services/context/account-context'
 import {
   Container,
   ImageContainer,

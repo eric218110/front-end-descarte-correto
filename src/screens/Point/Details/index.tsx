@@ -1,6 +1,9 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useCallback, useEffect, useState } from 'react'
-import { ResponseListPoints, getOnePointApi } from '../../../service/api/points'
+import {
+  ResponseListPoints,
+  getOnePointApi
+} from '../../../services/api/points'
 import { Loading } from '../../../components/Loading'
 import { AlertAnimated } from '../../../components/Alert'
 import { StatusBar } from 'react-native'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAccountContext } from '../../../service/context/account-context'
+import { useAccountContext } from '../../../services/context/account-context'
 import { Account } from '../../Account'
 import { AddPoint as AddPointScreen } from './AddPoint'
 

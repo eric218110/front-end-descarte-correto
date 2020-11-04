@@ -3,7 +3,7 @@ import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
 import * as Yup from 'yup'
 import { Input } from '../../../components/Input'
 import { FormHandles } from '@unform/core'
-import { useAccountContext } from '../../../service/context/account-context'
+import { useAccountContext } from '../../../services/context/account-context'
 import { useNavigation } from '@react-navigation/native'
 import { AlertAnimated } from '../../../components/Alert'
 import {

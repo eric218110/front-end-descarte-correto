@@ -11,7 +11,7 @@ import {
   TextEmail,
   UserCircleIcon
 } from './style'
-import { useAccountContext } from '../../service/context/account-context'
+import { useAccountContext } from '../../services/context/account-context'
 import { AlertAnimatedSuccessLoggout } from '../Alert'
 
 type Account = {

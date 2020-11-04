@@ -24,9 +24,9 @@ import { Button } from '../../../components/Button'
 import getValidationErrorsYup from '../../../utils/getValidationErrorYup'
 import * as Yup from 'yup'
 import { AlertAnimatedError, ErrorAlert } from '../../../components/Alert'
-import { useItemsContext } from '../../../service/context/items-context'
+import { useItemsContext } from '../../../services/context/items-context'
 import { useNavigation } from '@react-navigation/native'
-import { useAccountContext } from '../../../service/context/account-context'
+import { useAccountContext } from '../../../services/context/account-context'
 import { fromHsv } from 'react-native-color-picker'
 
 export const AddItem = (): JSX.Element => {
