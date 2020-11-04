@@ -7,3 +7,8 @@ export type Account = {
   password: string
   passwordConfirmation: string
 }
+
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin'
+}

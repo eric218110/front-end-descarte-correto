@@ -33,6 +33,7 @@ import { Point } from '../../components/Point'
 import { Callout } from '../../components/Callout'
 import { useAccountContext } from '../../services/context/account-context'
 import { RoutesName } from '../../routes/routes-names'
+import { Role } from '../../services/domain/account'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<
   DirectionsProps,
@@ -42,6 +43,13 @@ export type DestinationPropsCallBackDetailsPoint = Omit<
 type IState = {
   latitude: number
   longitude: number
+}
+
+enum LocationInfo {
+  LATITUDE_DELTA = 0.014,
+  LONGITUDE_DELTA = 0.014,
+  MAX_ZOOM_LONGITUDE_DELTA = 0.008,
+  MAX_ZOOM_LATITUDE_DELTA = 0.008
 }
 
 export const Map = (): JSX.Element => {
@@ -167,8 +175,8 @@ export const Map = (): JSX.Element => {
     mapRef.current?.animateToRegion({
       latitude,
       longitude,
-      latitudeDelta: 0.008,
-      longitudeDelta: 0.008
+      latitudeDelta: LocationInfo.MAX_ZOOM_LATITUDE_DELTA,
+      longitudeDelta: LocationInfo.MAX_ZOOM_LONGITUDE_DELTA
     })
   }, [])
 
@@ -199,8 +207,8 @@ export const Map = (): JSX.Element => {
               initialRegion={{
                 latitude: initialLocation.latitude,
                 longitude: initialLocation.longitude,
-                latitudeDelta: 0.014,
-                longitudeDelta: 0.014
+                latitudeDelta: LocationInfo.LATITUDE_DELTA,
+                longitudeDelta: LocationInfo.LONGITUDE_DELTA
               }}
             >
               {directionEnable.origin.latitude !== 0 && (
@@ -275,7 +283,7 @@ export const Map = (): JSX.Element => {
           </ContentAction>
         ) : (
           <>
-            {account.role === 'admin' && (
+            {account.role === Role.ADMIN && (
               <ContentAction onPress={handleNavigateAddItem}>
                 <AddItemsIcon />
               </ContentAction>
