@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
+import { version } from '../../../package.json'
 import {
   Wrapper,
   TextLogo,
@@ -12,7 +12,8 @@ import {
   Body,
   Footer,
   Icon,
-  ContentTitle
+  ContentTitle,
+  TextVersion
 } from './styles'
 import HumanIcon from '../../assets/human.svg'
 import HumanIconDark from '../../assets/dark/humanDark.svg'
@@ -78,6 +79,7 @@ export const Home = (): JSX.Element => {
           <IconLeftButtom />
         </ButtonBottom>
       </Footer>
+      <TextVersion>{version}</TextVersion>
     </Wrapper>
   )
 }

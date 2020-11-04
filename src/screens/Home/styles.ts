@@ -95,3 +95,9 @@ export const IconLeftButtom = styled(MaterialCommunityIcons).attrs(
     color: theme.text.light
   })
 )``
+
+export const TextVersion = styled.Text`
+  color: ${({ theme }) => theme.backgroundSecundary};
+  margin-bottom: 20px;
+  margin-top: -20px;
+`
