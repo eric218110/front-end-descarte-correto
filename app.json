@@ -19,12 +19,18 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "userInterfaceStyle": "automatic"
+      "userInterfaceStyle": "automatic",
+      "bundleIdentifier": "com.ericsilva.apptcc",
+      "buildNumber": "0.2.2"
     },
     "android": {
       "package": "com.ericsilva.apptcc",
       "versionCode": 1,
       "userInterfaceStyle": "automatic",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBlsADWqWAm2E3P7WxOzPEc71PQ67nLAmk"
