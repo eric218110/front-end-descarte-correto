@@ -1,5 +1,6 @@
 import React from 'react'
 import { MapViewDirectionsStyled } from './style'
+import { expo } from '../../../app.json'
 export type DirectionsProps = {
   origin: {
     latitude: number
@@ -21,6 +22,6 @@ export const DestinationMapsComponent = ({
     origin={origin}
     destination={destination}
     onReady={onReady}
-    apikey={'AIzaSyDaouL2YzYKvgTOGi3rGhS4DmqStoBdpyI'}
+    apikey={expo.android.config.googleMaps.apiKey}
   />
 )
