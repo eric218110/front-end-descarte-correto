@@ -176,8 +176,11 @@ export const AddPointDetails = (): JSX.Element => {
   }, [itemsSelecteds, dataImageUri])
 
   const handleClickButtonCamera = useCallback(async () => {
+    const qualityLimitPhoto = 0.3
     if (hasPermissionCamera) {
-      const photo = await ImagePicker.launchCameraAsync()
+      const photo = await ImagePicker.launchCameraAsync({
+        quality: qualityLimitPhoto
+      })
       if (!photo.cancelled) {
         setDataImageUri(photo.uri)
       }
