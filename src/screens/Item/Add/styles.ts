@@ -16,6 +16,7 @@ export const Wrapper = styled.View`
   width: ${width}px;
   align-items: center;
   justify-content: center;
+  flex: 1;
 `
 
 export const Header = styled.View`

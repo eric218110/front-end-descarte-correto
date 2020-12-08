@@ -14,6 +14,7 @@ export const Wrapper = styled.SafeAreaView`
   padding-top: ${statusBarHeight}px;
   justify-content: space-around;
   align-items: center;
+  flex: 1;
 `
 
 export const ContentTitle = styled.Text`

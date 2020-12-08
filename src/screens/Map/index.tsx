@@ -34,6 +34,7 @@ import { Callout } from '../../components/Callout'
 import { useAccountContext } from '../../services/context/account-context'
 import { RoutesName } from '../../routes/routes-names'
 import { Role } from '../../services/domain/account'
+import { StatusBar } from 'expo-status-bar'
 
 export type DestinationPropsCallBackDetailsPoint = Omit<
   DirectionsProps,

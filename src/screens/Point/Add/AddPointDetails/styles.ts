@@ -12,6 +12,7 @@ export const Container = styled.SafeAreaView`
   justify-content: center;
   align-items: center;
   margin: auto;
+  flex: 1;
 `
 
 export const ImageContainer = styled.View`
