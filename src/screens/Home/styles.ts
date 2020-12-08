@@ -15,6 +15,7 @@ export const Wrapper = styled.SafeAreaView`
   width: ${width}px;
   align-items: center;
   justify-content: center;
+  flex: 1;
 `
 
 export const Header = styled.View`
