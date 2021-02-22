@@ -9,10 +9,9 @@
 [![dependencies Status](https://david-dm.org/eric218110/mobile-tcc/status.svg)](https://david-dm.org/eric218110/mobile-tcc)
 ---
 
-Esta Aplicação faz parte do TCC de Eric Silva.
 Aplicativo para Android e IOS
 
-## [**Link para a API**](https://github.com/eric218110/back-end-tcc)
+## [**BackEnd**](https://github.com/eric218110/back-end-descarte-correto)
 
 
 > ## Bibliotecas e Ferramentas
